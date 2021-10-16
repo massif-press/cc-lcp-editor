@@ -1,5 +1,13 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+  <v-container>
+    about
+    <br />
+    disclaimer
+    <br />
+    resources
+    <br />
+    contribution
+    <br />
+    changelog
+  </v-container>
 </template>
