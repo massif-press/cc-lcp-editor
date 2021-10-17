@@ -89,22 +89,22 @@ export default Vue.extend({
     activationTypes: activationTypes,
   }),
   computed: {
-    loaded() {
+    loaded(): boolean {
       return this.$store.getters.loaded
     },
-    lcp() {
+    lcp(): any {
       return this.$store.getters.lcp
     },
-    errors() {
+    errors(): string[] {
       const arr: string[] = []
       if (!this.lcp[this.itemKey] || !this.lcp[this.itemKey].length) return arr
 
-      this.checkDupes.forEach(prop => {
+      this.checkDupes.forEach((prop: string) => {
         getDuplicateProperties(this.lcp[this.itemKey], prop).forEach(p => {
           arr.push(`Duplicate ${prop} detected:   ${p}`)
         })
       })
-      this.checkEmpty.forEach(prop => {
+      this.checkEmpty.forEach((prop: string) => {
         getEmptyProperties(this.lcp[this.itemKey], prop).forEach(p => {
           arr.push(`Item with missing ${prop} field (${p.id || p.name || '--'})`)
         })
@@ -117,36 +117,33 @@ export default Vue.extend({
       if (!this.lcp[this.itemKey]) this.$set(this.lcp, this.itemKey, [])
       this.lcp[this.itemKey].push({})
     },
-    duplicateItem(item) {
+    duplicateItem(item: any) {
       this.lcp[this.itemKey].push(JSON.parse(JSON.stringify(item)))
     },
-    deleteItem(item) {
+    deleteItem(item: any) {
       this.lcp[this.itemKey].splice(
-        this.lcp[this.itemKey].findIndex(x => x.id === item.id),
+        this.lcp[this.itemKey].findIndex((x: any) => x.id === item.id),
         1
       )
     },
     exportJson() {
       const blob = new Blob([JSON.stringify(this.lcp[this.itemKey])])
-      if (window.navigator.msSaveOrOpenBlob) {
-        window.navigator.msSaveBlob(blob, 'actions.json')
-      } else {
-        const elem = window.document.createElement('a')
-        elem.href = window.URL.createObjectURL(blob)
-        elem.download = 'actions.json'
-        document.body.appendChild(elem)
-        elem.click()
-        document.body.removeChild(elem)
-      }
+      const elem = window.document.createElement('a')
+      elem.href = window.URL.createObjectURL(blob)
+      elem.download = 'actions.json'
+      document.body.appendChild(elem)
+      elem.click()
+      document.body.removeChild(elem)
     },
     importJson() {
-      this.$refs.fileUpload.click()
+      if (this.$refs.fileUpload) (this.$refs.fileUpload as HTMLElement).click()
     },
-    importFile(evt) {
+    importFile(evt: any) {
       const file = evt.target.files[0]
       const reader = new FileReader()
 
-      reader.onload = e => console.log(this.$set(this.lcp, 'actions', JSON.parse(e.target.result)))
+      reader.onload = e =>
+        this.$set(this.lcp, 'actions', JSON.parse(e?.target?.result?.toString() || ''))
       reader.readAsText(file)
     },
   },

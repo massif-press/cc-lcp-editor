@@ -99,8 +99,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import PromisifyFileReader from 'promisify-file-reader'
 import _ from 'lodash'
+import PromisifyFileReader from 'promisify-file-reader'
 
 export default Vue.extend({
   name: 'Home',
@@ -125,13 +125,13 @@ export default Vue.extend({
     gmCategories: ['npc_classes', 'npc_templates'],
   }),
   computed: {
-    loaded() {
+    loaded(): boolean {
       return this.$store.getters.loaded
     },
-    lcp() {
+    lcp(): any {
       return this.$store.getters.lcp
     },
-    manuCount() {
+    manuCount(): number {
       if (!this.lcp.manufacturers && !this.lcp.frames) return 0
       const m = this.lcp.manufacturers?.length || 0
       const f = this.lcp.frames ? _.uniq(this.lcp.frames.map((x: any) => x.source)).length : 0
@@ -160,7 +160,7 @@ export default Vue.extend({
         this.$store.dispatch('loadLcp', fileData).then(() => {
           this.loading = false
         })
-      } catch (e) {
+      } catch (e: any) {
         this.error = e.message
         this.loading = false
       }
