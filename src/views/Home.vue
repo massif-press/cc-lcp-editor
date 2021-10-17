@@ -13,14 +13,16 @@
           @change="loadLcp($event)"
         />
       </v-col>
-      <v-col cols="5"><v-btn large block color="primary">Create New LCP</v-btn></v-col>
+      <v-col cols="5">
+        <v-btn large block color="primary" @click="createNew">Create New LCP</v-btn>
+      </v-col>
     </v-row>
 
-    <v-card v-if="!loaded" :key="mKey" color="grey darken-2">
+    <v-card v-if="!loaded" :key="loaded" color="grey darken-2">
       <v-card-text class="text--disabled text-center">No LCP loaded</v-card-text>
     </v-card>
 
-    <v-card v-else :key="mKey">
+    <v-card v-else :key="loaded">
       <v-toolbar dense color="pink darken-3" dark>
         <span class="text-h4">{{ lcp.lcp_manifest.name }}</span>
       </v-toolbar>
@@ -57,103 +59,31 @@
         </v-alert>
         <div class="text-h6 mb-2">LCP Contents:</div>
         <v-row justify="space-around">
-          <v-col cols="auto">
-            <v-btn large to="editor/actions">
-              Actions
-              <span class="item-count">({{ catLength('actions') }})</span>
-            </v-btn>
-          </v-col>
-          <v-col cols="auto">
-            <v-btn large>
-              Backgrounds
-              <span class="item-count">({{ catLength('backgrounds') }})</span>
-            </v-btn>
-          </v-col>
-          <v-col cols="auto">
-            <v-btn large>
-              Environments
-              <span class="item-count">({{ catLength('environments') }})</span>
-            </v-btn>
-          </v-col>
-          <v-col cols="auto">
-            <v-btn large>
-              Pilot Gear
-              <span class="item-count">({{ catLength('pilot_gear') }})</span>
-            </v-btn>
-          </v-col>
-          <v-col cols="auto">
-            <v-btn large>
-              Reserves
-              <span class="item-count">({{ catLength('reserves') }})</span>
-            </v-btn>
-          </v-col>
-
-          <v-col cols="auto">
-            <v-btn large>
-              Skills
-              <span class="item-count">({{ catLength('skills') }})</span>
-            </v-btn>
-          </v-col>
-          <v-col cols="auto">
-            <v-btn large>
-              Statuses
-              <span class="item-count">({{ catLength('statuses') }})</span>
-            </v-btn>
-          </v-col>
-          <v-col cols="auto">
-            <v-btn large>
-              Tables
-              <span class="item-count">({{ catLength('tables') }})</span>
-            </v-btn>
-          </v-col>
-          <v-col cols="auto">
-            <v-btn large>
-              Tags
-              <span class="item-count">({{ catLength('tags') }})</span>
-            </v-btn>
-          </v-col>
-          <v-col cols="auto">
-            <v-btn large>
-              Talents
-              <span class="item-count">({{ catLength('talents') }})</span>
-            </v-btn>
-          </v-col>
-        </v-row>
-
-        <v-row justify="space-around">
           <v-col cols="10">
             <v-btn x-large block>Manufacturers & Licenses</v-btn>
             <br />
             <div class="text-center mt-n4">
-              {{ manuCount }} Manufacturers ({{ catLength('manufacturers') }} new) //
+              {{ manuCount }} Manufacturers ({{ catLength('manufacturers') }} new) with
               {{ catLength('frames') }} Licenses, containing {{ catLength('weapons') }} Weapons,
               {{ catLength('systems') }} Systems and {{ catLength('mods') }} Weapon Mods
             </div>
           </v-col>
         </v-row>
+
         <v-row justify="space-around">
-          <v-col cols="auto">
-            <v-btn large>
-              NPC Classes
-              <span class="item-count">(0 Classes / 0 Features)</span>
+          <v-col v-for="(t, i) in categories" :key="`player_btn_${i}`" cols="2">
+            <v-btn large block :to="`editor/${t}`">
+              {{ t.replace('_', ' ') }}
+              <span class="item-count">({{ catLength(t) }})</span>
             </v-btn>
           </v-col>
-          <v-col cols="auto">
-            <v-btn large>
-              NPC Templates
-              <span class="item-count">({{ catLength('backgrounds') }})</span>
-            </v-btn>
-          </v-col>
-          <v-col cols="auto">
-            <v-btn large>
-              SITREPs
-              <span class="item-count">({{ catLength('backgrounds') }})</span>
-            </v-btn>
-          </v-col>
-          <v-col cols="auto">
-            <v-btn large>
-              Environments
-              <span class="item-count">({{ catLength('backgrounds') }})</span>
+        </v-row>
+
+        <v-row justify="space-around">
+          <v-col v-for="(t, i) in gmCategories" :key="`gm_btn_${i}`" cols="2">
+            <v-btn large block :to="`editor/${t}`" disabled>
+              {{ t.replace('_', ' ') }}
+              <span class="item-count">({{ catLength(t) }})</span>
             </v-btn>
           </v-col>
         </v-row>
@@ -178,6 +108,21 @@ export default Vue.extend({
     lcpFile: null,
     error: '',
     loading: false,
+    categories: [
+      'actions',
+      'backgrounds',
+      'environments',
+      'pilot_gear',
+      'reserves',
+      'skills',
+      'statuses',
+      'tables',
+      'tags',
+      'talents',
+      'sitreps',
+      'environments',
+    ],
+    gmCategories: ['npc_classes', 'npc_templates'],
   }),
   computed: {
     loaded() {
@@ -185,10 +130,6 @@ export default Vue.extend({
     },
     lcp() {
       return this.$store.getters.lcp
-    },
-    mKey() {
-      if (this.lcp.lcp_manifest) return this.lcp.lcp_manifest.name
-      return ''
     },
     manuCount() {
       if (!this.lcp.manufacturers && !this.lcp.frames) return 0
@@ -226,6 +167,9 @@ export default Vue.extend({
     },
     clearLcp() {
       this.$store.dispatch('clearLcp')
+    },
+    createNew() {
+      this.$store.dispatch('newLcp')
     },
   },
 })

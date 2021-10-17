@@ -1,8 +1,8 @@
 <template>
   <editor-base
-    itemKey="actions"
+    itemKey="skills"
     :checkDupes="['id', 'name']"
-    :checkEmpty="['id', 'name', 'activation', 'detail']"
+    :checkEmpty="['id', 'name', 'description', 'detail', 'family']"
   >
     <template v-slot="{ item }">
       <v-toolbar dense color="primary" class="white--text text-h6">{{ item.name }}</v-toolbar>
@@ -12,14 +12,15 @@
           <v-col><v-text-field label="Name" v-model="item.name" /></v-col>
           <v-col>
             <v-select
-              label="Activation"
-              :items="activationTypes"
-              item-text="desc"
-              v-model="item.activation"
+              label="Skill Type"
+              :items="['str', 'con', 'int', 'dex', 'cha']"
+              v-model="item.family"
+              hint="This deremines where on the Skill Trigger list the item appears and has no mechanical effect"
+              persistent-hint
             />
           </v-col>
         </v-row>
-        <v-text-field label="Short Description" v-model="item.terse" />
+        <v-text-field label="Short Description" v-model="item.description" />
         <v-card outlined class="pa-1">
           <div class="caption">Long Description</div>
           <tiptap-vuetify
@@ -30,30 +31,6 @@
             :toolbar-attributes="{ color: 'black', dark: true }"
           />
         </v-card>
-        <v-row v-if="item.activation !== 'Downtime'" class="px-4">
-          <v-col><v-switch dense label="Pilot Only" v-model="item.pilot" /></v-col>
-          <v-col><v-switch dense label="Mech Only" v-model="item.mech" /></v-col>
-          <v-col>
-            <v-switch dense label="Ignore 'Used' State" v-model="item.ignore_used" />
-          </v-col>
-          <v-col><v-switch dense label="Incur Heat Cost" v-model="item.heat_cost" /></v-col>
-          <v-col>
-            <v-select
-              label="Synergy Locations"
-              multiple
-              clearable
-              :items="synergyLocations"
-              item-text="desc"
-              v-model="item.synergy_locations"
-            >
-              <template v-slot:selection="{ chip }">
-                <v-chip small>
-                  <span>{{ chip.value }}</span>
-                </v-chip>
-              </template>
-            </v-select>
-          </v-col>
-        </v-row>
       </v-card-text>
     </template>
   </editor-base>
@@ -78,14 +55,11 @@ import {
   History,
 } from 'tiptap-vuetify'
 import EditorBase from './EditorBase.vue'
-import { synergyLocations, activationTypes } from '@/assets/enums'
 
 export default Vue.extend({
-  name: 'action-editor',
+  name: 'skills-editor',
   components: { TiptapVuetify, EditorBase },
   data: () => ({
-    synergyLocations: synergyLocations,
-    activationTypes: activationTypes,
     extensions: [
       History,
       Blockquote,

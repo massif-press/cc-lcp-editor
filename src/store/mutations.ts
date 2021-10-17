@@ -24,15 +24,26 @@ export default {
   async LOAD_LCP(state: any, payload: any) {
     state.loaded = false
     const zip = await JSZip.loadAsync(payload)
-    Object.keys(zip.files).forEach(async file => {
-      const propname = zip.files[file].name.split('.')[0]
-      Vue.set(state.lcp, propname, await getZipData(zip, zip.files[file].name))
-    });
+    await Promise.all(
+      Object.keys(zip.files).map(async file => {
+        const propname = zip.files[file].name.split('.')[0]
+        Vue.set(state.lcp, propname, await getZipData(zip, zip.files[file].name))
+      })
+    )
     state.loaded = true
-    console.log(state)
+    console.info(state)
   },
   CLEAR_LCP(state: any) {
     state.lcp = {}
     state.loaded = false
-  }
+  },
+  NEW_LCP(state: any) {
+    state.lcp = {
+      lcp_manifest: {
+        name: 'New LCP',
+        version: '0.0.1'
+      },
+    }
+    state.loaded = true
+  },
 }
