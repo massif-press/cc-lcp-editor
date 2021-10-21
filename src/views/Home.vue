@@ -111,7 +111,6 @@ export default Vue.extend({
     categories: [
       'actions',
       'backgrounds',
-      'environments',
       'pilot_gear',
       'reserves',
       'skills',
@@ -122,7 +121,7 @@ export default Vue.extend({
       'sitreps',
       'environments',
     ],
-    gmCategories: ['npc_classes', 'npc_templates'],
+    gmCategories: ['npc_classes', 'npc_templates', 'eidolon_shells'],
   }),
   computed: {
     loaded(): boolean {

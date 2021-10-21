@@ -1,15 +1,13 @@
 <template>
   <v-container>
-    <div>
-      <div class="overline">Quick Navigation</div>
-      <v-btn
-        v-for="(item, i) in lcp[itemKey]"
-        :key="`btn${i}`"
-        @click="$vuetify.goTo(`#item_${i}`)"
-      >
-        {{ item.name }}
-      </v-btn>
-    </div>
+    <div class="overline">Quick Navigation</div>
+    <v-row no-gutters justify="space-around" align="center">
+      <v-col v-for="(item, i) in lcp[itemKey]" :key="`btn${i}`" cols="auto">
+        <v-btn text @click="$vuetify.goTo(`#item_${i}`)">
+          {{ item.name }}
+        </v-btn>
+      </v-col>
+    </v-row>
     <v-divider class="my-3" />
     <v-row>
       <v-col cols="12" v-for="(item, i) in lcp[itemKey]" :key="`item_${i}`">
@@ -153,8 +151,5 @@ export default Vue.extend({
 <style scoped>
 .error-msg {
   font-size: 18px !important;
-}
-#rte >>> .tiptap-vuetify-editor__content {
-  max-height: 200px;
 }
 </style>

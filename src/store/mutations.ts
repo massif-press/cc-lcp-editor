@@ -21,7 +21,7 @@ async function getZipData(zip: JSZip, filename: string): Promise<any> {
 }
 
 export default {
-  async LOAD_LCP(state: any, payload: any) {
+  async LOAD_LCP(state: any, payload: any): Promise<void> {
     state.loaded = false
     const zip = await JSZip.loadAsync(payload)
     await Promise.all(
@@ -30,18 +30,22 @@ export default {
         Vue.set(state.lcp, propname, await getZipData(zip, zip.files[file].name))
       })
     )
+    if (!state.lcp.lcp_manifest) state.lcp.lcp_manifest = {
+      name: 'New LCP',
+      version: '0.0.1',
+    }
     state.loaded = true
     console.info(state)
   },
-  CLEAR_LCP(state: any) {
+  CLEAR_LCP(state: any): void {
     state.lcp = {}
     state.loaded = false
   },
-  NEW_LCP(state: any) {
+  NEW_LCP(state: any): void {
     state.lcp = {
       lcp_manifest: {
         name: 'New LCP',
-        version: '0.0.1'
+        version: '0.0.1',
       },
     }
     state.loaded = true

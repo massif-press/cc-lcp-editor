@@ -19,16 +19,11 @@
             />
           </v-col>
         </v-row>
-        <v-card outlined class="pa-1">
-          <div class="caption">Long Description</div>
-          <tiptap-vuetify
-            id="rte"
-            v-model="item.description"
-            :extensions="extensions"
-            :card-props="{ flat: true, tile: true, elevation: 0 }"
-            :toolbar-attributes="{ color: 'black', dark: true }"
-          />
-        </v-card>
+        <rich-text-editor
+          title="Description"
+          :value="item.description"
+          @input="item.description = $event"
+        />
       </v-card-text>
     </template>
   </editor-base>
@@ -36,56 +31,11 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import {
-  TiptapVuetify,
-  Heading,
-  Bold,
-  Italic,
-  Strike,
-  Underline,
-  Code,
-  BulletList,
-  OrderedList,
-  ListItem,
-  Blockquote,
-  HardBreak,
-  HorizontalRule,
-  History,
-} from 'tiptap-vuetify'
 import EditorBase from './EditorBase.vue'
+import { RichTextEditor } from '@/components'
 
 export default Vue.extend({
   name: 'tags-editor',
-  components: { TiptapVuetify, EditorBase },
-  data: () => ({
-    extensions: [
-      History,
-      Blockquote,
-      Underline,
-      Strike,
-      Italic,
-      ListItem,
-      BulletList,
-      OrderedList,
-      [
-        Heading,
-        {
-          options: {
-            levels: [1, 2, 3],
-          },
-        },
-      ],
-      Bold,
-      Code,
-      HorizontalRule,
-      HardBreak,
-    ],
-  }),
+  components: { EditorBase, RichTextEditor },
 })
 </script>
-
-<style scoped>
-#rte >>> .tiptap-vuetify-editor__content {
-  max-height: 200px;
-}
-</style>

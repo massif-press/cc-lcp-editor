@@ -1,11 +1,12 @@
 const activationTypes = [
+  { value: 'Move', desc: 'Move' },
   { value: 'Free', desc: 'Free Action' },
   { value: 'Protocol', desc: 'Protocol' },
   { value: 'Quick', desc: 'Quick Action' },
   { value: 'Full', desc: 'Full Action' },
   { value: 'Invade', desc: 'Invasion Option' },
-  { value: 'Full', desc: 'Tech	Full Tech Action' },
-  { value: 'Quick', desc: 'Tech	Quick Tech Action' },
+  { value: 'Full Tech', desc: 'Full Tech Action' },
+  { value: 'Quick Tech', desc: 'Quick Tech Action' },
   { value: 'Reaction', desc: 'Reaction' },
   { value: 'Other', desc: 'Other / Unsorted Action' },
   { value: 'Downtime', desc: 'Downtime Action' },
@@ -53,9 +54,21 @@ const synergyLocations = [
     value: 'overcharge',
     desc: 'Next to the overcharge pip tracker in the Active Mode: Combat view',
   },
+  { value: 'dismount', desc: 'Dismount Action modal' },
+  { value: 'quick_activation', desc: 'Quick System Action modal' },
+  { value: 'full_activation', desc: 'Full System Action modal' },
+  { value: 'stabilize', desc: 'Stabilize Action modal' },
+  { value: 'barrage', desc: 'Barrage Action modal' },
+  { value: 'reload', desc: 'Reload Action modal' },
+  { value: 'shut_down', desc: 'Shut Down Action modal' },
+  { value: 'prepare', desc: 'Prepare Action modal' },
+  { value: 'eject', desc: 'Eject Action modal' },
+  { value: 'hide', desc: 'Hide Action modal' },
+  { value: 'bolster', desc: 'Bolster Action modal' },
   { value: 'ram', desc: 'Ram Action modal' },
   { value: 'grapple', desc: 'Grapple Action modal' },
   { value: 'tech_attack', desc: 'Tech Attack Action modal' },
+  { value: 'quick_tech', desc: 'Quick Tech Action modal' },
   { value: 'overcharge', desc: 'Overcharge Action modal' },
   { value: 'skill_check', desc: 'Skill Check Action modal' },
   { value: 'overwatch', desc: 'Overwatch Action modal' },
@@ -65,6 +78,7 @@ const synergyLocations = [
   { value: 'stabilize', desc: 'Stabilize Action modal' },
   { value: 'tech', desc: 'Quick and Full Tech Attack modals' },
   { value: 'lock_on', desc: 'Lock On Action modal' },
+  { value: 'scan', desc: 'Scan Action modal' },
   { value: 'hull', desc: 'mouseover tooltip for HULL stat' },
   { value: 'agility', desc: 'mouseover tooltip for AGILITY stat' },
   { value: 'systems', desc: 'mouseover tooltip for SYSTEMS stat' },
@@ -79,7 +93,7 @@ const bonuses = [
   { value: 'talent_point', desc: 'Add Pilot Talent point', type: 'integer' },
   { value: 'license_point', desc: 'Add Pilot License point', type: 'integer' },
   { value: 'cb_point', desc: 'Add Pilot CORE Bonus point', type: 'integer' },
-  { value: 'range', desc: 'Add Range(including Threat) to weapons', type: 'integer' },
+  { value: 'range', desc: 'Add Range (including Threat) to weapons', type: 'integer' },
   { value: 'damage', desc: 'Add Damage to weapons', type: 'integer' },
   { value: 'hp', desc: 'Add Mech HP', type: 'integer' },
   { value: 'armor', desc: 'Add Mech Armor', type: 'integer' },
@@ -101,7 +115,7 @@ const bonuses = [
   { value: 'ai_cap', desc: 'Add AI Capacity', type: 'integer' },
   { value: 'cheap_struct', desc: 'Half cost for Structure repairs', type: 'boolean' },
   { value: 'cheap_stress', desc: 'Half cost for Reactor Stress repairs', type: 'boolean' },
-  { value: 'overcharge', desc: 'Overcharge Track	DieRol', type: '[]' },
+  { value: 'overcharge', desc: 'Overcharge Track', type: 'string' },
   { value: 'limited_bonus', desc: 'Add Limited equipment uses', type: 'integer' },
   { value: 'pilot_hp', desc: 'Add Pilot HP', type: 'integer' },
   { value: 'pilot_armor', desc: 'Add Pilot Armor', type: 'integer' },
@@ -169,4 +183,32 @@ const weaponType = ['Rifle', 'Cannon', 'Launcher', 'CQB', 'Nexus', 'Melee']
 
 const weaponSize = ['Aux', 'Main', 'Heavy', 'Superheavy']
 
-export { activationTypes, synergyLocations, bonuses, systemType, mountType, weaponType, weaponSize }
+const rangeType = [
+  'Range',
+  'Threat',
+  'Thrown',
+  'Line',
+  'Cone',
+  'Blast',
+  'Burst',
+]
+
+const damageType = [
+  'Kinetic',
+  'Energy',
+  'Explosive',
+  'Heat',
+  'Burn',
+  'Variable',
+]
+
+const mechType = [
+  'Balanced',
+  'Artillery',
+  'Striker',
+  'Controller',
+  'Support',
+  'Defender',
+]
+
+export { activationTypes, synergyLocations, bonuses, systemType, mountType, weaponType, weaponSize, rangeType, damageType, mechType }

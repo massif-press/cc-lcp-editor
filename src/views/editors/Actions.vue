@@ -11,47 +11,29 @@
           <v-col><v-text-field label="ID" v-model="item.id" /></v-col>
           <v-col><v-text-field label="Name" v-model="item.name" /></v-col>
           <v-col>
-            <v-select
-              label="Activation"
-              :items="activationTypes"
-              item-text="desc"
-              v-model="item.activation"
-            />
+            <activator-selector :item="item" />
           </v-col>
         </v-row>
         <v-text-field label="Short Description" v-model="item.terse" />
-        <v-card outlined class="pa-1">
-          <div class="caption">Long Description</div>
-          <tiptap-vuetify
-            id="rte"
-            v-model="item.detail"
-            :extensions="extensions"
-            :card-props="{ flat: true, tile: true, elevation: 0 }"
-            :toolbar-attributes="{ color: 'black', dark: true }"
-          />
-        </v-card>
-        <v-row v-if="item.activation !== 'Downtime'" class="px-4">
-          <v-col><v-switch dense label="Pilot Only" v-model="item.pilot" /></v-col>
-          <v-col><v-switch dense label="Mech Only" v-model="item.mech" /></v-col>
+        <rich-text-editor
+          title="Long Description"
+          :value="item.detail"
+          @input="item.detail = $event"
+        />
+
+        <v-row v-if="item.activation !== 'Downtime'" class="px-4 mb-2" dense>
+          <v-col><v-switch dense hide-details label="Pilot Action" v-model="item.pilot" /></v-col>
+          <v-col><v-switch dense hide-details label="Mech Action" v-model="item.mech" /></v-col>
           <v-col>
-            <v-switch dense label="Ignore 'Used' State" v-model="item.ignore_used" />
+            <v-switch dense hide-details label="Ignore 'Used' State" v-model="item.ignore_used" />
           </v-col>
-          <v-col><v-switch dense label="Incur Heat Cost" v-model="item.heat_cost" /></v-col>
           <v-col>
-            <v-select
-              label="Synergy Locations"
-              multiple
-              clearable
-              :items="synergyLocations"
-              item-text="desc"
-              v-model="item.synergy_locations"
-            >
-              <template v-slot:selection="{ chip }">
-                <v-chip small>
-                  <span>{{ chip.value }}</span>
-                </v-chip>
-              </template>
-            </v-select>
+            <v-switch dense hide-details label="Incur Heat Cost" v-model="item.heat_cost" />
+          </v-col>
+        </v-row>
+        <v-row dense>
+          <v-col>
+            <synergy-selector :item="item" />
           </v-col>
         </v-row>
       </v-card-text>
@@ -61,59 +43,11 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import {
-  TiptapVuetify,
-  Heading,
-  Bold,
-  Italic,
-  Strike,
-  Underline,
-  Code,
-  BulletList,
-  OrderedList,
-  ListItem,
-  Blockquote,
-  HardBreak,
-  HorizontalRule,
-  History,
-} from 'tiptap-vuetify'
 import EditorBase from './EditorBase.vue'
-import { synergyLocations, activationTypes } from '@/assets/enums'
+import { SynergySelector, ActivatorSelector, RichTextEditor } from '@/components'
 
 export default Vue.extend({
   name: 'action-editor',
-  components: { TiptapVuetify, EditorBase },
-  data: () => ({
-    synergyLocations: synergyLocations,
-    activationTypes: activationTypes,
-    extensions: [
-      History,
-      Blockquote,
-      Underline,
-      Strike,
-      Italic,
-      ListItem,
-      BulletList,
-      OrderedList,
-      [
-        Heading,
-        {
-          options: {
-            levels: [1, 2, 3],
-          },
-        },
-      ],
-      Bold,
-      Code,
-      HorizontalRule,
-      HardBreak,
-    ],
-  }),
+  components: { EditorBase, SynergySelector, ActivatorSelector, RichTextEditor },
 })
 </script>
-
-<style scoped>
-#rte >>> .tiptap-vuetify-editor__content {
-  max-height: 200px;
-}
-</style>
