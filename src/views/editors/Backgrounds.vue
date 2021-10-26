@@ -11,11 +11,7 @@
           <v-col><v-text-field label="ID" v-model="item.id" /></v-col>
           <v-col><v-text-field label="Name" v-model="item.name" /></v-col>
         </v-row>
-        <rich-text-editor
-          title="Description"
-          :value="item.description"
-          @input="item.description = $event"
-        />
+        <rich-text-editor title="Description" v-model="item.description" />
       </v-card-text>
     </template>
   </editor-base>
@@ -24,7 +20,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import EditorBase from './EditorBase.vue'
-import { RichTextEditor } from '@/components'
+import RichTextEditor from '@/components/RichTextEditor.vue'
 
 export default Vue.extend({
   name: 'backgrounds-editor',

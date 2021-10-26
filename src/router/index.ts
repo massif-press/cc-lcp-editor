@@ -55,6 +55,11 @@ const routes: Array<RouteConfig> = [
     name: 'Reserve Editor',
     component: () => import(/* webpackChunkName: "editors" */ '../views/editors/Reserves.vue'),
   },
+  {
+    path: '/editor/pilot_gear',
+    name: 'Pilot Gear Editor',
+    component: () => import(/* webpackChunkName: "editors" */ '../views/editors/PilotGear.vue'),
+  },
 ]
 
 const router = new VueRouter({

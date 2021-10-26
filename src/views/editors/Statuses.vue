@@ -26,7 +26,7 @@
           />
         </v-row>
         <v-text-field label="Short Description" v-model="item.terse" />
-        <rich-text-editor title="Effects" :value="item.effects" @input="item.effects = $event" />
+        <rich-text-editor title="Effects" v-model="item.effects" />
       </v-card-text>
     </template>
   </editor-base>
@@ -35,7 +35,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import EditorBase from './EditorBase.vue'
-import { RichTextEditor } from '@/components'
+import RichTextEditor from '@/components/RichTextEditor.vue'
 
 export default Vue.extend({
   name: 'status-editor',

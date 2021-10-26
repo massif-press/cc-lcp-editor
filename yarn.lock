@@ -5597,6 +5597,11 @@ klona@^2.0.4:
   resolved "https://registry.yarnpkg.com/klona/-/klona-2.0.4.tgz#7bb1e3affb0cb8624547ef7e8f6708ea2e39dfc0"
   integrity sha512-ZRbnvdg/NxqzC7L9Uyqzf4psi1OM4Cuc+sJAkQPjO6XkQIJTNbfK2Rsmbw8fx1p2mkZdp2FZYo2+LwXYY/uwIA==
 
+lancer-data@^3.0.38:
+  version "3.0.38"
+  resolved "https://registry.yarnpkg.com/lancer-data/-/lancer-data-3.0.38.tgz#3d737c51704dc647bfe90c399096590d79a09b14"
+  integrity sha512-23Ak5fhhV31UMu6yrsVq9sPNeihKiE7+w8gIw4Il0Xq3zQWs8YifWIN3d6GWGuOi+8tjuDVCfNP19QbYSvk0Kg==
+
 launch-editor-middleware@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/launch-editor-middleware/-/launch-editor-middleware-2.2.1.tgz#e14b07e6c7154b0a4b86a0fd345784e45804c157"

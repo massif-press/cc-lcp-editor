@@ -15,11 +15,7 @@
           </v-col>
         </v-row>
         <v-text-field label="Short Description" v-model="item.terse" />
-        <rich-text-editor
-          title="Long Description"
-          :value="item.detail"
-          @input="item.detail = $event"
-        />
+        <rich-text-editor title="Long Description" v-model="item.detail" />
 
         <v-row v-if="item.activation !== 'Downtime'" class="px-4 mb-2" dense>
           <v-col><v-switch dense hide-details label="Pilot Action" v-model="item.pilot" /></v-col>
@@ -44,7 +40,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import EditorBase from './EditorBase.vue'
-import { SynergySelector, ActivatorSelector, RichTextEditor } from '@/components'
+import RichTextEditor from '@/components/RichTextEditor.vue'
+import ActivatorSelector from '@/components/ActivatorSelector.vue'
+import SynergySelector from '@/components/SynergySelector.vue'
 
 export default Vue.extend({
   name: 'action-editor',

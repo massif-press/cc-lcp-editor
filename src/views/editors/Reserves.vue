@@ -24,11 +24,7 @@
         </v-row>
         <v-row dense>
           <v-col>
-            <rich-text-editor
-              title="Description"
-              :value="item.description"
-              @input="item.description = $event"
-            />
+            <rich-text-editor title="Description" v-model="item.description" />
           </v-col>
         </v-row>
         <v-row>
@@ -57,9 +53,7 @@
             <i-counter-builder :item="item" />
           </v-col>
           <v-col>
-            <!-- TODO -->
-            "deployables"?: IDeployableData[]
-            <!-- TODO -->
+            <i-deployable-builder :item="item" />
           </v-col>
         </v-row>
       </v-card-text>
@@ -70,15 +64,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import EditorBase from './EditorBase.vue'
-import {
-  SynergySelector,
-  IBonusBuilder,
-  SpecialEquipmentSelector,
-  IntegratedSelector,
-  IActionBuilder,
-  ICounterBuilder,
-  RichTextEditor,
-} from '@/components'
+import RichTextEditor from '@/components/RichTextEditor.vue'
+import IActionBuilder from '@/components/IActionBuilder.vue'
+import IBonusBuilder from '@/components/IBonusBuilder.vue'
+import ICounterBuilder from '@/components/ICounterBuilder.vue'
+import SynergySelector from '@/components/SynergySelector.vue'
+import SpecialEquipmentSelector from '@/components/SpecialEquipmentSelector.vue'
+import IntegratedSelector from '@/components/IntegratedSelector.vue'
+import IDeployableBuilder from '@/components/IDeployableBuilder.vue'
 
 export default Vue.extend({
   name: 'reserves-editor',
@@ -91,6 +84,7 @@ export default Vue.extend({
     IActionBuilder,
     ICounterBuilder,
     RichTextEditor,
+    IDeployableBuilder,
   },
 })
 </script>

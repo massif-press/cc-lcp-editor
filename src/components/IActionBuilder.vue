@@ -62,7 +62,7 @@
             </v-row>
             <v-row>
               <v-col>
-                <rich-text-editor title="Detail" :value="detail" @input="detail = $event" />
+                <rich-text-editor title="Detail" v-model="detail" />
               </v-col>
             </v-row>
             <v-row dense align="center" justify="space-around" class="my-2">
@@ -94,17 +94,13 @@
               <v-row dense>
                 <v-col>
                   <v-card outlined>
-                    <rich-text-editor
-                      title="Precondition (optional)"
-                      :value="init"
-                      @input="init = $event"
-                    />
+                    <rich-text-editor title="Precondition (optional)" v-model="init" />
                   </v-card>
                 </v-col>
               </v-row>
               <v-row dense>
                 <v-col>
-                  <rich-text-editor title="Trigger" :value="trigger" @input="trigger = $event" />
+                  <rich-text-editor title="Trigger" v-model="trigger" />
                 </v-col>
               </v-row>
             </div>
@@ -129,7 +125,9 @@
 </template>
 
 <script lang="ts">
-import { RichTextEditor, ActivatorSelector, SynergySelector } from './index'
+import RichTextEditor from './RichTextEditor.vue'
+import ActivatorSelector from './ActivatorSelector.vue'
+import SynergySelector from './SynergySelector.vue'
 
 import Vue from 'vue'
 export default Vue.extend({

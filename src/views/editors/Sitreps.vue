@@ -11,58 +11,30 @@
           <v-col><v-text-field label="ID" v-model="item.id" /></v-col>
           <v-col><v-text-field label="Name" v-model="item.name" /></v-col>
         </v-row>
-        <rich-text-editor
-          title="Description"
-          :value="item.description"
-          @input="item.description = $event"
-        />
+        <rich-text-editor title="Description" v-model="item.description" />
 
         <v-row>
           <v-col>
-            <rich-text-editor
-              title="PC Victory"
-              :value="item.pcVictory"
-              @input="item.pcVictory = $event"
-            />
+            <rich-text-editor title="PC Victory" v-model="item.pcVictory" />
           </v-col>
           <v-col>
-            <rich-text-editor
-              title="Enemy Victory"
-              :value="item.enemyVictory"
-              @input="item.enemyVictory = $event"
-            />
+            <rich-text-editor title="Enemy Victory" v-model="item.enemyVictory" />
           </v-col>
         </v-row>
         <v-row>
           <v-col>
-            <rich-text-editor
-              title="Stalemate"
-              :value="item.noVictory"
-              @input="item.noVictory = $event"
-            />
+            <rich-text-editor title="Stalemate" v-model="item.stalemate" />
           </v-col>
           <v-col>
-            <rich-text-editor
-              title="Deployment"
-              :value="item.deployment"
-              @input="item.deployment = $event"
-            />
+            <rich-text-editor title="Deployment" v-model="item.deployment" />
           </v-col>
         </v-row>
         <v-row>
           <v-col>
-            <rich-text-editor
-              title="Objective"
-              :value="item.objective"
-              @input="item.objective = $event"
-            />
+            <rich-text-editor title="Objective" v-model="item.objective" />
           </v-col>
           <v-col>
-            <rich-text-editor
-              title="Extraction"
-              :value="item.extraction"
-              @input="item.extraction = $event"
-            />
+            <rich-text-editor title="Extraction" v-model="item.extraction" />
           </v-col>
         </v-row>
       </v-card-text>
@@ -73,7 +45,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import EditorBase from './EditorBase.vue'
-import { RichTextEditor } from '@/components'
+import RichTextEditor from '@/components/RichTextEditor.vue'
 
 export default Vue.extend({
   name: 'sitreps-editor',

@@ -1,10 +1,11 @@
 <template>
   <v-select
-    label="Activation"
+    :label="`${label}${optional ? ' (Optional)' : ''}`"
     :items="activationTypes"
     item-text="desc"
     hide-details
-    v-model="item.activation"
+    :clearable="optional"
+    v-model="item[field]"
   />
 </template>
 
@@ -18,6 +19,19 @@ export default Vue.extend({
     item: {
       type: Object,
       required: true,
+    },
+    label: {
+      type: String,
+      required: false,
+      default: 'Activation',
+    },
+    field: {
+      type: String,
+      required: false,
+      default: 'activation',
+    },
+    optional: {
+      type: Boolean,
     },
   },
   data: () => ({
