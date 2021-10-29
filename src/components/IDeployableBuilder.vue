@@ -128,7 +128,7 @@
                 <v-select label="Size" :items="[0.5, 1, 2, 3, 4]" hide-details v-model="size" />
               </v-col>
               <v-col>
-                <synergy-selector :item="this" />
+                <i-synergy-builder :item="this" />
               </v-col>
             </v-row>
             <v-row>
@@ -328,7 +328,7 @@ import IActionBuilder from './IActionBuilder.vue'
 import IBonusBuilder from './IBonusBuilder.vue'
 import ICounterBuilder from './ICounterBuilder.vue'
 import TagSelector from './TagSelector.vue'
-import SynergySelector from './SynergyLocationSelector.vue'
+import ISynergyBuilder from './ISynergyBuilder.vue'
 
 import Vue from 'vue'
 export default Vue.extend({
@@ -337,7 +337,7 @@ export default Vue.extend({
   components: {
     RichTextEditor,
     ActivatorSelector,
-    SynergySelector,
+    ISynergyBuilder,
     IActionBuilder,
     IBonusBuilder,
     ICounterBuilder,
@@ -369,7 +369,7 @@ export default Vue.extend({
     mech: false,
     actions: [],
     bonuses: [],
-    synergy_locations: [],
+    synergies: [],
     counters: [],
     isEdit: false,
     editIndex: -1,
@@ -406,7 +406,7 @@ export default Vue.extend({
         mech: this.mech,
         actions: this.actions,
         bonuses: this.bonuses,
-        synergies: this.synergy_locations,
+        synergies: this.synergies,
         counters: this.counters,
       }
       if (this.isEdit) {
@@ -443,7 +443,7 @@ export default Vue.extend({
       this.mech = deployable.mech || false
       this.actions = deployable.actions || []
       this.bonuses = deployable.bonuses || []
-      this.synergy_locations = deployable.synergies || []
+      this.synergies = deployable.synergies || []
       this.counters = deployable.counters || []
       this.isEdit = true
       this.editIndex = index
@@ -477,7 +477,7 @@ export default Vue.extend({
       this.mech = false
       this.actions = []
       this.bonuses = []
-      this.synergy_locations = []
+      this.synergies = []
       this.counters = []
     },
   },

@@ -114,7 +114,6 @@ export default Vue.extend({
     synergies: [],
     actions: [],
     bonuses: [],
-    synergy_locations: [],
     deployables: [],
     counters: [],
     integrated: [],
@@ -135,7 +134,6 @@ export default Vue.extend({
         synergies: this.synergies,
         actions: this.actions,
         bonuses: this.bonuses,
-        synergy_locations: this.synergy_locations,
         deployables: this.deployables,
         counters: this.counters,
         integrated: this.integrated,
@@ -153,10 +151,9 @@ export default Vue.extend({
     edit(rank: any, index: number): void {
       this.name = rank.name
       this.description = rank.description
-      this.synergies = rank.synergies
       this.actions = rank.actions
       this.bonuses = rank.bonuses
-      this.synergy_locations = rank.synergy_locations
+      this.synergies = rank.synergies
       this.deployables = rank.deployables
       this.counters = rank.counters
       this.integrated = rank.integrated
@@ -174,7 +171,7 @@ export default Vue.extend({
       this.synergies = []
       this.actions = []
       this.bonuses = []
-      this.synergy_locations = []
+      this.synergies = []
       this.deployables = []
       this.counters = []
       this.integrated = []
