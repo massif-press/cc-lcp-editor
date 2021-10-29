@@ -60,7 +60,9 @@
         <div class="text-h6 mb-2">LCP Contents:</div>
         <v-row justify="space-around">
           <v-col cols="10">
-            <v-btn x-large block>Manufacturers & Licenses</v-btn>
+            <v-btn x-large block color="primary darken-3" to="editor/manufacturers">
+              Manufacturers & Licenses
+            </v-btn>
             <br />
             <div class="text-center mt-n4">
               {{ manuCount }} Manufacturers ({{ catLength('manufacturers') }} new) with
@@ -72,16 +74,16 @@
 
         <v-row justify="space-around">
           <v-col v-for="(t, i) in categories" :key="`player_btn_${i}`" cols="2">
-            <v-btn large block :to="`editor/${t}`">
+            <v-btn large block color="primary darken-3" :to="`editor/${t}`">
               {{ t.replace('_', ' ') }}
-              <span class="item-count">({{ catLength(t) }})</span>
+              <span v-show="t !== 'tables'" class="item-count">({{ catLength(t) }})</span>
             </v-btn>
           </v-col>
         </v-row>
 
         <v-row justify="space-around">
           <v-col v-for="(t, i) in gmCategories" :key="`gm_btn_${i}`" cols="2">
-            <v-btn large block :to="`editor/${t}`" disabled>
+            <v-btn large block color="primary darken-3" :to="`editor/${t}`" disabled>
               {{ t.replace('_', ' ') }}
               <span class="item-count">({{ catLength(t) }})</span>
             </v-btn>
@@ -90,8 +92,7 @@
       </v-card-text>
       <v-divider class="my-2" />
       <v-card-actions>
-        <v-spacer />
-        <v-btn color="success">Export LCP</v-btn>
+        <v-btn x-large block color="success" @click="exportLCP">Export LCP</v-btn>
       </v-card-actions>
     </v-card>
   </v-container>
@@ -101,6 +102,8 @@
 import Vue from 'vue'
 import _ from 'lodash'
 import PromisifyFileReader from 'promisify-file-reader'
+import JSZip from 'jszip'
+import { saveAs } from 'file-saver'
 
 export default Vue.extend({
   name: 'Home',
@@ -132,9 +135,12 @@ export default Vue.extend({
     },
     manuCount(): number {
       if (!this.lcp.manufacturers && !this.lcp.frames) return 0
-      const m = this.lcp.manufacturers?.length || 0
-      const f = this.lcp.frames ? _.uniq(this.lcp.frames.map((x: any) => x.source)).length : 0
-      return m + f
+      const m =
+        this.lcp.manufacturers && this.lcp.manufacturers.length
+          ? this.lcp.manufacturers.map((x: any) => x.id)
+          : []
+      const f = this.lcp.frames ? _.uniq(this.lcp.frames.map((x: any) => x.source)) : []
+      return _.uniq(m.concat(f)).length
     },
   },
   methods: {
@@ -168,7 +174,20 @@ export default Vue.extend({
       this.$store.dispatch('clearLcp')
     },
     createNew() {
+      this.$store.dispatch('clearLcp')
       this.$store.dispatch('newLcp')
+    },
+    exportLCP() {
+      const filename = `${this.lcp.lcp_manifest.name.toLowerCase().replaceAll(' ', '-')}_${
+        this.lcp.lcp_manifest.version
+      }.lcp`
+      const zip = new JSZip()
+      Object.keys(this.lcp).forEach(key => {
+        zip.file(`${key}.json`, JSON.stringify(this.lcp[key]))
+      })
+      zip.generateAsync({ type: 'blob' }).then(function (blob) {
+        saveAs(blob, filename)
+      })
     },
   },
 })

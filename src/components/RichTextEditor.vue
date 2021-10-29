@@ -1,12 +1,12 @@
 <template>
   <v-card outlined>
-    <div class="caption px-1">Description</div>
+    <div class="caption px-1">{{ title }}</div>
     <tiptap-vuetify
       id="rte"
       v-model="val"
       :extensions="extensions"
       :card-props="{ flat: true, tile: true, elevation: 0 }"
-      :toolbar-attributes="{ color: 'black', dark: true }"
+      :toolbar-attributes="{ color: 'darkgrey', dark: true }"
     />
   </v-card>
 </template>
@@ -33,7 +33,7 @@ import {
 export default Vue.extend({
   name: 'rich-text-editor',
   components: { TiptapVuetify },
-  props: ['value'],
+  props: ['value', 'title'],
   data: () => ({
     extensions: [
       History,

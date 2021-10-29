@@ -6,3 +6,4 @@ declare module '*.vue' {
 declare module 'tiptap-vuetify'
 declare module 'promisify-file-reader'
 declare module 'lancer-data'
+declare module 'file-saver'

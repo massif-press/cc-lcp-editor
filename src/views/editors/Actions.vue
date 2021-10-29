@@ -42,7 +42,7 @@ import Vue from 'vue'
 import EditorBase from './EditorBase.vue'
 import RichTextEditor from '@/components/RichTextEditor.vue'
 import ActivatorSelector from '@/components/ActivatorSelector.vue'
-import SynergySelector from '@/components/SynergySelector.vue'
+import SynergySelector from '@/components/SynergyLocationSelector.vue'
 
 export default Vue.extend({
   name: 'action-editor',

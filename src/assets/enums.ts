@@ -157,26 +157,22 @@ const bonuses = [
 ]
 
 const systemType = [
-  { value: 'AI', desc: 'AI Systems' },
-  {
-    value: 'Deployable',
-    desc: 'Systems that are or contain non - drone Deployable equipment, or Charges',
-  },
-  { value: 'Drone', desc: 'Systems that are or contain one ore more Drone - type Deployables' },
-  { value: 'Flight', desc: 'System	Systems that add or allow flying movement' },
-  { value: 'Shield', desc: 'Systems that add Overshield or another shielding mechanic' },
-  { value: 'System', desc: 'Non - typed / passive / generic activation Systems' },
-  { value: 'Tech', desc: 'Systems that include a Tech Activation or expand Invasion options' },
+  'AI',
+  'Deployable',
+  'Drone',
+  'Flight',
+  'Shield',
+  'System',
+  'Tech',
 ]
 
 const mountType = [
-  { value: 'Main', desc: 'Main Mount' },
-  { value: 'Heavy', desc: 'Heavy Mount' },
-  { value: 'Aux', desc: 'Aux	Aux/Aux Mount' },
-  { value: 'Aux', desc: 'Aux Mount' },
-  { value: 'Main', desc: 'Aux	Main/Aux Mount' },
-  { value: 'Flex', desc: 'Flex Mount' },
-  { value: 'Integrated', desc: 'Integrated Mount' },
+  'Main',
+  'Main/Aux',
+  'Aux/Aux',
+  'Heavy',
+  'Flex',
+  'Integrated',
 ]
 
 const weaponType = ['Rifle', 'Cannon', 'Launcher', 'CQB', 'Nexus', 'Melee']

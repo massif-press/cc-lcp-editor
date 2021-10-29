@@ -128,7 +128,7 @@ export default Vue.extend({
       const blob = new Blob([JSON.stringify(this.lcp[this.itemKey])])
       const elem = window.document.createElement('a')
       elem.href = window.URL.createObjectURL(blob)
-      elem.download = 'actions.json'
+      elem.download = `${this.itemKey}.json`
       document.body.appendChild(elem)
       elem.click()
       document.body.removeChild(elem)
@@ -141,7 +141,7 @@ export default Vue.extend({
       const reader = new FileReader()
 
       reader.onload = e =>
-        this.$set(this.lcp, 'actions', JSON.parse(e?.target?.result?.toString() || ''))
+        this.$set(this.lcp, this.itemKey, JSON.parse(e?.target?.result?.toString() || ''))
       reader.readAsText(file)
     },
   },

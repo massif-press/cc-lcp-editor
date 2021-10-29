@@ -2,7 +2,12 @@
   <v-card outlined>
     <div class="caption mb-n1 mt-n3">ACTIONS</div>
     <v-card flat>
-      <v-tooltip v-for="(action, i) in item.actions" :key="`action_chip_${item.id}-${i}`" top>
+      <v-tooltip
+        v-for="(action, i) in item.actions"
+        :key="`action_chip_${item.id || item.name}-${i}`"
+        top
+        max-width="50vw"
+      >
         <template v-slot:activator="{ on }">
           <v-chip
             small
@@ -105,9 +110,10 @@
               </v-row>
             </div>
             <v-divider class="my-2" />
-            <div class="caption">Damage (Charge items only):</div>
-            <v-row dense align="center">
-              <v-col>todo</v-col>
+            <div class="caption mb-2">Charge items only:</div>
+            <v-row>
+              <v-col><damage-selector :item="this" /></v-col>
+              <v-col><range-selector :item="this" /></v-col>
             </v-row>
           </v-card-text>
           <v-divider />
@@ -115,7 +121,7 @@
             <v-btn text color="error" @click="dialog = false">cancel</v-btn>
             <v-spacer />
             <v-btn color="success darken-2" :disabled="!confirmOK" @click="submit">
-              {{ isEdit ? 'edit' : 'confirm' }}
+              {{ isEdit ? 'save' : 'confirm' }}
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -127,13 +133,15 @@
 <script lang="ts">
 import RichTextEditor from './RichTextEditor.vue'
 import ActivatorSelector from './ActivatorSelector.vue'
-import SynergySelector from './SynergySelector.vue'
+import SynergySelector from './SynergyLocationSelector.vue'
+import DamageSelector from './DamageSelector.vue'
+import RangeSelector from './RangeSelector.vue'
 
 import Vue from 'vue'
 export default Vue.extend({
   name: 'action-builder',
   props: { item: { type: Object, required: true } },
-  components: { RichTextEditor, ActivatorSelector, SynergySelector },
+  components: { RichTextEditor, ActivatorSelector, SynergySelector, DamageSelector, RangeSelector },
   data: () => ({
     dialog: false,
     name: '',
@@ -142,6 +150,8 @@ export default Vue.extend({
     cost: 0,
     pilot: false,
     synergy_locations: [],
+    damage: [],
+    range: [],
     tech_attack: false,
     frequency: 'Unlimited',
     init: '',
@@ -164,6 +174,8 @@ export default Vue.extend({
         detail: this.detail,
         cost: this.cost,
         pilot: this.pilot,
+        damage: this.damage,
+        range: this.range,
         synergy_locations: this.synergy_locations,
         tech_attack: this.tech_attack,
         frequency: this.frequency,
@@ -185,6 +197,8 @@ export default Vue.extend({
       this.detail = action.detail
       this.cost = action.cost
       this.pilot = action.pilot
+      this.damage = action.damage
+      this.range = action.range
       this.synergy_locations = action.synergy_locations
       this.tech_attack = action.tech_attack
       this.frequency = action.frequency
@@ -203,6 +217,8 @@ export default Vue.extend({
       this.detail = ''
       this.cost = 0
       this.pilot = false
+      this.damage = []
+      this.range = []
       this.synergy_locations = []
       this.tech_attack = false
       this.frequency = 'Unlimited'

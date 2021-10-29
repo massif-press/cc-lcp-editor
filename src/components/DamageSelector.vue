@@ -42,12 +42,8 @@
           <v-card-actions>
             <v-btn text color="error" @click="menu = false">cancel</v-btn>
             <v-spacer />
-            <v-btn
-              color="success darken-2"
-              :disabled="!damage.type || !damage.range"
-              @click="submit"
-            >
-              {{ isEdit ? 'edit' : 'confirm' }}
+            <v-btn color="success darken-2" :disabled="!damage.type || !damage.val" @click="submit">
+              {{ isEdit ? 'save' : 'confirm' }}
             </v-btn>
           </v-card-actions>
         </v-card>

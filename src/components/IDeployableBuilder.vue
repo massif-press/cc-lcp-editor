@@ -106,7 +106,7 @@
         </div>
         <div v-if="deployable.tags">
           <v-divider />
-          <v-chip small v-for="t in deployable.tags" :key="t">{{ t }}</v-chip>
+          <v-chip small v-for="t in deployable.tags" :key="t.id">{{ t }}</v-chip>
         </div>
       </v-tooltip>
 
@@ -312,7 +312,7 @@
             <v-btn text color="error" @click="dialog = false">cancel</v-btn>
             <v-spacer />
             <v-btn color="success darken-2" :disabled="!confirmOK" @click="submit">
-              {{ isEdit ? 'edit' : 'confirm' }}
+              {{ isEdit ? 'save' : 'confirm' }}
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -328,7 +328,7 @@ import IActionBuilder from './IActionBuilder.vue'
 import IBonusBuilder from './IBonusBuilder.vue'
 import ICounterBuilder from './ICounterBuilder.vue'
 import TagSelector from './TagSelector.vue'
-import SynergySelector from './SynergySelector.vue'
+import SynergySelector from './SynergyLocationSelector.vue'
 
 import Vue from 'vue'
 export default Vue.extend({

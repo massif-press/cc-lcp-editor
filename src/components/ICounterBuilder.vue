@@ -78,7 +78,7 @@
               :disabled="!counter.name || !counter.id"
               @click="submit"
             >
-              {{ isEdit ? 'edit' : 'confirm' }}
+              {{ isEdit ? 'save' : 'confirm' }}
             </v-btn>
           </v-card-actions>
         </v-card>

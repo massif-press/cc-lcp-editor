@@ -60,6 +60,21 @@ const routes: Array<RouteConfig> = [
     name: 'Pilot Gear Editor',
     component: () => import(/* webpackChunkName: "editors" */ '../views/editors/PilotGear.vue'),
   },
+  {
+    path: '/editor/talents',
+    name: 'Talent Editor',
+    component: () => import(/* webpackChunkName: "editors" */ '../views/editors/Talents.vue'),
+  },
+  {
+    path: '/editor/tables',
+    name: 'Table Editor',
+    component: () => import(/* webpackChunkName: "editors" */ '../views/editors/Tables.vue'),
+  },
+  {
+    path: '/editor/manufacturers',
+    name: 'Manufacturer Editor',
+    component: () => import(/* webpackChunkName: "editors" */ '../views/editors/Manufacturers.vue'),
+  },
 ]
 
 const router = new VueRouter({

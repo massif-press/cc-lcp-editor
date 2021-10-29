@@ -11,17 +11,23 @@
           <v-col><v-text-field label="ID" v-model="item.id" /></v-col>
           <v-col><v-text-field label="Name" v-model="item.name" /></v-col>
           <v-col>
-            <v-select
-              label="Skill Type"
-              :items="['str', 'con', 'int', 'dex', 'cha']"
-              v-model="item.family"
-              hint="This deremines where on the Skill Trigger list the item appears and has no mechanical effect"
+            <v-text-field
+              label="Icon URL"
               persistent-hint
+              hint="Must be .svg"
+              v-model="item.icon_url"
             />
           </v-col>
         </v-row>
-        <v-text-field label="Short Description" v-model="item.description" />
-        <rich-text-editor title="Long Description" v-model="item.detail" />
+        <v-row dense>
+          <v-col cols="12"><v-text-field label="Short Description" v-model="item.terse" /></v-col>
+          <v-col cols="12">
+            <rich-text-editor title="Long Description" v-model="item.description" />
+          </v-col>
+          <v-col cols="12" class="mt-2">
+            <i-rank-builder :item="item" />
+          </v-col>
+        </v-row>
       </v-card-text>
     </template>
   </editor-base>
@@ -31,9 +37,10 @@
 import Vue from 'vue'
 import EditorBase from './EditorBase.vue'
 import RichTextEditor from '@/components/RichTextEditor.vue'
+import IRankBuilder from '@/components/IRankBuilder.vue'
 
 export default Vue.extend({
   name: 'skills-editor',
-  components: { EditorBase, RichTextEditor },
+  components: { EditorBase, RichTextEditor, IRankBuilder },
 })
 </script>
