@@ -8,9 +8,9 @@
             :key="`${m.id}_${i}`"
             :class="selected && selected.id === m.id ? 'primary darken-3' : ''"
             selectable
-            @click="''"
+            @click="selected = m"
           >
-            <v-list-item-content class="mt-n2" @click="selected = m">
+            <v-list-item-content class="mt-n2">
               <v-list-item-title>
                 <span class="text-h6 mr-1">{{ m.id }}</span>
                 {{ m.name }}
@@ -25,15 +25,40 @@
               </v-list-item-action-text>
             </v-list-item-content>
           </v-list-item>
+          <v-divider />
+          <v-list-item
+            :class="selected && selected === 'none' ? 'primary darken-3' : ''"
+            selectable
+            @click="selected = 'none'"
+          >
+            <v-list-item-content class="mt-n2">
+              <v-list-item-title>
+                <span class="text-h6 mr-1">No Source</span>
+              </v-list-item-title>
+              <v-list-item-action-text class="mt-n2">
+                {{ itemsByMID('', 'weapons').length }} weapons,
+                {{ itemsByMID('', 'systems').length }} systems,
+                {{ itemsByMID('', 'mods').length }} mods
+              </v-list-item-action-text>
+            </v-list-item-content>
+          </v-list-item>
         </v-list>
         <v-divider class="my-2" />
         <v-btn block color="secondary" @click="addNew">
           <v-icon left>mdi-plus</v-icon>
-          add new manufacturer
         </v-btn>
       </v-col>
       <v-col>
-        <v-container v-if="selected">
+        <v-container v-if="selected === 'none'">
+          <p class="text-center grey darken-4 pa-2">
+            The following equipment does not include a
+            <code>Source</code>
+            field. This is used to add integrated equipment that does not appear anywhere besides
+            the parent frame or equipment, and is not normally independently selectable by a player.
+          </p>
+          <sourceless-equipment />
+        </v-container>
+        <v-container v-else-if="selected">
           <v-expansion-panels v-model="panels" focusable accordion>
             <v-expansion-panel>
               <v-expansion-panel-header>Manufacturer Information</v-expansion-panel-header>
@@ -185,10 +210,11 @@ import { manufacturers } from 'lancer-data'
 import RichTextEditor from '@/components/RichTextEditor.vue'
 import CoreBonusEditor from './components/CoreBonus.vue'
 import LicenseEditor from './components/Licenses.vue'
+import SourcelessEquipment from './components/SourcelessEquipment.vue'
 
 export default Vue.extend({
   name: 'manufacturer-editor',
-  components: { RichTextEditor, CoreBonusEditor, LicenseEditor },
+  components: { RichTextEditor, CoreBonusEditor, LicenseEditor, SourcelessEquipment },
   data: () => ({
     panels: 0,
     core_manufacturers: manufacturers,

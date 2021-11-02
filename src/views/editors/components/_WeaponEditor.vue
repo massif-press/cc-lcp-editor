@@ -2,7 +2,7 @@
   <v-dialog v-model="dialog" fullscreen>
     <v-card>
       <v-toolbar dense color="deep-purple darken-4" class="text-h6">
-        {{ manufacturer.id }} Weapon Editor
+        {{ manufacturer ? manufacturer.id : '' }} Weapon Editor
         <v-spacer />
         <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
       </v-toolbar>
@@ -165,8 +165,8 @@ import Vue from 'vue'
 export default Vue.extend({
   name: 'weapon-editor',
   props: {
-    manufacturer: { type: Object, required: true },
-    licenses: { type: Array, required: true },
+    manufacturer: { type: Object, required: false },
+    licenses: { type: Array, required: false, default: () => [] },
   },
   components: {
     RichTextEditor,
@@ -221,7 +221,7 @@ export default Vue.extend({
   }),
   computed: {
     confirmOK(): boolean {
-      return !!this.id && !!this.name && !!this.license && !!this.mount
+      return !!this.id && !!this.name && !!this.mount
     },
   },
   methods: {
@@ -235,7 +235,7 @@ export default Vue.extend({
       const e = {
         id: this.id,
         name: this.name,
-        source: this.manufacturer.id,
+        source: this.manufacturer ? this.manufacturer.id : '',
         license: this.license,
         license_level: this.license_level,
         description: this.description,
