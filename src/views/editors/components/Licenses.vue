@@ -108,6 +108,7 @@ export default Vue.extend({
           .filter((x: any) => x.source === this.manufacturer.id)
           .forEach((frame: any) => {
             if (this.manufacturer.id === 'GMS' && frame.source === 'GMS') {
+              if (!items['GMS']) this.$set(items, 'GMS', [])
               items['GMS'].push(frame)
               return
             }

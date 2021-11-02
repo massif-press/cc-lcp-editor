@@ -84,10 +84,15 @@ export default Vue.extend({
       return this.$store.getters.lcp
     },
   },
+  created() {
+    if (!this.lcp.tables) this.$set(this.lcp, 'tables', [])
+
+    this.tables.forEach(e => {
+      if (!this.lcp.tables[e.key]) this.$set(this.lcp.tables, e.key, [])
+    })
+  },
   methods: {
     addNew(key: string) {
-      if (!this.lcp.tables) this.$set(this.lcp, 'tables', [])
-      if (!this.lcp.tables[key]) this.$set(this.lcp.tables, key, [])
       this.lcp.tables[key].push('')
     },
     deleteItem(key: string, index: number) {
