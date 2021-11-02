@@ -194,6 +194,7 @@ export default Vue.extend({
       // tiptap's default <p> wrapping doesn't look good in C/C
       d.replaceAll('<p', '<div')
       d.replaceAll('</p', '</div')
+
       return d
     },
   },
