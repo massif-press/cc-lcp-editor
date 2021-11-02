@@ -39,5 +39,11 @@
     <div class="text-h5">Changelog</div>
     <div class="text-h6 ml-3">v0.1.0 (10/29/2020)</div>
     <p class="ml-6">Initial release</p>
+    <div class="text-h6 ml-3">v0.1.2 (11/2/2020)</div>
+    <div class="ml-6">
+      <ul>
+        <li>Corrected Name/Type linkage on System Editor</li>
+      </ul>
+    </div>
   </v-container>
 </template>

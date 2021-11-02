@@ -15,7 +15,7 @@
             <v-text-field label="Name" hide-details v-model="name" />
           </v-col>
           <v-col>
-            <v-select label="Type" :items="systemTypes" hide-details v-model="name" />
+            <v-select label="Type" :items="systemTypes" hide-details v-model="type" />
           </v-col>
           <v-col>
             <v-combobox v-model="license" label="License" dense hide-details :items="licenses" />
