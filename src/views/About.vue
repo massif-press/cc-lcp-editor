@@ -50,6 +50,10 @@
           Ensure sub-editors clear on exit/load
           <a href="https://github.com/massif-press/cc-lcp-editor/issues/5" target="_blank">(#5)</a>
         </li>
+        <li>
+          Replace tiptap paragraph output with divs to preserve C/C styling
+          <a href="https://github.com/massif-press/cc-lcp-editor/issues/7" target="_blank">(#7)</a>
+        </li>
       </ul>
     </div>
   </v-container>
