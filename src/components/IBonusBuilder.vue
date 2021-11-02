@@ -30,8 +30,8 @@
         </div>
       </v-tooltip>
       <v-dialog v-model="dialog">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on"><v-icon>mdi-plus</v-icon></v-btn>
+        <template v-slot:activator="{ attrs }">
+          <v-btn icon v-bind="attrs" @click="newItem()"><v-icon>mdi-plus</v-icon></v-btn>
         </template>
         <v-card>
           <v-toolbar dense color="pink darken-4" class="text-h6">Add Bonus</v-toolbar>
@@ -185,6 +185,10 @@ export default Vue.extend({
     editIndex: -1,
   }),
   methods: {
+    newItem(): void {
+      this.reset()
+      this.dialog = true
+    },
     submit() {
       if (!this.bonus) return
       const e = {
@@ -207,6 +211,7 @@ export default Vue.extend({
       this.dialog = false
     },
     edit(bonus: any, index: number): void {
+      this.reset()
       this.bonus = this.bonuses.find(x => x.value === bonus.id) as any
       this.value = bonus.val
       this.dt = bonus.damage_types

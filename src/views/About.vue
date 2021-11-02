@@ -39,10 +39,17 @@
     <div class="text-h5">Changelog</div>
     <div class="text-h6 ml-3">v0.1.0 (10/29/2020)</div>
     <p class="ml-6">Initial release</p>
-    <div class="text-h6 ml-3">v0.1.2 (11/2/2020)</div>
+    <div class="text-h6 ml-3">v0.1.1 (11/2/2020)</div>
     <div class="ml-6">
       <ul>
-        <li>Corrected Name/Type linkage on System Editor</li>
+        <li>
+          Corrected Name/Type linkage on System Editor
+          <a href="https://github.com/massif-press/cc-lcp-editor/issues/1" target="_blank">(#1)</a>
+        </li>
+        <li>
+          Ensure sub-editors clear on exit/load
+          <a href="https://github.com/massif-press/cc-lcp-editor/issues/5" target="_blank">(#5)</a>
+        </li>
       </ul>
     </div>
   </v-container>

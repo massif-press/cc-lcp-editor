@@ -43,8 +43,8 @@
       </v-tooltip>
 
       <v-dialog v-model="dialog">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on"><v-icon>mdi-plus</v-icon></v-btn>
+        <template v-slot:activator="{ attrs }">
+          <v-btn icon v-bind="attrs" @click="newItem()"><v-icon>mdi-plus</v-icon></v-btn>
         </template>
         <v-card>
           <v-toolbar dense color="pink darken-4" class="text-h6">Add Action</v-toolbar>
@@ -167,6 +167,10 @@ export default Vue.extend({
     },
   },
   methods: {
+    newItem(): void {
+      this.reset()
+      this.dialog = true
+    },
     submit(): void {
       const e = {
         name: this.name,
@@ -192,6 +196,7 @@ export default Vue.extend({
       this.dialog = false
     },
     edit(action: any, index: number): void {
+      this.reset()
       this.name = action.name
       this.activation = action.activation
       this.detail = action.detail

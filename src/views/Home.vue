@@ -183,11 +183,18 @@ export default Vue.extend({
       }.lcp`
       const zip = new JSZip()
       Object.keys(this.lcp).forEach(key => {
-        zip.file(`${key}.json`, JSON.stringify(this.lcp[key]))
+        zip.file(`${key}.json`, this.prepareJSON(this.lcp[key]))
       })
       zip.generateAsync({ type: 'blob' }).then(function (blob) {
         saveAs(blob, filename)
       })
+    },
+    prepareJSON(obj: any): string {
+      const d = JSON.stringify(obj)
+      // tiptap's default <p> wrapping doesn't look good in C/C
+      d.replaceAll('<p', '<div')
+      d.replaceAll('</p', '</div')
+      return d
     },
   },
 })

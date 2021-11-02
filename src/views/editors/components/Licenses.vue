@@ -157,7 +157,6 @@ export default Vue.extend({
     saveItem(type: string, item: any) {
       if (!this.lcp[type]) this.$set(this.lcp, type, [])
       const idx = this.lcp[type].findIndex((x: any) => x.id === item.id)
-      console.log(idx)
       if (idx < 0) {
         this.lcp[type].push(item)
         console.log(this.lcp[type])
