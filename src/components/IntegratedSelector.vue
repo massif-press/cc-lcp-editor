@@ -7,6 +7,7 @@
     outlined
     dense
     hide-details
+    multiple
     v-model="item.integrated"
   />
 </template>

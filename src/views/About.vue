@@ -36,7 +36,7 @@
       <a href="https://twitter.com/jarena2" target="_blank">beeftime</a>
     </p>
     <div class="text-h5">Special Thanks</div>
-    <p class="ml-3">Bluhman, sealtrowitz, BoltsJ</p>
+    <p class="ml-3">Bluhman, sealtrowitz, BoltsJ, GNUtopia</p>
     <v-divider class="my-2" />
     <div class="text-h5">Changelog</div>
     <div class="text-h6 ml-3">v0.1.0 (10/29/2020)</div>
