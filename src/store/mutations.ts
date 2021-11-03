@@ -23,6 +23,7 @@ async function getZipData(zip: JSZip, filename: string): Promise<any> {
 export default {
   async LOAD_LCP(state: any, payload: any): Promise<void> {
     state.loaded = false
+    Vue.set(state, 'lcp', {})
     const zip = await JSZip.loadAsync(payload)
     await Promise.all(
       Object.keys(zip.files).map(async file => {
@@ -38,16 +39,18 @@ export default {
     console.info(state)
   },
   CLEAR_LCP(state: any): void {
-    state.lcp = {}
+    Vue.set(state, 'lcp', {})
     state.loaded = false
   },
   NEW_LCP(state: any): void {
-    state.lcp = {
-      lcp_manifest: {
-        name: 'New LCP',
-        version: '0.0.1',
-      },
-    }
+    Vue.set(state, 'lcp',
+      {
+        lcp_manifest: {
+          name: 'New LCP',
+          version: '0.0.1',
+        },
+      }
+    )
     state.loaded = true
   },
 }

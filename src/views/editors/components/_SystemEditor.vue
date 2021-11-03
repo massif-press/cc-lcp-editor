@@ -130,6 +130,11 @@ export default Vue.extend({
     confirmOK(): boolean {
       return !!this.id && !!this.name
     },
+    source(): string {
+      if (this.manufacturer) return this.manufacturer.id
+      if (this.tags.some((x: any) => x.id === 'tg_exotic')) return 'EXOTIC'
+      return ''
+    },
   },
   methods: {
     open() {
@@ -142,7 +147,7 @@ export default Vue.extend({
       const e = {
         id: this.id,
         name: this.name,
-        source: this.manufacturer ? this.manufacturer.id : '',
+        source: this.source,
         license: this.license,
         license_level: Number(this.license_level),
         effect: this.effect,

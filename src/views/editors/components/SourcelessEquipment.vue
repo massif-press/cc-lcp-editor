@@ -63,7 +63,7 @@ export default Vue.extend({
       let items = (this.lcp.weapons || [])
         .concat(this.lcp.systems || [])
         .concat(this.lcp.mods || [])
-      return items.filter((x: any) => !x.source)
+      return items.filter((x: any) => x.source === 'EXOTIC' || !x.source)
     },
   },
   methods: {
