@@ -177,7 +177,7 @@ const mountType = [
 
 const weaponType = ['Rifle', 'Cannon', 'Launcher', 'CQB', 'Nexus', 'Melee']
 
-const weaponSize = ['Aux', 'Main', 'Heavy', 'Superheavy']
+const weaponSize = ['Auxiliary', 'Main', 'Heavy', 'Superheavy']
 
 const rangeType = [
   'Range',
