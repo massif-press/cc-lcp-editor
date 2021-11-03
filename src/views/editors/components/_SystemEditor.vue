@@ -144,7 +144,7 @@ export default Vue.extend({
         name: this.name,
         source: this.manufacturer ? this.manufacturer.id : '',
         license: this.license,
-        license_level: this.license_level,
+        license_level: Number(this.license_level),
         effect: this.effect,
         type: this.type,
         sp: this.sp,
@@ -166,7 +166,7 @@ export default Vue.extend({
       this.id = system.id
       this.name = system.name
       this.license = system.license
-      this.license_level = system.license_level
+      this.license_level = Number(system.license_level)
       this.effect = system.effect
       this.type = system.type
       this.sp = system.sp

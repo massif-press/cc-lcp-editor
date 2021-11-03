@@ -35,7 +35,7 @@
         </v-list>
       </v-menu>
       <v-divider vertical class="ml-2 mr-4" />
-      <h2>COMP/CON LCP Editor v.0.1.1</h2>
+      <h2>COMP/CON LCP Editor v.0.1.2</h2>
       <h3 class="warning--text pl-2">[EXPERIMENTAL]</h3>
     </v-app-bar>
 

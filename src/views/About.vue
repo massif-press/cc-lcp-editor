@@ -62,5 +62,20 @@
         </li>
       </ul>
     </div>
+    <div class="text-h6 ml-3">v0.1.2 (11/3/2020)</div>
+    <div class="ml-6">
+      <ul>
+        <li>
+          Corrected Auxiliary weapon size value
+          <a href="https://github.com/massif-press/cc-lcp-editor/issues/9" target="_blank">(#9)</a>
+        </li>
+        <li>
+          Corrected incorrect indexing that lead to undeletable items
+          <a href="https://github.com/massif-press/cc-lcp-editor/issues/10" target="_blank">
+            (#10)
+          </a>
+        </li>
+      </ul>
+    </div>
   </v-container>
 </template>

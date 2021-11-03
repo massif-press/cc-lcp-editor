@@ -448,7 +448,7 @@ export default Vue.extend({
       const e = {
         id: this.id,
         source: this.manufacturer.id,
-        license_level: this.license_level,
+        license_level: Number(this.license_level),
         name: this.name,
         mechtype: this.mechtype,
         description: this.description,
@@ -465,7 +465,7 @@ export default Vue.extend({
     },
     edit(frame: any): void {
       this.id = frame.id
-      this.license_level = frame.license_level
+      this.license_level = Number(frame.license_level)
       this.name = frame.name
       this.mechtype = frame.mechtype
       this.description = frame.description

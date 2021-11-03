@@ -164,7 +164,8 @@ export default Vue.extend({
     },
     removeItem(type: string, id: string) {
       const idx = this.lcp[type].findIndex((x: any) => x.id === id)
-      if (idx > 0) this.lcp[type].splice(idx, 1)
+      console.log(idx)
+      if (idx > -1) this.lcp[type].splice(idx, 1)
     },
   },
 })

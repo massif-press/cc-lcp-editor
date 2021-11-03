@@ -237,7 +237,7 @@ export default Vue.extend({
         name: this.name,
         source: this.manufacturer ? this.manufacturer.id : '',
         license: this.license,
-        license_level: this.license_level,
+        license_level: Number(this.license_level),
         description: this.description,
         effect: this.effect,
         on_attack: this.on_attack,
@@ -274,7 +274,7 @@ export default Vue.extend({
       this.id = weapon.id
       this.name = weapon.name
       this.license = weapon.license
-      this.license_level = weapon.license_level
+      this.license_level = Number(weapon.license_level)
       this.description = weapon.description
       this.effect = weapon.effect
       this.on_attack = weapon.on_attack
