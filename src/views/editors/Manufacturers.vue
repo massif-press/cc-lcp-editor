@@ -91,6 +91,11 @@
                         label="Logo URL"
                         :readonly="isCore(selected.id)"
                       />
+                      <v-img
+                        :src="selected.logo_url"
+                        max-height="222"
+                        contain
+                      />
                     </v-col>
                     <v-col>
                       Light Color
