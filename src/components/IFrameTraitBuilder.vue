@@ -31,7 +31,7 @@
           <v-btn icon v-bind="attrs" @click="newItem()"><v-icon>mdi-plus</v-icon></v-btn>
         </template>
         <v-card>
-          <v-toolbar dense color="pink darken-4" class="text-h6">Edit Trair</v-toolbar>
+          <v-toolbar dense color="pink darken-4" class="text-h6">Edit Trait</v-toolbar>
           <v-card-text>
             <v-row justify="space-around" align="center" class="mt-2">
               <v-col>
