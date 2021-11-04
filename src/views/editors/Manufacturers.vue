@@ -93,21 +93,17 @@
                       />
                     </v-col>
                     <v-col>
-                      <v-text-field
+                      Light Color
+                      <v-color-picker
                         v-model="selected.light"
-                        persistent-hint
-                        hint="Hex"
-                        label="Light Color"
-                        :readonly="isCore(selected.id)"
+                        :disabled="isCore(selected.id)"
                       />
                     </v-col>
                     <v-col>
-                      <v-text-field
+                      Dark Color
+                      <v-color-picker
                         v-model="selected.dark"
-                        persistent-hint
-                        hint="Hex"
-                        label="Dark Color"
-                        :readonly="isCore(selected.id)"
+                        :disabled="isCore(selected.id)"
                       />
                     </v-col>
                     <v-col cols="12">
@@ -218,7 +214,7 @@ export default Vue.extend({
   data: () => ({
     panels: 0,
     core_manufacturers: manufacturers,
-    selected: null,
+    selected: null as any,
     importKey: '',
   }),
   computed: {
@@ -233,15 +229,34 @@ export default Vue.extend({
         ).values(),
       ]
     },
+    liteColorRaw:{
+      get() {
+        return this.selected.light;
+      },
+      set (v: any) {
+        this.selected.light = v['hex'];
+      }
+    },
+    darkColorRaw:{
+      get() {
+        return this.selected.dark;
+      },
+      set (v: any) {
+        this.selected.dark = v['hex'];
+      }
+    }
   },
   methods: {
     addNew() {
-      if (!this.lcp.manufacturers) this.$set(this.lcp, 'manufacturers', [])
-      else
-        this.lcp.manufacturers.push({
-          id: 'new',
-          name: 'New Manufacturer',
-        })
+      if (!this.lcp.manufacturers){
+        this.$set(this.lcp, 'manufacturers', [])
+      } 
+      this.lcp.manufacturers.push({
+        id: 'new',
+        name: 'New Manufacturer',
+        light: '#ff0000',
+        dark: '#ff0000'
+      })
     },
     itemsByMID(id: string, type: string) {
       if (!this.lcp[type]) return []
