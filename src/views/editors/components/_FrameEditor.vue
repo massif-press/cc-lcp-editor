@@ -24,7 +24,7 @@
               v-model="license_level"
             />
           </v-col>
-          <v-col>
+          <v-col cols="3">
             <v-combobox
               v-model="mechtype"
               label="Mech Type"
@@ -35,7 +35,7 @@
               :items="mechTypes"
             />
           </v-col>
-          <v-col>
+          <v-col cols="7">
             <v-text-field label="Image URL" hide-details v-model="image_url" />
           </v-col>
           <v-col cols="2">
@@ -47,6 +47,27 @@
               dense
               v-model="y_pos"
             />
+          </v-col>
+          <v-col cols="4">
+            Image Preview
+            <v-img 
+              :src="image_url"
+              max-height="300"
+              contain
+            />
+          </v-col>
+          <v-col cols="8">
+            Banner Preview
+            <div style="height: 72px">
+              <div style="display: flex; min-height: 100%; position: relative; min-width: 100%">
+              <v-img 
+                :src="image_url"
+                max-height="100%"
+                :position="'top '+y_pos+'% left 0px'"
+                style="position:absolute; top: 0; right: 0; z-index: 9"
+              />
+              </div>
+            </div>
           </v-col>
         </v-row>
         <v-row>
