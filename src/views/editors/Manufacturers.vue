@@ -94,6 +94,7 @@
                       <v-img
                         :src="selected.logo_url"
                         max-height="222"
+                        max-width="450"
                         contain
                       />
                     </v-col>
