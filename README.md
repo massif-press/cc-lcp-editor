@@ -1,4 +1,5 @@
 # cc-lcp-editor
+[![Netlify Status](https://api.netlify.com/api/v1/badges/487bd3a4-d35b-42a4-bdd0-15e4c24ad898/deploy-status)](https://app.netlify.com/sites/cc-lcp-editor/deploys)
   A tool for producing Lancer Content Packages for use with COMP/CON. More information about LCPs, including technical notes and content examples, can be found in the lancer-data repository: https://github.com/massif-press/lancer-data
 
 ## Disclaimer</div>

@@ -29,31 +29,41 @@
       <v-card-text>
         <v-alert outlined text color="primary">
           <div class="text-h5">LCP Manifest</div>
-          <v-row dense justify="space-around">
-            <v-col cols="3"><v-text-field v-model="lcp.lcp_manifest.name" label="Name" /></v-col>
-            <v-col cols="3">
-              <v-text-field v-model="lcp.lcp_manifest.author" label="Author" />
+          <v-row>
+            <v-col>
+              <v-row dense justify="space-around">
+                <v-col cols="3">
+                  <v-text-field v-model="lcp.lcp_manifest.name" label="Name" />
+                </v-col>
+                <v-col cols="3">
+                  <v-text-field v-model="lcp.lcp_manifest.author" label="Author" />
+                </v-col>
+                <v-col cols="2">
+                  <v-text-field v-model="lcp.lcp_manifest.item_prefix" label="Item ID Prefix" />
+                </v-col>
+                <v-col cols="2">
+                  <v-text-field v-model="lcp.lcp_manifest.version" label="LCP Version" />
+                </v-col>
+                <v-col cols="5">
+                  <v-text-field v-model="lcp.lcp_manifest.website" label="Website URL" />
+                </v-col>
+                <v-col cols="5">
+                  <v-text-field v-model="lcp.lcp_manifest.image_url" label="Preview Image URL" />
+                </v-col>
+                <v-col cols="12">
+                  <v-textarea
+                    v-model="lcp.lcp_manifest.description"
+                    outlined
+                    auto-grow
+                    rows="3"
+                    label="Description"
+                  />
+                </v-col>
+              </v-row>
             </v-col>
-            <v-col cols="2">
-              <v-text-field v-model="lcp.lcp_manifest.item_prefix" label="Item ID Prefix" />
-            </v-col>
-            <v-col cols="2">
-              <v-text-field v-model="lcp.lcp_manifest.version" label="LCP Version" />
-            </v-col>
-            <v-col cols="5">
-              <v-text-field v-model="lcp.lcp_manifest.website" label="Website URL" />
-            </v-col>
-            <v-col cols="5">
-              <v-text-field v-model="lcp.lcp_manifest.image_url" label="Preview Image URL" />
-            </v-col>
-            <v-col cols="12">
-              <v-textarea
-                v-model="lcp.lcp_manifest.description"
-                outlined
-                auto-grow
-                rows="3"
-                label="Description"
-              />
+            <v-col v-show="!!lcp.lcp_manifest.image_url" cols="auto">
+              Image Preview
+              <v-img :src="lcp.lcp_manifest.image_url" max-width="300" contain />
             </v-col>
           </v-row>
         </v-alert>

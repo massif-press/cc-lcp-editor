@@ -82,7 +82,7 @@
                       />
                     </v-col>
                   </v-row>
-                  <v-row dense justify="space-around">
+                  <v-row dense justify="space-around" align="center">
                     <v-col>
                       <v-text-field
                         v-model="selected.logo_url"
@@ -91,24 +91,19 @@
                         label="Logo URL"
                         :readonly="isCore(selected.id)"
                       />
-                      <v-img
-                        :src="selected.logo_url"
-                        max-height="222"
-                        max-width="450"
-                        contain
-                      />
+                      <v-img :src="selected.logo_url" max-height="222" max-width="450" contain />
                     </v-col>
                     <v-col>
-                      Light Color
-                      <v-color-picker
+                      <color-selector
                         v-model="selected.light"
+                        title="Light Color"
                         :disabled="isCore(selected.id)"
                       />
                     </v-col>
                     <v-col>
-                      Dark Color
-                      <v-color-picker
-                        v-model="selected.dark"
+                      <color-selector
+                        v-model="selected.light"
+                        title="Dark Color"
                         :disabled="isCore(selected.id)"
                       />
                     </v-col>
@@ -210,13 +205,20 @@ import Vue from 'vue'
 import _ from 'lodash'
 import { manufacturers } from 'lancer-data'
 import RichTextEditor from '@/components/RichTextEditor.vue'
+import ColorSelector from '@/components/ColorSelector.vue'
 import CoreBonusEditor from './components/CoreBonus.vue'
 import LicenseEditor from './components/Licenses.vue'
 import SourcelessEquipment from './components/SourcelessEquipment.vue'
 
 export default Vue.extend({
   name: 'manufacturer-editor',
-  components: { RichTextEditor, CoreBonusEditor, LicenseEditor, SourcelessEquipment },
+  components: {
+    RichTextEditor,
+    CoreBonusEditor,
+    LicenseEditor,
+    SourcelessEquipment,
+    ColorSelector,
+  },
   data: () => ({
     panels: 0,
     core_manufacturers: manufacturers,
@@ -235,33 +237,33 @@ export default Vue.extend({
         ).values(),
       ]
     },
-    liteColorRaw:{
+    liteColorRaw: {
       get() {
-        return this.selected.light;
+        return this.selected.light
       },
-      set (v: any) {
-        this.selected.light = v['hex'];
-      }
+      set(v: any) {
+        this.selected.light = v['hex']
+      },
     },
-    darkColorRaw:{
+    darkColorRaw: {
       get() {
-        return this.selected.dark;
+        return this.selected.dark
       },
-      set (v: any) {
-        this.selected.dark = v['hex'];
-      }
-    }
+      set(v: any) {
+        this.selected.dark = v['hex']
+      },
+    },
   },
   methods: {
     addNew() {
-      if (!this.lcp.manufacturers){
+      if (!this.lcp.manufacturers) {
         this.$set(this.lcp, 'manufacturers', [])
-      } 
+      }
       this.lcp.manufacturers.push({
         id: 'new',
         name: 'New Manufacturer',
         light: '#ff0000',
-        dark: '#ff0000'
+        dark: '#ff0000',
       })
     },
     itemsByMID(id: string, type: string) {

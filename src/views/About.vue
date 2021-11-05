@@ -33,7 +33,8 @@
     </p>
     <div class="text-h5">Contributors</div>
     <p class="ml-3">
-      <a href="https://twitter.com/jarena2" target="_blank">beeftime</a>
+      <a href="http://jarena3.github.io/" target="_blank">beeftime</a>
+      , Bluhman
     </p>
     <div class="text-h5">Special Thanks</div>
     <p class="ml-3">Bluhman, sealtrowitz, BoltsJ, GNUtopia</p>
@@ -78,6 +79,21 @@
           <a href="https://github.com/massif-press/cc-lcp-editor/issues/10" target="_blank">
             (#10)
           </a>
+        </li>
+        <li>
+          Fixed array export for integrated and special equipment
+          <a href="https://github.com/massif-press/cc-lcp-editor/issues/11" target="_blank">
+            (#11)
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="text-h6 ml-3">v0.1.3 (11/5/2020)</div>
+    <div class="ml-6">
+      <ul>
+        <li>
+          Added Image/Color picking tools (thanks Bluhman!)
+          <a href="https://github.com/massif-press/cc-lcp-editor/pull/13" target="_blank">(#13)</a>
         </li>
       </ul>
     </div>

@@ -7,67 +7,67 @@
         <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
       </v-toolbar>
       <v-card-text>
-        <v-row justify="space-around" align="end">
-          <v-col cols="3">
-            <v-text-field label="ID" hide-details v-model="id" />
-          </v-col>
-          <v-col cols="7">
-            <v-text-field label="Name" hide-details v-model="name" />
-          </v-col>
-          <v-col cols="2">
-            <v-text-field
-              label="License Level"
-              type="number"
-              hide-details
-              outlined
-              dense
-              v-model="license_level"
-            />
-          </v-col>
-          <v-col cols="3">
-            <v-combobox
-              v-model="mechtype"
-              label="Mech Type"
-              dense
-              hide-details
-              multiple
-              clearable
-              :items="mechTypes"
-            />
-          </v-col>
-          <v-col cols="7">
-            <v-text-field label="Image URL" hide-details v-model="image_url" />
-          </v-col>
-          <v-col cols="2">
-            <v-text-field
-              label="Mech Banner Y Position"
-              type="number"
-              hide-details
-              outlined
-              dense
-              v-model="y_pos"
-            />
-          </v-col>
-          <v-col cols="4">
+        <v-row>
+          <v-col v-show="!!image_url" cols="auto">
             Image Preview
-            <v-img 
-              :src="image_url"
-              max-height="300"
-              contain
-            />
+            <v-img :src="image_url" max-width="300" contain />
           </v-col>
-          <v-col cols="8">
-            Banner Preview
-            <div style="height: 72px">
-              <div style="display: flex; min-height: 100%; position: relative; min-width: 100%">
-              <v-img 
-                :src="image_url"
-                max-height="100%"
-                :position="'top '+y_pos+'% left 0px'"
-                style="position:absolute; top: 0; right: 0; z-index: 9"
-              />
-              </div>
-            </div>
+          <v-col>
+            <v-row justify="space-around" align="end">
+              <v-col cols="3">
+                <v-text-field label="ID" hide-details v-model="id" />
+              </v-col>
+              <v-col cols="7">
+                <v-text-field label="Name" hide-details v-model="name" />
+              </v-col>
+              <v-col cols="2">
+                <v-text-field
+                  label="License Level"
+                  type="number"
+                  hide-details
+                  outlined
+                  dense
+                  v-model="license_level"
+                />
+              </v-col>
+              <v-col cols="3">
+                <v-combobox
+                  v-model="mechtype"
+                  label="Mech Type"
+                  dense
+                  hide-details
+                  multiple
+                  clearable
+                  :items="mechTypes"
+                />
+              </v-col>
+              <v-col cols="7">
+                <v-text-field label="Image URL" hide-details v-model="image_url" />
+              </v-col>
+              <v-col cols="2">
+                <v-text-field
+                  label="Mech Banner Y Position"
+                  type="number"
+                  hide-details
+                  outlined
+                  dense
+                  v-model="y_pos"
+                />
+              </v-col>
+              <v-col v-show="!!image_url" cols="8" class="ml-auto mt-n2">
+                Banner Preview
+                <div style="height: 72px; border-radius: 2px" class="grey darken-4">
+                  <div style="display: flex; min-height: 100%; position: relative; min-width: 100%">
+                    <v-img
+                      :src="image_url"
+                      max-height="100%"
+                      :position="'top ' + y_pos + '% left 0px'"
+                      style="position: absolute; top: 0; right: 0; z-index: 9"
+                    />
+                  </div>
+                </div>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
         <v-row>
