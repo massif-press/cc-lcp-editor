@@ -52,7 +52,6 @@
             <v-col>
               <v-text-field label="Name" hide-details v-model="name" />
             </v-col>
-
             <v-col>
               <v-text-field
                 label="Use Cost"
@@ -62,6 +61,9 @@
                 dense
                 v-model="cost"
               />
+            </v-col>
+            <v-col>
+              <v-select label="Type" :items="weaponTypes" hide-details v-model="type" />
             </v-col>
           </v-row>
 
@@ -106,6 +108,11 @@
             <v-col><integrated-selector :item="this" /></v-col>
             <v-col><special-equipment-selector :item="this" /></v-col>
           </v-row>
+          <v-row align="center">
+            <v-col>
+              <tag-selector :item="this" />
+            </v-col>
+          </v-row>
         </v-card-text>
         <v-divider />
         <v-card-actions>
@@ -133,6 +140,7 @@ import IntegratedSelector from '@/components/IntegratedSelector.vue'
 import SpecialEquipmentSelector from '@/components/SpecialEquipmentSelector.vue'
 import DamageSelector from '@/components/DamageSelector.vue'
 import RangeSelector from '@/components/RangeSelector.vue'
+import TagSelector from '@/components/TagSelector.vue'
 
 import Vue from 'vue'
 export default Vue.extend({
@@ -151,6 +159,7 @@ export default Vue.extend({
     SpecialEquipmentSelector,
     DamageSelector,
     RangeSelector,
+    TagSelector,
   },
   data: () => ({
     dialog: false,
@@ -162,6 +171,7 @@ export default Vue.extend({
     on_attack: '',
     on_hit: '',
     on_crit: '',
+    type: '',
     cost: 1,
     damage: [],
     range: [],
@@ -172,6 +182,7 @@ export default Vue.extend({
     counters: [],
     integrated: [],
     special_equipment: [],
+    tags: [],
     isEdit: false,
     editIndex: -1,
   }),
@@ -197,6 +208,7 @@ export default Vue.extend({
         on_attack: this.on_attack,
         on_hit: this.on_hit,
         on_crit: this.on_crit,
+        type: this.type,
         cost: this.cost,
         damage: this.damage,
         range: this.range,
@@ -207,6 +219,7 @@ export default Vue.extend({
         counters: this.counters,
         integrated: this.integrated,
         special_equipment: this.special_equipment,
+        tags: this.tags,
       }
       if (!this.item.profiles) this.$set(this.item, 'profiles', [])
       if (this.isEdit && this.editIndex > -1) {
@@ -223,6 +236,7 @@ export default Vue.extend({
       this.on_hit = weapon.on_hit
       this.on_crit = weapon.on_crit
       this.cost = weapon.cost
+      this.type = weapon.type
       this.damage = weapon.damage
       this.range = weapon.range
       this.actions = weapon.actions
@@ -232,6 +246,7 @@ export default Vue.extend({
       this.counters = weapon.counters
       this.integrated = weapon.integrated
       this.special_equipment = weapon.special_equipment
+      this.tags = weapon.tags
       this.isEdit = true
       this.editIndex = index
       this.dialog = true
@@ -248,6 +263,7 @@ export default Vue.extend({
       this.on_hit = ''
       this.on_crit = ''
       this.cost = 1
+      this.type = ''
       this.damage = []
       this.range = []
       this.actions = []
@@ -257,6 +273,7 @@ export default Vue.extend({
       this.counters = []
       this.integrated = []
       this.special_equipment = []
+      this.tags = []
       this.isEdit = false
       this.editIndex = -1
     },

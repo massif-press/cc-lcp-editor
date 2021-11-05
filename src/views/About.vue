@@ -95,6 +95,12 @@
           Added Image/Color picking tools (thanks Bluhman!)
           <a href="https://github.com/massif-press/cc-lcp-editor/pull/13" target="_blank">(#13)</a>
         </li>
+        <li>
+          Added support for tags and alternate types on weapon profiles
+          <a href="https://github.com/massif-press/cc-lcp-editor/issues/15" target="_blank">
+            (#15)
+          </a>
+        </li>
       </ul>
     </div>
   </v-container>

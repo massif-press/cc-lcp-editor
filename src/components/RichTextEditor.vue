@@ -75,6 +75,6 @@ export default Vue.extend({
 
 <style scoped>
 #rte >>> .tiptap-vuetify-editor__content {
-  max-height: 200px;
+  max-height: 400px;
 }
 </style>
