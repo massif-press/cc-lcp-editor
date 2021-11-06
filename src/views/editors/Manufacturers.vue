@@ -102,7 +102,7 @@
                     </v-col>
                     <v-col>
                       <color-selector
-                        v-model="selected.light"
+                        v-model="selected.dark"
                         title="Dark Color"
                         :disabled="isCore(selected.id)"
                       />
