@@ -207,4 +207,13 @@ const mechType = [
   'Defender',
 ]
 
-export { activationTypes, synergyLocations, bonuses, systemType, mountType, weaponType, weaponSize, rangeType, damageType, mechType }
+const npcRole = [
+  'Striker',
+  'Artillery',
+  'Controller',
+  'Support',
+  'Tank',
+  'Defender',
+]
+
+export { activationTypes, synergyLocations, bonuses, systemType, mountType, weaponType, weaponSize, rangeType, damageType, mechType, npcRole }

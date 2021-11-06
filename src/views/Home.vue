@@ -7,6 +7,7 @@
           filled
           color="primary"
           label="Load LCP"
+          accept=".lcp,.zip"
           show-size
           hide-details
           @click:clear="clearLcp()"
@@ -93,7 +94,7 @@
 
         <v-row justify="space-around">
           <v-col v-for="(t, i) in gmCategories" :key="`gm_btn_${i}`" cols="2">
-            <v-btn large block color="primary darken-3" :to="`editor/${t}`" disabled>
+            <v-btn large block color="primary darken-3" :to="`editor/${t}`">
               {{ t.replace('_', ' ') }}
               <span class="item-count">({{ catLength(t) }})</span>
             </v-btn>
