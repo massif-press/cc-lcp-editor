@@ -103,5 +103,16 @@
         </li>
       </ul>
     </div>
+    <div class="text-h6 ml-3">v0.1.4 (11/6/2020)</div>
+    <div class="ml-6">
+      <ul>
+        <li>
+          Fixed color picker not picking dark color
+          <a href="https://github.com/massif-press/cc-lcp-editor/issues/16" target="_blank">
+            (#16)
+          </a>
+        </li>
+      </ul>
+    </div>
   </v-container>
 </template>
