@@ -112,6 +112,12 @@
             (#16)
           </a>
         </li>
+        <li>
+          Improve item sorting to prevent the app from assigning the incorrect editor to an item
+          <a href="https://github.com/massif-press/cc-lcp-editor/issues/17" target="_blank">
+            (#17)
+          </a>
+        </li>
       </ul>
     </div>
   </v-container>

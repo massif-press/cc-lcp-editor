@@ -97,9 +97,9 @@ export default Vue.extend({
       return this.$store.getters.lcp
     },
     licensesByFrame(): any {
-      let items = (this.lcp.weapons || [])
-        .concat(this.lcp.systems || [])
-        .concat(this.lcp.mods || [])
+      let items = (this.lcp.weapons.map((obj: any) => ({ ...obj, itemType: 'weapons' })) || [])
+        .concat(this.lcp.systems.map((obj: any) => ({ ...obj, itemType: 'systems' })) || [])
+        .concat(this.lcp.mods.map((obj: any) => ({ ...obj, itemType: 'mods' })) || [])
       items = items.filter((x: any) => x.source === this.manufacturer.id)
       items = _.groupBy(items, 'license')
 
@@ -124,10 +124,8 @@ export default Vue.extend({
   },
   methods: {
     getType(item: any) {
-      if (item.mount) return 'weapons'
-      if (item.mounts) return 'frames'
-      if (item.allowed_types) return 'mods'
-      return 'systems'
+      if (item.itemType) return item.itemType
+      return 'frames'
     },
     colorByType(item: any) {
       const type = this.getType(item)
