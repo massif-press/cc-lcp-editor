@@ -8,7 +8,7 @@
       <v-toolbar dense color="primary" class="white--text text-h6">{{ item.name }}</v-toolbar>
       <v-card-text>
         <v-row>
-          <v-col><v-text-field label="ID" v-model="item.id" /></v-col>
+          <v-col><id-input v-model="item.id" /></v-col>
           <v-col><v-text-field label="Name" v-model="item.name" /></v-col>
           <v-col>
             <activator-selector :item="item" />
@@ -29,7 +29,7 @@
         </v-row>
         <v-row dense>
           <v-col>
-            <synergy-selector :item="item" />
+            <synergy-location-selector :item="item" />
           </v-col>
         </v-row>
       </v-card-text>
@@ -40,12 +40,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import EditorBase from './EditorBase.vue'
-import RichTextEditor from '@/components/RichTextEditor.vue'
-import ActivatorSelector from '@/components/ActivatorSelector.vue'
-import SynergySelector from '@/components/SynergyLocationSelector.vue'
 
 export default Vue.extend({
   name: 'action-editor',
-  components: { EditorBase, SynergySelector, ActivatorSelector, RichTextEditor },
+  components: { EditorBase },
 })
 </script>

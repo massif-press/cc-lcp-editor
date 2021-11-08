@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app color="secondary" dark>
-      <v-menu bottom offset-y>
+      <v-menu bottom offset-y class="pr-12" max-height="50vh" min-width="30vw">
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
             <v-icon>mdi-menu</v-icon>
@@ -12,9 +12,13 @@
             <v-list-item-avatar><v-icon>mdi-home</v-icon></v-list-item-avatar>
             <v-list-item-title>Home</v-list-item-title>
           </v-list-item>
-          <v-list-item to="about">
+          <v-list-item to="/about">
             <v-list-item-avatar><v-icon>mdi-information-outline</v-icon></v-list-item-avatar>
             <v-list-item-title>About</v-list-item-title>
+          </v-list-item>
+          <v-list-item to="/util">
+            <v-list-item-avatar><v-icon>mdi-wrench</v-icon></v-list-item-avatar>
+            <v-list-item-title>Utilities</v-list-item-title>
           </v-list-item>
           <v-divider v-if="loaded" />
           <v-list-item-group v-if="loaded">
@@ -25,7 +29,7 @@
               </v-list-item-title>
             </v-list-item>
             <v-divider />
-            <v-list-item v-for="c in gmCategories" :key="c" disabled>
+            <v-list-item v-for="c in gmCategories" :key="c">
               <v-list-item-avatar><v-icon>mdi-pencil</v-icon></v-list-item-avatar>
               <v-list-item-title style="text-transform: capitalize">
                 {{ c.replace('_', ' ') }}

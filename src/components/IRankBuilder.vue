@@ -98,15 +98,7 @@ import Vue from 'vue'
 export default Vue.extend({
   name: 'rank-builder',
   props: { item: { type: Object, required: true } },
-  components: {
-    RichTextEditor,
-    ISynergyBuilder,
-    IActionBuilder,
-    IBonusBuilder,
-    IDeployableBuilder,
-    ICounterBuilder,
-    IntegratedSelector,
-  },
+
   data: () => ({
     dialog: false,
     name: '',

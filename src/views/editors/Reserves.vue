@@ -8,7 +8,7 @@
       <v-toolbar dense color="primary" class="white--text text-h6">{{ item.name }}</v-toolbar>
       <v-card-text>
         <v-row>
-          <v-col><v-text-field label="ID" v-model="item.id" /></v-col>
+          <v-col><id-input v-model="item.id" /></v-col>
           <v-col><v-text-field label="Name" v-model="item.name" /></v-col>
           <v-col><v-text-field label="Label" v-model="item.label" /></v-col>
           <v-col>
@@ -64,27 +64,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import EditorBase from './EditorBase.vue'
-import RichTextEditor from '@/components/RichTextEditor.vue'
-import IActionBuilder from '@/components/IActionBuilder.vue'
-import IBonusBuilder from '@/components/IBonusBuilder.vue'
-import ICounterBuilder from '@/components/ICounterBuilder.vue'
+
 import SynergySelector from '@/components/SynergyLocationSelector.vue'
-import SpecialEquipmentSelector from '@/components/SpecialEquipmentSelector.vue'
-import IntegratedSelector from '@/components/IntegratedSelector.vue'
-import IDeployableBuilder from '@/components/IDeployableBuilder.vue'
 
 export default Vue.extend({
   name: 'reserves-editor',
   components: {
     EditorBase,
     SynergySelector,
-    IBonusBuilder,
-    SpecialEquipmentSelector,
-    IntegratedSelector,
-    IActionBuilder,
-    ICounterBuilder,
-    RichTextEditor,
-    IDeployableBuilder,
   },
 })
 </script>

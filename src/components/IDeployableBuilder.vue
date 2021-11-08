@@ -127,13 +127,13 @@
               <v-col>
                 <v-select label="Size" :items="[0.5, 1, 2, 3, 4]" hide-details v-model="size" />
               </v-col>
-              <v-col>
+              <v-col v-if="!npc">
                 <i-synergy-builder :item="this" />
               </v-col>
             </v-row>
             <v-row>
               <v-col>
-                <rich-text-editor title="Detail" v-model="detail" />
+                <rich-text-editor title="Detail" v-model="detail" npc />
               </v-col>
             </v-row>
             <v-row align="center">
@@ -181,118 +181,21 @@
                   hide-details
                 />
               </v-col>
-              <v-col class="mt-n4">
+              <v-col v-show="!npc" class="mt-n4">
                 <v-switch v-model="pilot" label="Pilot" dense hide-details />
               </v-col>
-              <v-col class="mt-n4">
+              <v-col v-show="!npc" class="mt-n4">
                 <v-switch v-model="mech" label="Mech" dense hide-details />
               </v-col>
             </v-row>
             <v-row dense align="center" justify="space-around" class="my-2">
-              <v-col>
+              <v-col v-for="k in stats" :key="`dep_stat_${k}`" cols="2">
+                <tiered-stat-input v-if="npc" v-model="$data[k]" :title="k.replaceAll('_', ' ')" />
                 <v-text-field
-                  v-model="armor"
+                  v-else
+                  v-model="$data[k]"
                   type="number"
-                  label="Armor"
-                  dense
-                  clearable
-                  outlined
-                  hide-details
-                />
-              </v-col>
-              <v-col>
-                <v-text-field
-                  v-model="hp"
-                  type="number"
-                  label="HP"
-                  dense
-                  clearable
-                  outlined
-                  hide-details
-                />
-              </v-col>
-              <v-col>
-                <v-text-field
-                  v-model="evasion"
-                  type="number"
-                  label="Evasion"
-                  dense
-                  clearable
-                  outlined
-                  hide-details
-                />
-              </v-col>
-              <v-col>
-                <v-text-field
-                  v-model="edef"
-                  type="number"
-                  label="E-Defense"
-                  dense
-                  clearable
-                  outlined
-                  hide-details
-                />
-              </v-col>
-              <v-col>
-                <v-text-field
-                  v-model="heatcap"
-                  type="number"
-                  label="Heat Capacity"
-                  dense
-                  clearable
-                  outlined
-                  hide-details
-                />
-              </v-col>
-              <v-col>
-                <v-text-field
-                  v-model="repcap"
-                  type="number"
-                  label="Repair Capacity"
-                  dense
-                  clearable
-                  outlined
-                  hide-details
-                />
-              </v-col>
-              <v-col>
-                <v-text-field
-                  v-model="sensor_range"
-                  type="number"
-                  label="Sensor Range"
-                  dense
-                  clearable
-                  outlined
-                  hide-details
-                />
-              </v-col>
-              <v-col>
-                <v-text-field
-                  v-model="tech_attack"
-                  type="number"
-                  label="Tech Attack"
-                  dense
-                  clearable
-                  outlined
-                  hide-details
-                />
-              </v-col>
-              <v-col>
-                <v-text-field
-                  v-model="save"
-                  type="number"
-                  label="Save"
-                  dense
-                  clearable
-                  outlined
-                  hide-details
-                />
-              </v-col>
-              <v-col>
-                <v-text-field
-                  v-model="speed"
-                  type="number"
-                  label="Speed"
+                  :label="k.replaceAll('_', ' ')"
                   dense
                   clearable
                   outlined
@@ -302,8 +205,8 @@
             </v-row>
             <v-divider class="my-4" />
             <v-row dense align="center">
-              <v-col><i-action-builder :item="this" /></v-col>
-              <v-col><i-bonus-builder :item="this" /></v-col>
+              <v-col><i-action-builder :item="this" npc /></v-col>
+              <v-col><i-bonus-builder :item="this" npc /></v-col>
               <v-col><i-counter-builder :item="this" /></v-col>
             </v-row>
           </v-card-text>
@@ -322,28 +225,26 @@
 </template>
 
 <script lang="ts">
-import RichTextEditor from './RichTextEditor.vue'
-import ActivatorSelector from './ActivatorSelector.vue'
-import IActionBuilder from './IActionBuilder.vue'
-import IBonusBuilder from './IBonusBuilder.vue'
-import ICounterBuilder from './ICounterBuilder.vue'
-import TagSelector from './TagSelector.vue'
-import ISynergyBuilder from './ISynergyBuilder.vue'
-
 import Vue from 'vue'
+const stats = [
+  'armor',
+  'hp',
+  'evasion',
+  'edef',
+  'heatcap',
+  'repcap',
+  'sensor_range',
+  'tech_attack',
+  'save',
+  'speed',
+]
+
 export default Vue.extend({
   name: 'deployable-builder',
-  props: { item: { type: Object, required: true } },
-  components: {
-    RichTextEditor,
-    ActivatorSelector,
-    ISynergyBuilder,
-    IActionBuilder,
-    IBonusBuilder,
-    ICounterBuilder,
-    TagSelector,
-  },
+  props: { item: { type: Object, required: true }, npc: { type: Boolean } },
+
   data: () => ({
+    stats: stats,
     dialog: false,
     name: '',
     type: '',

@@ -32,7 +32,7 @@
           <v-card-text>
             <v-row justify="space-around" align="center" class="mt-2">
               <v-col>
-                <v-text-field v-model="counter.id" label="ID" hide-details />
+                <id-input v-model="counter.id" />
               </v-col>
               <v-col>
                 <v-text-field v-model="counter.name" label="Name" hide-details />

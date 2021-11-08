@@ -16,6 +16,11 @@ const routes: Array<RouteConfig> = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
   },
   {
+    path: '/util',
+    name: 'Utilities',
+    component: () => import(/* webpackChunkName: "util" */ '../views/Util.vue'),
+  },
+  {
     path: '/editor/actions',
     name: 'Action Editor',
     component: () => import(/* webpackChunkName: "editors" */ '../views/editors/Actions.vue'),

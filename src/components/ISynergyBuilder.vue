@@ -30,7 +30,7 @@
               <v-col cols="12">
                 <v-select
                   label="Synergy Locations"
-                  :items="synergies"
+                  :items="npc ? npcSynergies : synergies"
                   item-value="value"
                   item-text="desc"
                   multiple
@@ -43,43 +43,45 @@
                 <rich-text-editor title="Detail" v-model="detail" />
               </v-col>
             </v-row>
-            <v-divider class="mb-2 mt-3" />
-            <div class="caption">Restrict to:</div>
-            <v-row dense align="center">
-              <v-col cols="4">
-                <v-select
-                  v-model="wt"
-                  :items="weaponType"
-                  dense
-                  outlined
-                  multiple
-                  hide-details
-                  label="Weapon Types"
-                />
-              </v-col>
-              <v-col cols="4">
-                <v-select
-                  v-model="ws"
-                  :items="weaponSize"
-                  dense
-                  outlined
-                  multiple
-                  hide-details
-                  label="Weapon Sizes"
-                />
-              </v-col>
-              <v-col cols="4">
-                <v-select
-                  v-model="st"
-                  :items="systemType"
-                  dense
-                  outlined
-                  multiple
-                  hide-details
-                  label="System Types"
-                />
-              </v-col>
-            </v-row>
+            <div v-show="!npc">
+              <v-divider class="mb-2 mt-3" />
+              <div class="caption">Restrict to:</div>
+              <v-row dense align="center">
+                <v-col cols="4">
+                  <v-select
+                    v-model="wt"
+                    :items="weaponType"
+                    dense
+                    outlined
+                    multiple
+                    hide-details
+                    label="Weapon Types"
+                  />
+                </v-col>
+                <v-col cols="4">
+                  <v-select
+                    v-model="ws"
+                    :items="weaponSize"
+                    dense
+                    outlined
+                    multiple
+                    hide-details
+                    label="Weapon Sizes"
+                  />
+                </v-col>
+                <v-col cols="4">
+                  <v-select
+                    v-model="st"
+                    :items="systemType"
+                    dense
+                    outlined
+                    multiple
+                    hide-details
+                    label="System Types"
+                  />
+                </v-col>
+              </v-row>
+            </div>
           </v-card-text>
           <v-divider />
           <v-card-actions>
@@ -100,16 +102,23 @@
 </template>
 
 <script lang="ts">
-import { synergyLocations, weaponType, weaponSize, systemType } from '@/assets/enums'
+import {
+  synergyLocations,
+  npcSynergyLocations,
+  weaponType,
+  weaponSize,
+  systemType,
+} from '@/assets/enums'
 import RichTextEditor from './RichTextEditor.vue'
 
 import Vue from 'vue'
 export default Vue.extend({
   name: 'synergy-builder',
   components: { RichTextEditor },
-  props: { item: { type: Object, required: true } },
+  props: { item: { type: Object, required: true }, npc: { type: Boolean } },
   data: () => ({
     synergies: synergyLocations,
+    npcSynergies: npcSynergyLocations,
     weaponType: weaponType,
     weaponSize: weaponSize,
     systemType: systemType,

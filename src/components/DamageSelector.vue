@@ -34,7 +34,8 @@
                 />
               </v-col>
               <v-col>
-                <v-text-field v-model="damage.val" label="Value" hide-details outlined />
+                <tiered-stat-input v-if="npc" v-model="damage.val" title="Value" />
+                <v-text-field v-else v-model="damage.val" label="Value" hide-details outlined />
               </v-col>
             </v-row>
           </v-card-text>
@@ -58,7 +59,7 @@ import { damageType } from '@/assets/enums'
 
 export default Vue.extend({
   name: 'damage-selector',
-  props: { item: { type: Object, required: true } },
+  props: { item: { type: Object, required: true }, npc: { type: Boolean } },
   data: () => ({
     menu: false,
     damage: {},

@@ -34,7 +34,15 @@
                 />
               </v-col>
               <v-col>
-                <v-text-field v-model="tag.val" type="number" label="Value" hide-details outlined />
+                <tiered-stat-input v-if="npc" v-model="tag.val" title="Value" />
+                <v-text-field
+                  v-else
+                  v-model="tag.val"
+                  type="number"
+                  label="Value"
+                  hide-details
+                  outlined
+                />
               </v-col>
             </v-row>
           </v-card-text>
@@ -55,10 +63,12 @@
 <script lang="ts">
 import Vue from 'vue'
 import { tags } from 'lancer-data'
+import TieredStatInput from './TieredStatInput.vue'
 
 export default Vue.extend({
   name: 'tag-selector',
-  props: { item: { type: Object, required: true } },
+  props: { item: { type: Object, required: true }, npc: { type: Boolean } },
+  components: { TieredStatInput },
   data: () => ({
     menu: false,
     tag: {},

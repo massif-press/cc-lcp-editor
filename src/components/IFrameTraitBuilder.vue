@@ -104,16 +104,7 @@ import Vue from 'vue'
 export default Vue.extend({
   name: 'trait-builder',
   props: { item: { type: Object, required: true } },
-  components: {
-    RichTextEditor,
-    IActionBuilder,
-    IBonusBuilder,
-    ICounterBuilder,
-    IntegratedSelector,
-    SpecialEquipmentSelector,
-    ISynergyBuilder,
-    IDeployableBuilder,
-  },
+
   data: () => ({
     dialog: false,
     name: '',

@@ -62,12 +62,12 @@
                 <activator-selector :item="this" />
               </v-col>
               <v-col>
-                <synergy-selector :item="this" />
+                <synergy-selector :item="this" :npc="npc" />
               </v-col>
             </v-row>
             <v-row>
               <v-col>
-                <rich-text-editor title="Detail" v-model="detail" />
+                <rich-text-editor title="Detail" v-model="detail" npc />
               </v-col>
             </v-row>
             <v-row dense align="center" justify="space-around" class="my-2">
@@ -81,7 +81,7 @@
                   hide-details
                 />
               </v-col>
-              <v-col cols="auto" class="mt-n4">
+              <v-col v-if="!npc" cols="auto" class="mt-n4">
                 <v-switch v-model="pilot" label="Pilot" dense hide-details />
               </v-col>
               <v-col cols="auto" class="mt-n4">
@@ -98,22 +98,20 @@
               </v-row>
               <v-row dense>
                 <v-col>
-                  <v-card outlined>
-                    <rich-text-editor title="Precondition (optional)" v-model="init" />
-                  </v-card>
+                  <rich-text-editor title="Precondition (optional)" v-model="init" npc />
                 </v-col>
               </v-row>
               <v-row dense>
                 <v-col>
-                  <rich-text-editor title="Trigger" v-model="trigger" />
+                  <rich-text-editor title="Trigger" v-model="trigger" npc />
                 </v-col>
               </v-row>
             </div>
             <v-divider class="my-2" />
-            <div class="caption mb-2">Charge items only:</div>
+            <div v-show="!npc" class="caption mb-2">Charge items only:</div>
             <v-row>
-              <v-col><damage-selector :item="this" /></v-col>
-              <v-col><range-selector :item="this" /></v-col>
+              <v-col><damage-selector :item="this" :npc="npc" /></v-col>
+              <v-col><range-selector :item="this" :npc="npc" /></v-col>
             </v-row>
           </v-card-text>
           <v-divider />
@@ -131,17 +129,14 @@
 </template>
 
 <script lang="ts">
-import RichTextEditor from './RichTextEditor.vue'
-import ActivatorSelector from './ActivatorSelector.vue'
 import SynergySelector from './SynergyLocationSelector.vue'
-import DamageSelector from './DamageSelector.vue'
 import RangeSelector from './RangeSelector.vue'
 
 import Vue from 'vue'
 export default Vue.extend({
   name: 'action-builder',
-  props: { item: { type: Object, required: true } },
-  components: { RichTextEditor, ActivatorSelector, SynergySelector, DamageSelector, RangeSelector },
+  props: { item: { type: Object, required: true }, npc: { type: Boolean } },
+  components: { SynergySelector, RangeSelector },
   data: () => ({
     dialog: false,
     name: '',

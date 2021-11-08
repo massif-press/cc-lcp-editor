@@ -130,36 +130,12 @@
 
 <script lang="ts">
 import { weaponType, weaponSize } from '@/assets/enums'
-import RichTextEditor from '@/components/RichTextEditor.vue'
-import IActionBuilder from '@/components/IActionBuilder.vue'
-import IBonusBuilder from '@/components/IBonusBuilder.vue'
-import ISynergyBuilder from '@/components/ISynergyBuilder.vue'
-import IDeployableBuilder from '@/components/IDeployableBuilder.vue'
-import ICounterBuilder from '@/components/ICounterBuilder.vue'
-import IntegratedSelector from '@/components/IntegratedSelector.vue'
-import SpecialEquipmentSelector from '@/components/SpecialEquipmentSelector.vue'
-import DamageSelector from '@/components/DamageSelector.vue'
-import RangeSelector from '@/components/RangeSelector.vue'
-import TagSelector from '@/components/TagSelector.vue'
 
 import Vue from 'vue'
 export default Vue.extend({
   name: 'weapon-profile-editor',
   props: {
     item: { type: Object, required: true },
-  },
-  components: {
-    RichTextEditor,
-    IActionBuilder,
-    IBonusBuilder,
-    ISynergyBuilder,
-    IDeployableBuilder,
-    ICounterBuilder,
-    IntegratedSelector,
-    SpecialEquipmentSelector,
-    DamageSelector,
-    RangeSelector,
-    TagSelector,
   },
   data: () => ({
     dialog: false,

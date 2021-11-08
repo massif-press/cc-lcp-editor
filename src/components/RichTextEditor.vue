@@ -1,6 +1,11 @@
 <template>
   <v-card outlined>
     <div class="caption px-1">{{ title }}</div>
+    <span v-show="npc" class="caption text--disabled">
+      The syntax
+      <code>{X/Y/Z}</code>
+      will be rendered into the values for Tier 1/2/3 based on user tier selection within COMP/CON
+    </span>
     <tiptap-vuetify
       id="rte"
       v-model="val"
@@ -33,7 +38,7 @@ import {
 export default Vue.extend({
   name: 'rich-text-editor',
   components: { TiptapVuetify },
-  props: ['value', 'title'],
+  props: ['value', 'title', 'npc'],
   data: () => ({
     extensions: [
       History,

@@ -9,7 +9,7 @@
       <v-card-text>
         <v-row justify="space-around" align="end">
           <v-col>
-            <v-text-field label="ID" hide-details v-model="id" />
+            <id-input v-model="id" />
           </v-col>
           <v-col cols="4">
             <v-text-field label="Name" hide-details v-model="name" />
@@ -148,18 +148,8 @@
 
 <script lang="ts">
 import { weaponType, weaponSize } from '@/assets/enums'
-import RichTextEditor from '@/components/RichTextEditor.vue'
-import IActionBuilder from '@/components/IActionBuilder.vue'
-import IBonusBuilder from '@/components/IBonusBuilder.vue'
-import ISynergyBuilder from '@/components/ISynergyBuilder.vue'
-import IDeployableBuilder from '@/components/IDeployableBuilder.vue'
-import ICounterBuilder from '@/components/ICounterBuilder.vue'
+
 import IProfileBuilder from '@/components/IProfileBuilder.vue'
-import IntegratedSelector from '@/components/IntegratedSelector.vue'
-import SpecialEquipmentSelector from '@/components/SpecialEquipmentSelector.vue'
-import TagSelector from '@/components/TagSelector.vue'
-import DamageSelector from '@/components/DamageSelector.vue'
-import RangeSelector from '@/components/RangeSelector.vue'
 
 import Vue from 'vue'
 export default Vue.extend({
@@ -169,17 +159,6 @@ export default Vue.extend({
     licenses: { type: Array, required: false, default: () => [] },
   },
   components: {
-    RichTextEditor,
-    IActionBuilder,
-    IBonusBuilder,
-    ISynergyBuilder,
-    IDeployableBuilder,
-    ICounterBuilder,
-    IntegratedSelector,
-    SpecialEquipmentSelector,
-    TagSelector,
-    DamageSelector,
-    RangeSelector,
     IProfileBuilder,
   },
   data: () => ({

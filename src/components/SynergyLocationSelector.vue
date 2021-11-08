@@ -24,6 +24,7 @@ export default Vue.extend({
       type: Object,
       required: true,
     },
+    npc: { type: Boolean },
   },
   data: () => ({
     synergyLocations: synergyLocations,

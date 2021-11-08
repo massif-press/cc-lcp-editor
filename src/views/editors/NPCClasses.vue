@@ -15,8 +15,18 @@
                 <span class="text-h6 mr-1">{{ c.name }}</span>
               </v-list-item-title>
               <v-list-item-action-text class="mt-n2">
-                {{ c.base_features.length }} base features /
-                {{ c.optional_features.length }} optional
+                {{ getFeatures(c).length }} base features /
+                {{ getFeatures(c, true).length }} optional
+              </v-list-item-action-text>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item @click="selected = 'generic'">
+            <v-list-item-content class="mt-n2">
+              <v-list-item-title>
+                <span class="text-h6 mr-1">Generic Features</span>
+              </v-list-item-title>
+              <v-list-item-action-text class="mt-n2">
+                TODO base features / TODO optional
               </v-list-item-action-text>
             </v-list-item-content>
           </v-list-item>
@@ -24,63 +34,100 @@
         <v-divider class="my-2" />
         <v-btn block color="secondary" @click="addNew">
           <v-icon left>mdi-plus</v-icon>
+          Add New NPC Class
         </v-btn>
       </v-col>
       <v-col>
-        <v-container v-if="selected">
+        <v-container v-if="selected && selected === 'generic'">todo</v-container>
+
+        <v-container v-else-if="selected">
           <v-card outlined>
             <v-toolbar dense color="primary" class="white--text text-h6">
               {{ selected.name }}
             </v-toolbar>
             <v-card-text>
-              <v-row dense justify="space-around">
+              <v-row dense justify="space-around" align="end">
                 <v-col cols="3">
-                  <v-text-field
-                    v-model="selected.id"
-                    hide-details
-                    label="ID"
-                    :readonly="isCore(selected.id)"
-                  />
+                  <id-input v-model="selected.id" />
                 </v-col>
-                <v-col cols="9">
-                  <v-text-field
-                    v-model="selected.name"
+                <v-col cols="6">
+                  <v-text-field v-model="selected.name" hide-details label="Name" dense />
+                </v-col>
+                <v-col cols="3">
+                  <v-select
+                    label="Role"
+                    outlined
+                    :items="roles"
+                    v-model="selected.role"
+                    dense
                     hide-details
-                    label="Name"
-                    :readonly="isCore(selected.id)"
                   />
                 </v-col>
               </v-row>
               <v-row dense justify="space-around" align="center">
-                <v-col>
-                  <v-text-field
-                    v-model="selected.logo_url"
-                    persistent-hint
-                    hint="SVG"
-                    label="Logo URL"
-                    :readonly="isCore(selected.id)"
-                  />
-                  <v-img :src="selected.logo_url" max-height="222" max-width="450" contain />
-                </v-col>
-                <v-col>
-                  <color-selector
-                    v-model="selected.light"
-                    title="Light Color"
-                    :disabled="isCore(selected.id)"
-                  />
-                </v-col>
-                <v-col>
-                  <color-selector
-                    v-model="selected.light"
-                    title="Dark Color"
-                    :disabled="isCore(selected.id)"
+                <v-col cols="12">
+                  <v-textarea
+                    label="Short Description"
+                    dense
+                    outlined
+                    hide-details
+                    rows="2"
+                    v-model="selected.info.terse"
                   />
                 </v-col>
                 <v-col cols="12">
-                  <rich-text-editor title="Flavor Quote" v-model="selected.quote" />
+                  <rich-text-editor title="Flavor" v-model="selected.info.flavor" />
                 </v-col>
                 <v-col cols="12">
-                  <rich-text-editor title="Description" v-model="selected.description" />
+                  <rich-text-editor title="Tactics" v-model="selected.info.tactics" />
+                </v-col>
+              </v-row>
+              <v-divider class="mt-3 mb-5" />
+              <v-row>
+                <v-col
+                  v-show="key !== 'size'"
+                  v-for="key in Object.keys(selected.stats)"
+                  :key="`stat_${key}`"
+                  cols="2"
+                  class="pa-1"
+                >
+                  <tiered-stat-input v-model="selected.stats[key]" :title="key" />
+                </v-col>
+                <v-col class="pa-1"><tiered-size-input v-model="selected.stats.size" /></v-col>
+              </v-row>
+              <v-divider class="mb-3 mt-5" />
+              <v-row>
+                <v-col>
+                  <v-card outlined>
+                    <v-toolbar dense color="grey darken-3"><b>BASE FEATURES</b></v-toolbar>
+                    <v-card-text>{{ getFeatures(selected) }}</v-card-text>
+                  </v-card>
+                </v-col>
+                <v-col>
+                  <v-card outlined>
+                    <v-toolbar dense color="grey darken-3"><b>OPTIONAL FEATURES</b></v-toolbar>
+                    <v-card-text>{{ getFeatures(selected, true) }}</v-card-text>
+                  </v-card>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-btn block large color="pink darken-4" @click="newFeature('traits')">
+                    <v-icon left>mdi-plus</v-icon>
+                    add new trait
+                  </v-btn>
+                </v-col>
+                <v-col>
+                  <v-btn block large color="deep-orange darken-4" @click="newFeature('weapons')">
+                    <v-icon left>mdi-plus</v-icon>
+                    add new weapon
+                  </v-btn>
+                </v-col>
+                <v-col>
+                  <v-btn block large color="teal darken-4" @click="newFeature('systems')">
+                    <v-icon left>mdi-plus</v-icon>
+                    add new system
+                  </v-btn>
                 </v-col>
               </v-row>
             </v-card-text>
@@ -105,25 +152,35 @@
       <v-btn outlined small class="mx-1" @click="exportJson()">Export JSON File</v-btn>
       <v-btn outlined small class="mx-1" @click="importJson()">Import JSON File</v-btn>
     </v-footer>
+    <div style="height: 50px" />
+    <npc-system-editor
+      ref="systems"
+      @save="saveItem('systems', $event)"
+      @remove="removeItem('systems', $event)"
+    />
+    <npc-trait-editor
+      ref="traits"
+      @save="saveItem('traits', $event)"
+      @remove="removeItem('traits', $event)"
+    />
+    <npc-weapon-editor
+      ref="weapons"
+      @save="saveItem('weapons', $event)"
+      @remove="removeItem('weapons', $event)"
+    />
   </v-container>
-
-  <!-- <template v-slot="{ item }">
-
-        
-
-      </v-card-text>
-    </template>
-  </editor-base> -->
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { npcRole } from '@/assets/enums'
-import RichTextEditor from '@/components/RichTextEditor.vue'
+import NpcSystemEditor from './components/_NpcSystemEditor.vue'
+import NpcTraitEditor from './components/_NpcTraitEditor.vue'
+import NpcWeaponEditor from './components/_NpcWeaponEditor.vue'
 
 export default Vue.extend({
-  name: 'action-editor',
-  components: { RichTextEditor },
+  name: 'npc-class-editor',
+  components: { NpcSystemEditor, NpcTraitEditor, NpcWeaponEditor },
   computed: {
     lcp(): any {
       return this.$store.getters.lcp
@@ -135,10 +192,48 @@ export default Vue.extend({
     },
   },
   data: () => ({
-    npcRoles: npcRole,
+    roles: npcRole,
     selected: null as any,
   }),
   methods: {
+    getFeatures(c: any, isOptional?: boolean) {
+      if (!this.lcp.npc_features) return []
+      if (c === 'generic') {
+        return this.lcp.npc_features.filter((x: any) => x.origin.type === 'Generic')
+      }
+
+      const fArr = this.lcp.npc_features.filter(
+        (x: any) => x.origin.type === 'Class' && x.origin.origin_id === c.id
+      )
+
+      return isOptional
+        ? fArr.filter((x: any) => x.origin.optional)
+        : fArr.filter((x: any) => !x.origin.optional)
+    },
+    addNew() {
+      if (!this.lcp.npc_classes) {
+        this.$set(this.lcp, 'npc_classes', [])
+      }
+      this.lcp.npc_classes.push({
+        id: 'new',
+        name: 'New Class',
+        info: {
+          flavor: '',
+          tactics: '',
+          terse: '',
+        },
+        stats: this.generateStatObject(),
+        base_features: [],
+        optional_features: [],
+      })
+    },
+    newFeature(type: string) {
+      if (this.$refs && this.$refs[type]) {
+        const r = this.$refs[type] as any
+        r.reset()
+        r.open()
+      }
+    },
     exportJSON() {
       const blob = new Blob([JSON.stringify(this.lcp.npc_classes)])
       const elem = window.document.createElement('a')
@@ -158,6 +253,24 @@ export default Vue.extend({
       reader.onload = e =>
         this.$set(this.lcp, 'npc_classes', JSON.parse(e?.target?.result?.toString() || ''))
       reader.readAsText(file)
+    },
+    generateStatObject() {
+      return {
+        armor: [0, 0, 0],
+        hp: [0, 0, 0],
+        evade: [0, 0, 0],
+        edef: [0, 0, 0],
+        heatcap: [0, 0, 0],
+        speed: [0, 0, 0],
+        sensor: [0, 0, 0],
+        save: [0, 0, 0],
+        hull: [0, 0, 0],
+        agility: [0, 0, 0],
+        systems: [0, 0, 0],
+        engineering: [0, 0, 0],
+        size: [[1], [1], [1]],
+        activations: [0, 0, 0],
+      }
     },
   },
 })

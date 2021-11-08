@@ -8,7 +8,7 @@
       <v-toolbar dense color="primary" class="white--text text-h6">{{ item.name }}</v-toolbar>
       <v-card-text>
         <v-row>
-          <v-col><v-text-field label="ID" v-model="item.id" /></v-col>
+          <v-col><id-input v-model="item.id" /></v-col>
           <v-col><v-text-field label="Name" v-model="item.name" /></v-col>
           <v-col>
             <v-switch
@@ -28,10 +28,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import EditorBase from './EditorBase.vue'
-import RichTextEditor from '@/components/RichTextEditor.vue'
 
 export default Vue.extend({
   name: 'tags-editor',
-  components: { EditorBase, RichTextEditor },
+  components: { EditorBase },
 })
 </script>

@@ -40,7 +40,7 @@
               <v-col cols="8">
                 <v-select
                   label="Bonus"
-                  :items="bonuses"
+                  :items="npc ? npcBonuses : bonuses"
                   return-object
                   item-text="desc"
                   v-model="bonus"
@@ -49,7 +49,8 @@
               <v-col cols="3">
                 <div v-if="!bonus" class="text--disabled">Select Bonus</div>
                 <div v-else-if="bonus.type === 'integer'">
-                  <v-text-field v-model="value" label="Integer" outlined />
+                  <tiered-stat-input v-if="npc" v-model="value" title="Integer" />
+                  <v-text-field v-else v-model="value" label="Integer" outlined />
                 </div>
                 <div v-else-if="bonus.type === 'boolean'">
                   <v-radio-group v-model="value" mandatory>
@@ -58,7 +59,8 @@
                   </v-radio-group>
                 </div>
                 <div v-else>
-                  <v-text-field v-model="value" label="String" outlined />
+                  <tiered-stat-input v-if="npc" v-model="value" title="String" />
+                  <v-text-field v-else v-model="value" label="String" outlined />
                 </div>
               </v-col>
             </v-row>
@@ -160,14 +162,17 @@
 </template>
 
 <script lang="ts">
-import { bonuses, weaponType, weaponSize, damageType, rangeType } from '@/assets/enums'
+import { bonuses, npcBonuses, weaponType, weaponSize, damageType, rangeType } from '@/assets/enums'
 
 import Vue from 'vue'
+import TieredStatInput from './TieredStatInput.vue'
 export default Vue.extend({
+  components: { TieredStatInput },
   name: 'bonus-builder',
-  props: { item: { type: Object, required: true } },
+  props: { item: { type: Object, required: true }, npc: { type: Boolean } },
   data: () => ({
     bonuses: bonuses,
+    npcBonuses: npcBonuses,
     weaponType: weaponType,
     weaponSize: weaponSize,
     damageType: damageType,

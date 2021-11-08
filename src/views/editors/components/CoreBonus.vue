@@ -36,7 +36,7 @@
         <v-card-text>
           <v-row justify="space-around" align="center">
             <v-col cols="4">
-              <v-text-field label="ID" hide-details v-model="id" />
+              <id-input v-model="id" />
             </v-col>
             <v-col>
               <v-text-field label="Name" hide-details v-model="name" />
@@ -95,29 +95,12 @@
 </template>
 
 <script lang="ts">
-import RichTextEditor from '@/components/RichTextEditor.vue'
-import IActionBuilder from '@/components/IActionBuilder.vue'
-import IBonusBuilder from '@/components/IBonusBuilder.vue'
-import ICounterBuilder from '@/components/ICounterBuilder.vue'
-import IDeployableBuilder from '@/components/IDeployableBuilder.vue'
-import IntegratedSelector from '@/components/IntegratedSelector.vue'
-import SpecialEquipmentSelector from '@/components/SpecialEquipmentSelector.vue'
-
 import Vue from 'vue'
-import ISynergyBuilder from '@/components/ISynergyBuilder.vue'
+
 export default Vue.extend({
   name: 'core-bonus-editor',
   props: { manufacturer: { type: Object, required: true } },
-  components: {
-    RichTextEditor,
-    IActionBuilder,
-    IBonusBuilder,
-    ICounterBuilder,
-    IDeployableBuilder,
-    IntegratedSelector,
-    SpecialEquipmentSelector,
-    ISynergyBuilder,
-  },
+
   data: () => ({
     dialog: false,
     id: '',

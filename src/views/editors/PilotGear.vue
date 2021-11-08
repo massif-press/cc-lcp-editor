@@ -8,7 +8,7 @@
       <v-toolbar dense color="primary" class="white--text text-h6">{{ item.name }}</v-toolbar>
       <v-card-text>
         <v-row>
-          <v-col><v-text-field hide-details label="ID" v-model="item.id" /></v-col>
+          <v-col><id-input v-model="item.id" /></v-col>
           <v-col><v-text-field hide-details label="Name" v-model="item.name" /></v-col>
           <v-col>
             <v-select
@@ -50,27 +50,15 @@
 <script lang="ts">
 import Vue from 'vue'
 import EditorBase from './EditorBase.vue'
-import RichTextEditor from '@/components/RichTextEditor.vue'
-import IActionBuilder from '@/components/IActionBuilder.vue'
-import IBonusBuilder from '@/components/IBonusBuilder.vue'
-import TagSelector from '@/components/TagSelector.vue'
+
 import SynergySelector from '@/components/SynergyLocationSelector.vue'
-import IDeployableBuilder from '@/components/IDeployableBuilder.vue'
-import DamageSelector from '@/components/DamageSelector.vue'
-import RangeSelector from '@/components/RangeSelector.vue'
 
 export default Vue.extend({
   name: 'tags-editor',
   components: {
     EditorBase,
-    RichTextEditor,
-    IActionBuilder,
-    IBonusBuilder,
-    TagSelector,
+
     SynergySelector,
-    IDeployableBuilder,
-    DamageSelector,
-    RangeSelector,
   },
 })
 </script>

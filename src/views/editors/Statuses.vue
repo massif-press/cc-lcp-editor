@@ -35,10 +35,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import EditorBase from './EditorBase.vue'
-import RichTextEditor from '@/components/RichTextEditor.vue'
 
 export default Vue.extend({
   name: 'status-editor',
-  components: { EditorBase, RichTextEditor },
+  components: { EditorBase },
 })
 </script>

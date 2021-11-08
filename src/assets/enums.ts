@@ -87,6 +87,13 @@ const synergyLocations = [
   { value: 'cascade', desc: 'Cascade warning panel' },
 ]
 
+const npcSynergyLocations = [
+  {
+    value: 'todo',
+    desc: 'todo',
+  },
+]
+
 const bonuses = [
   { value: 'skill_point', desc: 'Add Pilot Skill Trigger point', type: 'integer' },
   { value: 'mech_skill_point', desc: 'Add Mech Skill(HASE) point', type: 'integer' },
@@ -156,6 +163,10 @@ const bonuses = [
   { value: 'drone_speed', desc: 'Add speed to all deployed Drones', type: 'integer' },
 ]
 
+const npcBonuses = [
+  { value: 'todo', desc: 'todo', type: 'integer' },
+]
+
 const systemType = [
   'AI',
   'Deployable',
@@ -216,4 +227,4 @@ const npcRole = [
   'Defender',
 ]
 
-export { activationTypes, synergyLocations, bonuses, systemType, mountType, weaponType, weaponSize, rangeType, damageType, mechType, npcRole }
+export { activationTypes, synergyLocations, npcSynergyLocations, bonuses, npcBonuses, systemType, mountType, weaponType, weaponSize, rangeType, damageType, mechType, npcRole }

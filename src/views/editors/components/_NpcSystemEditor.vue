@@ -1,8 +1,8 @@
 <template>
   <v-dialog v-model="dialog" fullscreen>
     <v-card>
-      <v-toolbar dense color="deep-purple darken-4" class="text-h6">
-        {{ manufacturer ? manufacturer.id : '' }} System Editor
+      <v-toolbar dense color="teal darken-4" class="text-h6">
+        NPC System Editor
         <v-spacer />
         <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
       </v-toolbar>
@@ -15,51 +15,40 @@
             <v-text-field label="Name" hide-details v-model="name" />
           </v-col>
           <v-col>
-            <v-select label="Type" :items="systemTypes" hide-details v-model="type" />
-          </v-col>
-          <v-col>
-            <v-combobox v-model="license" label="License" dense hide-details :items="licenses" />
-          </v-col>
-          <v-col>
             <v-text-field
-              label="License Level"
+              v-model="recharge"
+              label="Recharge"
               type="number"
               hide-details
               outlined
               dense
-              v-model="license_level"
+              clearable
             />
           </v-col>
-          <v-col>
-            <v-text-field label="SP Cost" type="number" hide-details outlined dense v-model="sp" />
+          <v-col v-show="npcClass || npcTemplate" cols="auto">
+            <v-btn-toggle v-model="optional" mandatory dense color="primary lighten-1">
+              <v-btn text :value="false">Base</v-btn>
+              <v-btn text :value="true">Optional</v-btn>
+            </v-btn-toggle>
           </v-col>
         </v-row>
         <v-row>
           <v-col>
-            <rich-text-editor title="Effect" v-model="effect" />
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <rich-text-editor title="Description" v-model="description" />
+            <rich-text-editor title="Effect" v-model="effect" npc />
           </v-col>
         </v-row>
         <v-row align="center">
-          <v-col><i-action-builder :item="this" /></v-col>
-          <v-col><i-bonus-builder :item="this" /></v-col>
-          <v-col><i-deployable-builder :item="this" /></v-col>
+          <v-col><i-action-builder npc :item="this" /></v-col>
+          <v-col><i-deployable-builder npc :item="this" /></v-col>
         </v-row>
         <v-row align="center">
-          <v-col><i-synergy-builder :item="this" /></v-col>
-
+          <v-col><i-synergy-builder npc :item="this" /></v-col>
           <v-col><i-counter-builder :item="this" /></v-col>
-          <v-col><integrated-selector :item="this" /></v-col>
-          <v-col><special-equipment-selector :item="this" /></v-col>
+          <v-col><i-clock-builder :item="this" /></v-col>
         </v-row>
         <v-row align="center">
-          <v-col>
-            <tag-selector :item="this" />
-          </v-col>
+          <v-col><i-bonus-builder npc :item="this" /></v-col>
+          <v-col><tag-selector npc :item="this" /></v-col>
         </v-row>
       </v-card-text>
       <v-divider />
@@ -76,45 +65,46 @@
 </template>
 
 <script lang="ts">
-import { systemType } from '@/assets/enums'
-
 import Vue from 'vue'
 export default Vue.extend({
-  name: 'system-editor',
+  name: 'npc-system-editor',
   props: {
-    manufacturer: { type: Object, required: false },
-    licenses: { type: Array, required: false, default: () => [] },
+    npcClass: { type: Object, required: false },
+    npcTemplate: { type: Object, required: false },
   },
-
   data: () => ({
     dialog: false,
-    systemTypes: systemType,
     id: '',
     name: '',
-    license: '',
-    license_level: 1,
+    recharge: 0,
+    optional: false,
     effect: '',
     type: 'System',
-    sp: '',
-    description: '',
     tags: [],
     actions: [],
     bonuses: [],
     synergies: [],
     deployables: [],
     counters: [],
-    integrated: [],
-    special_equipment: [],
+    clocks: [],
     isEdit: false,
   }),
   computed: {
     confirmOK(): boolean {
       return !!this.id && !!this.name
     },
-    source(): string {
-      if (this.manufacturer) return this.manufacturer.id
-      if (this.tags.some((x: any) => x.id === 'tg_exotic')) return 'EXOTIC'
-      return ''
+    origin(): any {
+      if (this.npcClass || this.npcTemplate)
+        return {
+          type: this.npcClass ? 'Class' : 'Template',
+          name: this[this.npcClass ? 'npcClass' : 'npcTemplate'].name,
+          optional: this.optional,
+          origin_id: this[this.npcClass ? 'npcClass' : 'npcTemplate'].id,
+        }
+      else
+        return {
+          type: 'Generic',
+        }
     },
   },
   methods: {
@@ -128,21 +118,18 @@ export default Vue.extend({
       const e = {
         id: this.id,
         name: this.name,
-        source: this.source,
-        license: this.license,
-        license_level: Number(this.license_level),
+        origin: this.origin,
         effect: this.effect,
+        recharge: this.recharge,
+        optional: this.optional,
         type: this.type,
-        sp: this.sp,
-        description: this.description,
         tags: this.tags,
         actions: this.actions,
         bonuses: this.bonuses,
         synergies: this.synergies,
         deployables: this.deployables,
         counters: this.counters,
-        integrated: this.integrated,
-        special_equipment: this.special_equipment,
+        clocks: this.clocks,
       }
       this.$emit('save', e)
       this.reset()
@@ -151,20 +138,17 @@ export default Vue.extend({
     edit(system: any): void {
       this.id = system.id
       this.name = system.name
-      this.license = system.license
-      this.license_level = Number(system.license_level)
       this.effect = system.effect
+      this.recharge = system.recharge
+      this.optional = system.optional
       this.type = system.type
-      this.sp = system.sp
-      this.description = system.description
       this.tags = system.tags
       this.actions = system.actions
       this.bonuses = system.bonuses
       this.synergies = system.synergies
       this.deployables = system.deployables
       this.counters = system.counters
-      this.integrated = system.integrated
-      this.special_equipment = system.special_equipment
+      this.clocks = system.clocks
       this.isEdit = true
       this.dialog = true
     },
@@ -175,20 +159,17 @@ export default Vue.extend({
     reset(): void {
       this.id = ''
       this.name = ''
-      this.license = ''
-      this.license_level = 1
       this.effect = ''
       this.type = 'System'
-      this.sp = ''
-      this.description = ''
+      this.recharge = 0
+      this.optional = false
       this.tags = []
       this.actions = []
       this.bonuses = []
       this.synergies = []
       this.deployables = []
       this.counters = []
-      this.integrated = []
-      this.special_equipment = []
+      this.clocks = []
       this.isEdit = false
     },
   },

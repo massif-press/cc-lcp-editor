@@ -10,6 +10,7 @@
           accept=".lcp,.zip"
           show-size
           hide-details
+          :loading="loading"
           @click:clear="clearLcp()"
           @change="loadLcp($event)"
         />
@@ -120,7 +121,6 @@ export default Vue.extend({
   name: 'Home',
   data: () => ({
     lcpFile: null,
-    error: '',
     loading: false,
     categories: [
       'actions',
@@ -161,13 +161,7 @@ export default Vue.extend({
     },
 
     async loadLcp(file: HTMLInputElement) {
-      const ext = file.name.split('.').pop()
-      if (ext !== 'lcp' && ext !== 'zip') {
-        this.error = 'This file is not in the correct format (.zip or .lcp)'
-      }
-
       this.loading = true
-      this.error = ''
 
       if (!file) return
 
@@ -177,7 +171,7 @@ export default Vue.extend({
           this.loading = false
         })
       } catch (e: any) {
-        this.error = e.message
+        console.error(e)
         this.loading = false
       }
     },

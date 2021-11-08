@@ -33,7 +33,8 @@
                 />
               </v-col>
               <v-col>
-                <v-text-field v-model="range.val" label="Value" hide-details outlined />
+                <tiered-stat-input v-if="npc" v-model="range.val" title="Value" />
+                <v-text-field v-else v-model="range.val" label="Value" hide-details outlined />
               </v-col>
             </v-row>
           </v-card-text>
@@ -54,10 +55,12 @@
 <script lang="ts">
 import Vue from 'vue'
 import { rangeType } from '@/assets/enums'
+import TieredStatInput from './TieredStatInput.vue'
 
 export default Vue.extend({
+  components: { TieredStatInput },
   name: 'range-selector',
-  props: { item: { type: Object, required: true } },
+  props: { item: { type: Object, required: true }, npc: { type: Boolean } },
   data: () => ({
     menu: false,
     range: {},

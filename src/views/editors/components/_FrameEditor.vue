@@ -15,7 +15,7 @@
           <v-col>
             <v-row justify="space-around" align="end">
               <v-col cols="3">
-                <v-text-field label="ID" hide-details v-model="id" />
+                <id-input v-model="id" />
               </v-col>
               <v-col cols="7">
                 <v-text-field label="Name" hide-details v-model="name" />
@@ -362,35 +362,12 @@
 
 <script lang="ts">
 import { mechType, mountType } from '@/assets/enums'
-import RichTextEditor from '@/components/RichTextEditor.vue'
-import ActivatorSelector from '@/components/ActivatorSelector.vue'
-import IFrameTraitBuilder from '@/components/IFrameTraitBuilder.vue'
-import IActionBuilder from '@/components/IActionBuilder.vue'
-import IBonusBuilder from '@/components/IBonusBuilder.vue'
-import ISynergyBuilder from '@/components/ISynergyBuilder.vue'
-import IDeployableBuilder from '@/components/IDeployableBuilder.vue'
-import ICounterBuilder from '@/components/ICounterBuilder.vue'
-import IntegratedSelector from '@/components/IntegratedSelector.vue'
-import SpecialEquipmentSelector from '@/components/SpecialEquipmentSelector.vue'
-import TagSelector from '@/components/TagSelector.vue'
 
 import Vue from 'vue'
 export default Vue.extend({
   name: 'frame-editor',
   props: { manufacturer: { type: Object, required: true } },
-  components: {
-    RichTextEditor,
-    IFrameTraitBuilder,
-    ActivatorSelector,
-    IActionBuilder,
-    IBonusBuilder,
-    ISynergyBuilder,
-    IDeployableBuilder,
-    ICounterBuilder,
-    IntegratedSelector,
-    SpecialEquipmentSelector,
-    TagSelector,
-  },
+
   data: () => ({
     dialog: false,
     mechTypes: mechType,

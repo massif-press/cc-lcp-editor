@@ -204,7 +204,7 @@
 import Vue from 'vue'
 import _ from 'lodash'
 import { manufacturers } from 'lancer-data'
-import RichTextEditor from '@/components/RichTextEditor.vue'
+
 import ColorSelector from '@/components/ColorSelector.vue'
 import CoreBonusEditor from './components/CoreBonus.vue'
 import LicenseEditor from './components/Licenses.vue'
@@ -213,7 +213,6 @@ import SourcelessEquipment from './components/SourcelessEquipment.vue'
 export default Vue.extend({
   name: 'manufacturer-editor',
   components: {
-    RichTextEditor,
     CoreBonusEditor,
     LicenseEditor,
     SourcelessEquipment,
