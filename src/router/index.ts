@@ -85,6 +85,11 @@ const routes: Array<RouteConfig> = [
     name: 'NPC Class Editor',
     component: () => import(/* webpackChunkName: "editors" */ '../views/editors/NPCClasses.vue'),
   },
+  {
+    path: '/editor/npc_templates',
+    name: 'NPC Template Editor',
+    component: () => import(/* webpackChunkName: "editors" */ '../views/editors/NPCTemplates.vue'),
+  },
 ]
 
 const router = new VueRouter({

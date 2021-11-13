@@ -4,7 +4,7 @@
       <v-col cols="2">
         <v-list nav dense>
           <v-list-item
-            v-for="(c, i) in classes"
+            v-for="(c, i) in templates"
             :key="`${c.id || 'new'}_${i}`"
             :class="selected && selected.id === c.id ? 'primary darken-3' : ''"
             selectable
@@ -50,52 +50,74 @@
                 <v-col cols="3">
                   <id-input v-model="selected.id" />
                 </v-col>
-                <v-col cols="6">
+                <v-col>
                   <v-text-field v-model="selected.name" hide-details label="Name" dense />
-                </v-col>
-                <v-col cols="3">
-                  <v-select
-                    label="Role"
-                    outlined
-                    :items="roles"
-                    v-model="selected.role"
-                    dense
-                    hide-details
-                  />
                 </v-col>
               </v-row>
               <v-row dense justify="space-around" align="center">
                 <v-col cols="12">
+                  <rich-text-editor title="Description" v-model="selected.description" />
+                </v-col>
+                <v-col cols="12">
+                  <rich-text-editor title="Detail" v-model="selected.detail" />
+                </v-col>
+              </v-row>
+              <v-divider class="my-4" />
+              <v-row>
+                <v-col cols="12">
+                  <v-checkbox v-model="selected.allowOptional" dense hide-details>
+                    <div slot="label">
+                      When choosing optional systems, the
+                      <b>{{ selected.name }}</b>
+                      can also choose from the
+                      <b>{{ selected.name }} Features</b>
+                      list.
+                    </div>
+                  </v-checkbox>
+                  <v-checkbox v-model="selected.forceOptional" dense hide-details>
+                    <v-row slot="label" no-gutters align="center">
+                      <v-col cols="auto">
+                        the
+                        <b>{{ selected.name }}</b>
+                        chooses
+                      </v-col>
+                      <v-col cols="1" class="mx-2">
+                        <v-text-field type="number" outlined dense hide-details />
+                      </v-col>
+                      <v-col cols="auto">to</v-col>
+                      <v-col cols="1" class="mx-2">
+                        <v-text-field type="number" outlined dense hide-details />
+                      </v-col>
+                      <v-col cols="auto">
+                        option(s) from the
+                        <b>{{ selected.name }} Features</b>
+                        list
+                      </v-col>
+                      <v-col class="mx-2 mt-n2">
+                        <v-select
+                          :items="['when choosing optional systems.', 'per Tier.']"
+                          dense
+                          hide-details
+                        />
+                      </v-col>
+                    </v-row>
+                  </v-checkbox>
+                </v-col>
+                <v-col
+                  v-show="selected.allowOptional || selected.forceOptional"
+                  cols="12"
+                  class="mt-n3"
+                >
                   <v-textarea
-                    label="Short Description"
                     dense
-                    outlined
                     hide-details
-                    rows="2"
-                    v-model="selected.info.terse"
+                    rows="1"
+                    outlined
+                    auto-grow
+                    label="Caveat (optional)"
                   />
                 </v-col>
-                <v-col cols="12">
-                  <rich-text-editor title="Flavor" v-model="selected.info.flavor" />
-                </v-col>
-                <v-col cols="12">
-                  <rich-text-editor title="Tactics" v-model="selected.info.tactics" />
-                </v-col>
               </v-row>
-              <v-divider class="mt-3 mb-5" />
-              <v-row>
-                <v-col
-                  v-show="key !== 'size'"
-                  v-for="key in Object.keys(selected.stats)"
-                  :key="`stat_${key}`"
-                  cols="2"
-                  class="pa-1"
-                >
-                  <tiered-stat-input v-model="selected.stats[key]" :title="key" />
-                </v-col>
-                <v-col class="pa-1"><tiered-size-input v-model="selected.stats.size" /></v-col>
-              </v-row>
-              <v-divider class="mb-3 mt-5" />
               <v-row>
                 <v-col>
                   <v-card outlined>
@@ -116,7 +138,9 @@
                 </v-col>
                 <v-col>
                   <v-card outlined>
-                    <v-toolbar dense color="grey darken-3"><b>OPTIONAL FEATURES</b></v-toolbar>
+                    <v-toolbar dense color="grey darken-3">
+                      <b>{{ selected.name }} FEATURES</b>
+                    </v-toolbar>
                     <v-card-text>
                       <v-row>
                         <v-col
@@ -207,10 +231,10 @@ export default Vue.extend({
     lcp(): any {
       return this.$store.getters.lcp
     },
-    classes() {
-      if (!this.$store.getters.lcp.npc_classes)
-        this.$set(this.$store.getters.lcp, 'npc_classes', [])
-      return this.$store.getters.lcp.npc_classes
+    templates() {
+      if (!this.$store.getters.lcp.npc_templates)
+        this.$set(this.$store.getters.lcp, 'npc_templates', [])
+      return this.$store.getters.lcp.npc_templates
     },
   },
   data: () => ({
@@ -238,7 +262,7 @@ export default Vue.extend({
       }
 
       const fArr = this.lcp.npc_features.filter(
-        (x: any) => x.origin.type === 'Class' && x.origin.origin_id === c.id
+        (x: any) => x.origin.type === 'Template' && x.origin.origin_id === c.id
       )
 
       return isOptional
@@ -246,18 +270,20 @@ export default Vue.extend({
         : fArr.filter((x: any) => !x.origin.optional)
     },
     addNew() {
-      if (!this.lcp.npc_classes) {
-        this.$set(this.lcp, 'npc_classes', [])
+      if (!this.lcp.npc_templates) {
+        this.$set(this.lcp, 'npc_templates', [])
       }
-      this.lcp.npc_classes.push({
+      this.lcp.npc_templates.push({
         id: 'new',
-        name: 'New Class',
-        info: {
-          flavor: '',
-          tactics: '',
-          terse: '',
-        },
-        stats: this.generateStatObject(),
+        name: 'New Template',
+        description: '',
+        detail: '',
+        allowOptional: false,
+        forceOptional: false,
+        optionalMin: 0,
+        optionalMax: 0,
+        optionalPerTier: false,
+        caveat: '',
         tables: [],
         clocks: [],
       })
@@ -270,10 +296,10 @@ export default Vue.extend({
       }
     },
     exportJSON() {
-      const blob = new Blob([JSON.stringify(this.lcp.npc_classes)])
+      const blob = new Blob([JSON.stringify(this.lcp.npc_templates)])
       const elem = window.document.createElement('a')
       elem.href = window.URL.createObjectURL(blob)
-      elem.download = 'npc_classes.json'
+      elem.download = 'npc_templates.json'
       document.body.appendChild(elem)
       elem.click()
       document.body.removeChild(elem)
@@ -286,7 +312,7 @@ export default Vue.extend({
       const reader = new FileReader()
 
       reader.onload = e =>
-        this.$set(this.lcp, 'npc_classes', JSON.parse(e?.target?.result?.toString() || ''))
+        this.$set(this.lcp, 'npc_templates', JSON.parse(e?.target?.result?.toString() || ''))
       reader.readAsText(file)
     },
     generateStatObject() {
