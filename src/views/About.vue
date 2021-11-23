@@ -120,5 +120,16 @@
         </li>
       </ul>
     </div>
+    <div class="text-h6 ml-3">v0.1.5 (11/23/2020)</div>
+    <div class="ml-6">
+      <ul>
+        <li>
+          Fixed License page not allowing for new equipment on core manufacturers in an empty LCP
+          <a href="https://github.com/massif-press/cc-lcp-editor/issues/19" target="_blank">
+            (#19)
+          </a>
+        </li>
+      </ul>
+    </div>
   </v-container>
 </template>
