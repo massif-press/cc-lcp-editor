@@ -20,7 +20,7 @@
               </v-list-item-action-text>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item @click="selected = 'generic'">
+          <!-- <v-list-item @click="selected = 'generic'">
             <v-list-item-content class="mt-n2">
               <v-list-item-title>
                 <span class="text-h6 mr-1">Generic Features</span>
@@ -29,7 +29,7 @@
                 TODO base features / TODO optional
               </v-list-item-action-text>
             </v-list-item-content>
-          </v-list-item>
+          </v-list-item> -->
         </v-list>
         <v-divider class="my-2" />
         <v-btn block color="secondary" @click="addNew">
@@ -177,18 +177,21 @@
     <div style="height: 50px" />
     <npc-system-editor
       ref="systems"
-      @save="saveItem('systems', $event)"
-      @remove="removeItem('systems', $event)"
+      :npcClass="selected"
+      @save="saveItem($event)"
+      @remove="removeItem($event)"
     />
     <npc-trait-editor
       ref="traits"
-      @save="saveItem('traits', $event)"
-      @remove="removeItem('traits', $event)"
+      :npcClass="selected"
+      @save="saveItem($event)"
+      @remove="removeItem($event)"
     />
     <npc-weapon-editor
       ref="weapons"
-      @save="saveItem('weapons', $event)"
-      @remove="removeItem('weapons', $event)"
+      :npcClass="selected"
+      @save="saveItem($event)"
+      @remove="removeItem($event)"
     />
   </v-container>
 </template>
@@ -268,6 +271,17 @@ export default Vue.extend({
         r.reset()
         r.open()
       }
+    },
+    saveItem(item: any) {
+      if (!this.lcp.npc_features) this.$set(this.lcp, 'npc_features', [])
+      const idx = this.lcp.npc_features.findIndex((x: any) => x.id === item.id)
+      if (idx < 0) {
+        this.lcp.npc_features.push(item)
+      } else this.$set(this.lcp.npc_features, idx, item)
+    },
+    removeItem(id: string) {
+      const idx = this.lcp.npc_features.findIndex((x: any) => x.id === id)
+      if (idx > -1) this.lcp.npc_features.splice(idx, 1)
     },
     exportJSON() {
       const blob = new Blob([JSON.stringify(this.lcp.npc_classes)])

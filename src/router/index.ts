@@ -90,6 +90,11 @@ const routes: Array<RouteConfig> = [
     name: 'NPC Template Editor',
     component: () => import(/* webpackChunkName: "editors" */ '../views/editors/NPCTemplates.vue'),
   },
+  {
+    path: '/editor/eidolon_shells',
+    name: 'Eidolon Shell Editor',
+    component: () => import(/* webpackChunkName: "editors" */ '../views/editors/EidolonShells.vue'),
+  },
 ]
 
 const router = new VueRouter({

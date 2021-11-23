@@ -29,7 +29,7 @@
               </v-list-item-title>
             </v-list-item>
             <v-divider />
-            <v-list-item v-for="c in gmCategories" :key="c">
+            <v-list-item v-for="c in gmCategories" :key="c" :to="`/editor/${c}`">
               <v-list-item-avatar><v-icon>mdi-pencil</v-icon></v-list-item-avatar>
               <v-list-item-title style="text-transform: capitalize">
                 {{ c.replace('_', ' ') }}

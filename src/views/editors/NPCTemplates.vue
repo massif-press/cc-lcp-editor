@@ -20,7 +20,7 @@
               </v-list-item-action-text>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item @click="selected = 'generic'">
+          <!-- <v-list-item @click="selected = 'generic'">
             <v-list-item-content class="mt-n2">
               <v-list-item-title>
                 <span class="text-h6 mr-1">Generic Features</span>
@@ -29,7 +29,7 @@
                 TODO base features / TODO optional
               </v-list-item-action-text>
             </v-list-item-content>
-          </v-list-item>
+          </v-list-item> -->
         </v-list>
         <v-divider class="my-2" />
         <v-btn block color="secondary" @click="addNew">
@@ -65,43 +65,78 @@
               <v-divider class="my-4" />
               <v-row>
                 <v-col cols="12">
-                  <v-checkbox v-model="selected.allowOptional" dense hide-details>
-                    <div slot="label">
-                      When choosing optional systems, the
-                      <b>{{ selected.name }}</b>
-                      can also choose from the
-                      <b>{{ selected.name }} Features</b>
-                      list.
-                    </div>
-                  </v-checkbox>
-                  <v-checkbox v-model="selected.forceOptional" dense hide-details>
-                    <v-row slot="label" no-gutters align="center">
-                      <v-col cols="auto">
-                        the
+                  <v-row no-gutters align="center">
+                    <v-col cols="auto">
+                      <v-simple-checkbox
+                        v-model="selected.allowOptional"
+                        dense
+                        hide-details
+                        :ripple="false"
+                      />
+                    </v-col>
+                    <v-col>
+                      <div slot="label">
+                        When choosing optional systems, the
                         <b>{{ selected.name }}</b>
-                        chooses
-                      </v-col>
-                      <v-col cols="1" class="mx-2">
-                        <v-text-field type="number" outlined dense hide-details />
-                      </v-col>
-                      <v-col cols="auto">to</v-col>
-                      <v-col cols="1" class="mx-2">
-                        <v-text-field type="number" outlined dense hide-details />
-                      </v-col>
-                      <v-col cols="auto">
-                        option(s) from the
+                        can also choose from the
                         <b>{{ selected.name }} Features</b>
-                        list
-                      </v-col>
-                      <v-col class="mx-2 mt-n2">
-                        <v-select
-                          :items="['when choosing optional systems.', 'per Tier.']"
-                          dense
-                          hide-details
-                        />
-                      </v-col>
-                    </v-row>
-                  </v-checkbox>
+                        list.
+                      </div>
+                    </v-col>
+                  </v-row>
+                  <v-row no-gutters align="center">
+                    <v-col cols="auto">
+                      <v-simple-checkbox
+                        v-model="selected.forceOptional"
+                        dense
+                        hide-details
+                        :ripple="false"
+                      />
+                    </v-col>
+                    <v-col cols="auto">
+                      the
+                      <b>{{ selected.name }}</b>
+                      chooses
+                    </v-col>
+                    <v-col cols="1" class="mx-2">
+                      <v-text-field
+                        :value="selected.optionalMin"
+                        v-model="selected.optionalMin"
+                        type="number"
+                        outlined
+                        dense
+                        hide-details
+                      />
+                    </v-col>
+                    <v-col cols="auto">to</v-col>
+                    <v-col cols="1" class="mx-2">
+                      <v-text-field
+                        :value="selected.optionalMax"
+                        v-model="selected.optionalMax"
+                        type="number"
+                        outlined
+                        dense
+                        hide-details
+                      />
+                    </v-col>
+                    <v-col cols="auto">
+                      option(s) from the
+                      <b>{{ selected.name }} Features</b>
+                      list
+                    </v-col>
+                    <v-col class="mx-2 mt-n2">
+                      <v-select
+                        :value="selected.optionalPerTier"
+                        v-model="selected.optionalPerTier"
+                        :items="[
+                          { text: 'when choosing optional systems.', value: false },
+                          { text: 'per Tier.', value: true },
+                        ]"
+                        dense
+                        hide-details
+                      />
+                    </v-col>
+                  </v-row>
                 </v-col>
                 <v-col
                   v-show="selected.allowOptional || selected.forceOptional"
@@ -109,6 +144,7 @@
                   class="mt-n3"
                 >
                   <v-textarea
+                    v-model="selected.caveat"
                     dense
                     hide-details
                     rows="1"
@@ -201,16 +237,19 @@
     <div style="height: 50px" />
     <npc-system-editor
       ref="systems"
+      :npcTemplate="selected"
       @save="saveItem('systems', $event)"
       @remove="removeItem('systems', $event)"
     />
     <npc-trait-editor
       ref="traits"
+      :npcTemplate="selected"
       @save="saveItem('traits', $event)"
       @remove="removeItem('traits', $event)"
     />
     <npc-weapon-editor
       ref="weapons"
+      :npcTemplate="selected"
       @save="saveItem('weapons', $event)"
       @remove="removeItem('weapons', $event)"
     />
@@ -281,7 +320,7 @@ export default Vue.extend({
         allowOptional: false,
         forceOptional: false,
         optionalMin: 0,
-        optionalMax: 0,
+        optionalMax: 1,
         optionalPerTier: false,
         caveat: '',
         tables: [],
@@ -294,6 +333,17 @@ export default Vue.extend({
         r.reset()
         r.open()
       }
+    },
+    saveItem(item: any) {
+      if (!this.lcp.npc_features) this.$set(this.lcp, 'npc_features', [])
+      const idx = this.lcp.npc_features.findIndex((x: any) => x.id === item.id)
+      if (idx < 0) {
+        this.lcp.npc_features.push(item)
+      } else this.$set(this.lcp.npc_features, idx, item)
+    },
+    removeItem(id: string) {
+      const idx = this.lcp.npc_features.findIndex((x: any) => x.id === id)
+      if (idx > -1) this.lcp.npc_features.splice(idx, 1)
     },
     exportJSON() {
       const blob = new Blob([JSON.stringify(this.lcp.npc_templates)])
