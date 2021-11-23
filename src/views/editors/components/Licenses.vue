@@ -97,9 +97,9 @@ export default Vue.extend({
       return this.$store.getters.lcp
     },
     licensesByFrame(): any {
-      let items = (this.lcp.weapons.map((obj: any) => ({ ...obj, itemType: 'weapons' })) || [])
-        .concat(this.lcp.systems.map((obj: any) => ({ ...obj, itemType: 'systems' })) || [])
-        .concat(this.lcp.mods.map((obj: any) => ({ ...obj, itemType: 'mods' })) || [])
+      let items = this.collect('weapons')
+        .concat(this.collect('systems'))
+        .concat(this.collect('mods'))
       items = items.filter((x: any) => x.source === this.manufacturer.id)
       items = _.groupBy(items, 'license')
 
@@ -123,6 +123,10 @@ export default Vue.extend({
     },
   },
   methods: {
+    collect(key: string) {
+      if (this.lcp[key]) return this.lcp[key].map((obj: any) => ({ ...obj, itemType: key }))
+      return []
+    },
     getType(item: any) {
       if (item.itemType) return item.itemType
       return 'frames'
