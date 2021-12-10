@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="overline mb-n1 mt-n2">{{ title }}</div>
+  <div class="mt-n2">
+    <div class="overline mb-n2 mt-n2">{{ title }}</div>
     <v-card color="grey darken-3" class="pa-1 pt-2">
       <v-row no-gutters>
         <v-col>
@@ -58,9 +58,14 @@ export default Vue.extend({
       },
     },
   },
+  created() {
+    if (!Array.isArray(this.val)) this.$set(this, 'val', [0, 0, 0])
+  },
   methods: {
     setTier(evt: string, tier: number) {
-      this.$set(this.val, tier, Number(evt))
+      const n = Number(evt)
+      if (!Array.isArray(this.val)) this.$set(this, 'val', [n, n, n])
+      this.$set(this.val, tier, n)
     },
   },
 })

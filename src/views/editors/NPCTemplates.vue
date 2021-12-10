@@ -84,6 +84,57 @@
                       </div>
                     </v-col>
                   </v-row>
+
+                  <v-row no-gutters align="center">
+                    <v-col cols="auto">
+                      <v-simple-checkbox
+                        v-model="selected.forceClassOptional"
+                        dense
+                        hide-details
+                        :ripple="false"
+                      />
+                    </v-col>
+                    <v-col cols="auto">
+                      the
+                      <b>{{ selected.name }}</b>
+                      chooses
+                    </v-col>
+                    <v-col cols="1" class="mx-2">
+                      <v-text-field
+                        :value="selected.optionalClassMin"
+                        v-model="selected.optionalClassMin"
+                        type="number"
+                        outlined
+                        dense
+                        hide-details
+                      />
+                    </v-col>
+                    <v-col cols="auto">to</v-col>
+                    <v-col cols="1" class="mx-2">
+                      <v-text-field
+                        :value="selected.optionalClassMax"
+                        v-model="selected.optionalClassMax"
+                        type="number"
+                        outlined
+                        dense
+                        hide-details
+                      />
+                    </v-col>
+                    <v-col cols="auto">option(s) from the NPC's Class Features list</v-col>
+                    <v-col cols="3" class="mx-2 mt-n2">
+                      <v-select
+                        :value="selected.optionalPerTier"
+                        v-model="selected.optionalPerTier"
+                        :items="[
+                          { text: 'when choosing optional systems.', value: false },
+                          { text: 'per Tier.', value: true },
+                        ]"
+                        dense
+                        hide-details
+                      />
+                    </v-col>
+                  </v-row>
+
                   <v-row no-gutters align="center">
                     <v-col cols="auto">
                       <v-simple-checkbox
@@ -119,12 +170,8 @@
                         hide-details
                       />
                     </v-col>
-                    <v-col cols="auto">
-                      option(s) from the
-                      <b>{{ selected.name }} Features</b>
-                      list
-                    </v-col>
-                    <v-col class="mx-2 mt-n2">
+                    <v-col cols="auto">option(s) from the {{ selected.name }} Featureslist</v-col>
+                    <v-col cols="3" class="mx-2 mt-n2">
                       <v-select
                         :value="selected.optionalPerTier"
                         v-model="selected.optionalPerTier"
@@ -206,9 +253,21 @@
                   </v-btn>
                 </v-col>
                 <v-col>
-                  <v-btn block large color="teal darken-4" @click="newFeature('systems')">
+                  <v-btn block large color="green darken-2" @click="newFeature('systems')">
                     <v-icon left>mdi-plus</v-icon>
                     add new system
+                  </v-btn>
+                </v-col>
+                <v-col>
+                  <v-btn block large color="teal darken-4" @click="newFeature('reactions')">
+                    <v-icon left>mdi-plus</v-icon>
+                    add new reaction
+                  </v-btn>
+                </v-col>
+                <v-col>
+                  <v-btn block large color="amber darken-4" @click="newFeature('protocols')">
+                    <v-icon left>mdi-plus</v-icon>
+                    add new protocol
                   </v-btn>
                 </v-col>
               </v-row>
@@ -231,27 +290,39 @@
       </v-btn>
       <v-spacer />
       <input ref="fileUpload" type="file" accept=".json" hidden @change="importFile" />
-      <v-btn outlined small class="mx-1" @click="exportJson()">Export JSON File</v-btn>
-      <v-btn outlined small class="mx-1" @click="importJson()">Import JSON File</v-btn>
+      <v-btn outlined small class="mx-1" @click="exportJSON()">Export JSON File</v-btn>
+      <v-btn outlined small class="mx-1" @click="importJSON()">Import JSON File</v-btn>
     </v-footer>
     <div style="height: 50px" />
     <npc-system-editor
       ref="systems"
       :npcTemplate="selected"
-      @save="saveItem('systems', $event)"
-      @remove="removeItem('systems', $event)"
+      @save="saveItem($event)"
+      @remove="removeItem($event)"
     />
     <npc-trait-editor
       ref="traits"
       :npcTemplate="selected"
-      @save="saveItem('traits', $event)"
-      @remove="removeItem('traits', $event)"
+      @save="saveItem($event)"
+      @remove="removeItem($event)"
+    />
+    <npc-reaction-editor
+      ref="reactions"
+      :npcTemplate="selected"
+      @save="saveItem($event)"
+      @remove="removeItem($event)"
+    />
+    <npc-protocol-editor
+      ref="protocols"
+      :npcTemplate="selected"
+      @save="saveItem($event)"
+      @remove="removeItem($event)"
     />
     <npc-weapon-editor
       ref="weapons"
       :npcTemplate="selected"
-      @save="saveItem('weapons', $event)"
-      @remove="removeItem('weapons', $event)"
+      @save="saveItem($event)"
+      @remove="removeItem($event)"
     />
   </v-container>
 </template>
@@ -262,10 +333,18 @@ import { npcRole } from '@/assets/enums'
 import NpcSystemEditor from './components/_NpcSystemEditor.vue'
 import NpcTraitEditor from './components/_NpcTraitEditor.vue'
 import NpcWeaponEditor from './components/_NpcWeaponEditor.vue'
+import NpcReactionEditor from './components/_NpcReactionEditor.vue'
+import NpcProtocolEditor from './components/_NpcProtocolEditor.vue'
 
 export default Vue.extend({
   name: 'npc-class-editor',
-  components: { NpcSystemEditor, NpcTraitEditor, NpcWeaponEditor },
+  components: {
+    NpcSystemEditor,
+    NpcTraitEditor,
+    NpcWeaponEditor,
+    NpcReactionEditor,
+    NpcProtocolEditor,
+  },
   computed: {
     lcp(): any {
       return this.$store.getters.lcp
@@ -284,11 +363,12 @@ export default Vue.extend({
     colorByType(item: any) {
       if (item.type === 'Weapon') return 'deep-orange darken-4'
       if (item.type === 'Trait') return 'pink darken-4'
+      if (item.type === 'System') return 'green darken-3'
+      if (item.type === 'Protocol') return 'amber darken-4'
       return 'teal darken-4'
     },
     openByType(item: any) {
-      const type =
-        item.type === 'Weapon' ? 'weapons' : item.type === 'System' ? 'systems' : 'traits'
+      const type = item.type.toLowerCase() + 's'
       if (this.$refs && this.$refs[type]) {
         const r = this.$refs[type] as any
         r.edit(item)
@@ -322,6 +402,10 @@ export default Vue.extend({
         optionalMin: 0,
         optionalMax: 1,
         optionalPerTier: false,
+        forceClassOptional: false,
+        optionalClassMin: 0,
+        optionalClassMax: 1,
+        optionalClassPerTier: false,
         caveat: '',
         tables: [],
         clocks: [],
@@ -345,14 +429,18 @@ export default Vue.extend({
       const idx = this.lcp.npc_features.findIndex((x: any) => x.id === id)
       if (idx > -1) this.lcp.npc_features.splice(idx, 1)
     },
-    exportJSON() {
-      const blob = new Blob([JSON.stringify(this.lcp.npc_templates)])
+    _exportJSON(type: string) {
+      const blob = new Blob([JSON.stringify(this.lcp[type])])
       const elem = window.document.createElement('a')
       elem.href = window.URL.createObjectURL(blob)
-      elem.download = 'npc_templates.json'
+      elem.download = `${type}.json`
       document.body.appendChild(elem)
       elem.click()
       document.body.removeChild(elem)
+    },
+    exportJSON() {
+      this._exportJSON('npc_templates')
+      this._exportJSON('npc_features')
     },
     importJSON() {
       if (this.$refs.fileUpload) (this.$refs.fileUpload as HTMLElement).click()

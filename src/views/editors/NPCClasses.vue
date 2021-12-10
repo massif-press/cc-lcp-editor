@@ -171,8 +171,8 @@
       </v-btn>
       <v-spacer />
       <input ref="fileUpload" type="file" accept=".json" hidden @change="importFile" />
-      <v-btn outlined small class="mx-1" @click="exportJson()">Export JSON File</v-btn>
-      <v-btn outlined small class="mx-1" @click="importJson()">Import JSON File</v-btn>
+      <v-btn outlined small class="mx-1" @click="exportJSON()">Export JSON File</v-btn>
+      <v-btn outlined small class="mx-1" @click="importJSON()">Import JSON File</v-btn>
     </v-footer>
     <div style="height: 50px" />
     <npc-system-editor
@@ -283,14 +283,18 @@ export default Vue.extend({
       const idx = this.lcp.npc_features.findIndex((x: any) => x.id === id)
       if (idx > -1) this.lcp.npc_features.splice(idx, 1)
     },
-    exportJSON() {
-      const blob = new Blob([JSON.stringify(this.lcp.npc_classes)])
+    _exportJSON(type: string) {
+      const blob = new Blob([JSON.stringify(this.lcp[type])])
       const elem = window.document.createElement('a')
       elem.href = window.URL.createObjectURL(blob)
-      elem.download = 'npc_classes.json'
+      elem.download = `${type}.json`
       document.body.appendChild(elem)
       elem.click()
       document.body.removeChild(elem)
+    },
+    exportJSON() {
+      this._exportJSON('npc_classes')
+      this._exportJSON('npc_features')
     },
     importJSON() {
       if (this.$refs.fileUpload) (this.$refs.fileUpload as HTMLElement).click()

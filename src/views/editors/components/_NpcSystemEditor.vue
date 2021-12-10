@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" fullscreen>
     <v-card>
-      <v-toolbar dense color="teal darken-4" class="text-h6">
+      <v-toolbar dense color="green darken-3" class="text-h6">
         NPC System Editor
         <v-spacer />
         <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>

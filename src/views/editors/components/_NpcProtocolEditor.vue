@@ -1,8 +1,8 @@
 <template>
   <v-dialog v-model="dialog" fullscreen>
     <v-card>
-      <v-toolbar dense color="teal darken-4" class="text-h6">
-        NPC System Editor
+      <v-toolbar dense color="amber darken-4" class="text-h6">
+        NPC Protocol Editor
         <v-spacer />
         <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
       </v-toolbar>
@@ -15,12 +15,6 @@
             <v-text-field label="Name" hide-details v-model="name" />
           </v-col>
           <v-col>
-            <v-select label="Size" :items="weaponSizes" hide-details v-model="weapon_size" />
-          </v-col>
-          <v-col>
-            <v-select label="Type" :items="weaponTypes" hide-details v-model="weapon_type" />
-          </v-col>
-          <v-col>
             <v-text-field
               v-model="recharge"
               label="Recharge"
@@ -30,6 +24,9 @@
               dense
               clearable
             />
+          </v-col>
+          <v-col cols="auto">
+            <v-switch v-model="hide_active" dense hide-details label="Hide in Active Mode" />
           </v-col>
           <v-col v-show="npcClass || npcTemplate" cols="auto">
             <v-btn-toggle v-model="optional" mandatory dense color="primary lighten-1">
@@ -43,37 +40,6 @@
             <rich-text-editor title="Effect" v-model="effect" npc />
           </v-col>
         </v-row>
-        <v-row>
-          <v-col>
-            <rich-text-editor title="On Attack Effect" v-model="on_attack" />
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <rich-text-editor title="On Hit Effect" v-model="on_hit" />
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <rich-text-editor title="On Crit Effect" v-model="on_crit" />
-          </v-col>
-        </v-row>
-        <v-divider class="my-5" />
-        <v-row align="center">
-          <v-col>
-            <damage-selector :item="this" npc />
-          </v-col>
-          <v-col>
-            <range-selector :item="this" npc />
-          </v-col>
-          <v-col>
-            <tiered-stat-input :value="attack_bonus" title="Attack Bonus" />
-          </v-col>
-          <v-col>
-            <tiered-stat-input :value="accuracy" title="Accuracy" />
-          </v-col>
-        </v-row>
-        <v-divider class="my-5" />
         <v-row align="center">
           <v-col><i-action-builder npc :item="this" /></v-col>
           <v-col><i-deployable-builder npc :item="this" /></v-col>
@@ -102,36 +68,22 @@
 </template>
 
 <script lang="ts">
-import { weaponType, weaponSize } from '@/assets/enums'
-import TieredStatInput from '@/components/TieredStatInput.vue'
 import Vue from 'vue'
-
 export default Vue.extend({
-  components: { TieredStatInput },
-  name: 'npc-weapon-editor',
+  name: 'npc-trait-editor',
   props: {
     npcClass: { type: Object, required: false },
     npcTemplate: { type: Object, required: false },
   },
   data: () => ({
     dialog: false,
-    weaponTypes: weaponType,
-    weaponSizes: weaponSize,
+    optional: false,
+    hide_active: false,
     id: '',
     name: '',
     recharge: 0,
-    optional: false,
-    type: 'Weapon',
     effect: '',
-    on_attack: '',
-    on_hit: '',
-    on_crit: '',
-    weapon_size: 'Aux',
-    weapon_type: 'Melee',
-    damage: [],
-    range: [],
-    attack_bonus: [0, 0, 0],
-    accuracy: [0, 0, 0],
+    type: 'Protocol',
     tags: [],
     actions: [],
     bonuses: [],
@@ -142,9 +94,6 @@ export default Vue.extend({
     isEdit: false,
   }),
   computed: {
-    confirmOK(): boolean {
-      return !!this.id && !!this.name
-    },
     origin(): any {
       if (this.npcClass || this.npcTemplate)
         return {
@@ -157,6 +106,9 @@ export default Vue.extend({
         return {
           type: 'Generic',
         }
+    },
+    confirmOK(): boolean {
+      return !!this.id && !!this.name
     },
   },
   methods: {
@@ -171,18 +123,10 @@ export default Vue.extend({
         id: this.id,
         name: this.name,
         origin: this.origin,
-        effect: this.effect,
         recharge: this.recharge,
         optional: this.optional,
-        damage: this.damage,
-        range: this.range,
-        on_attack: this.on_attack,
-        on_hit: this.on_hit,
-        on_crit: this.on_crit,
-        weapon_size: this.weapon_size,
-        weapon_type: this.weapon_type,
-        attack_bonus: this.attack_bonus,
-        accuracy: this.accuracy,
+        hide_active: this.hide_active,
+        effect: this.effect,
         type: this.type,
         tags: this.tags,
         actions: this.actions,
@@ -196,31 +140,20 @@ export default Vue.extend({
       this.reset()
       this.dialog = false
     },
-    edit(weapon: any): void {
-      this.id = weapon.id
-      this.name = weapon.name
-      this.effect = weapon.effect
-      this.recharge = weapon.recharge
-      this.optional = weapon.optional
-      this.damage = weapon.damage
-      this.range = weapon.range
-      this.on_attack = weapon.on_attack
-      this.on_hit = weapon.on_hit
-      this.on_crit = weapon.on_crit
-      this.weapon_size = weapon.weapon_size
-      this.weapon_type = weapon.weapon_type
-      this.attack_bonus = weapon.attack_bonus
-      this.accuracy = Array.isArray(weapon.accuracy)
-        ? weapon.accuracy
-        : Array(3).fill(weapon.accuracy)
-      this.type = weapon.type
-      this.tags = weapon.tags
-      this.actions = weapon.actions
-      this.bonuses = weapon.bonuses
-      this.synergies = weapon.synergies
-      this.deployables = weapon.deployables
-      this.counters = weapon.counters
-      this.clocks = weapon.clocks
+    edit(trait: any): void {
+      this.id = trait.id
+      this.name = trait.name
+      this.effect = trait.effect
+      this.type = trait.type
+      this.optional = trait.optional
+      this.hide_active = trait.hide_active
+      this.tags = trait.tags
+      this.actions = trait.actions
+      this.bonuses = trait.bonuses
+      this.synergies = trait.synergies
+      this.deployables = trait.deployables
+      this.counters = trait.counters
+      this.clocks = trait.clocks
       this.isEdit = true
       this.dialog = true
     },
@@ -231,19 +164,11 @@ export default Vue.extend({
     reset(): void {
       this.id = ''
       this.name = ''
-      this.type = 'Weapon'
       this.effect = ''
-      this.damage = []
-      this.range = []
-      this.on_attack = ''
-      this.on_hit = ''
-      this.on_crit = ''
-      this.weapon_size = 'Aux'
-      this.weapon_type = 'Melee'
-      this.attack_bonus = [0, 0, 0]
-      this.accuracy = [0, 0, 0]
+      this.type = 'Protocol'
       this.recharge = 0
       this.optional = false
+      this.hide_active = false
       this.tags = []
       this.actions = []
       this.bonuses = []
