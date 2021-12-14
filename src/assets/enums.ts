@@ -279,6 +279,7 @@ const npcRole = [
   'Support',
   'Tank',
   'Defender',
+  'Special',
 ]
 
 export { activationTypes, synergyLocations, npcSynergyLocations, bonuses, npcBonuses, systemType, mountType, weaponType, weaponSize, rangeType, damageType, mechType, npcRole }

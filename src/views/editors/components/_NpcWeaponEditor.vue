@@ -32,10 +32,15 @@
             />
           </v-col>
           <v-col v-show="npcClass || npcTemplate" cols="auto">
-            <v-btn-toggle v-model="optional" mandatory dense color="primary lighten-1">
-              <v-btn text :value="false">Base</v-btn>
-              <v-btn text :value="true">Optional</v-btn>
-            </v-btn-toggle>
+            <v-switch
+              inset
+              v-model="optional"
+              :value="optional"
+              mandatory
+              dense
+              hide-details
+              :label="`${npcClass ? 'Class' : 'Template'} Feature`"
+            />
           </v-col>
         </v-row>
         <v-row>
@@ -201,7 +206,7 @@ export default Vue.extend({
       this.name = weapon.name
       this.effect = weapon.effect
       this.recharge = weapon.recharge
-      this.optional = weapon.optional
+      this.optional = weapon.origin.optional
       this.damage = weapon.damage
       this.range = weapon.range
       this.on_attack = weapon.on_attack

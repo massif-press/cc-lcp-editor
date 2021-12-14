@@ -26,10 +26,15 @@
             />
           </v-col>
           <v-col v-show="npcClass || npcTemplate" cols="auto">
-            <v-btn-toggle v-model="optional" mandatory dense color="primary lighten-1">
-              <v-btn text :value="false">Base</v-btn>
-              <v-btn text :value="true">Optional</v-btn>
-            </v-btn-toggle>
+            <v-switch
+              inset
+              v-model="optional"
+              :value="optional"
+              mandatory
+              dense
+              hide-details
+              :label="`${npcClass ? 'Class' : 'Template'} Feature`"
+            />
           </v-col>
         </v-row>
         <v-row>
@@ -140,7 +145,7 @@ export default Vue.extend({
       this.name = system.name
       this.effect = system.effect
       this.recharge = system.recharge
-      this.optional = system.optional
+      this.optional = system.origin.optional
       this.type = system.type
       this.tags = system.tags
       this.actions = system.actions

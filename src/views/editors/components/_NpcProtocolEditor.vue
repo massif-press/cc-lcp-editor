@@ -29,10 +29,15 @@
             <v-switch v-model="hide_active" dense hide-details label="Hide in Active Mode" />
           </v-col>
           <v-col v-show="npcClass || npcTemplate" cols="auto">
-            <v-btn-toggle v-model="optional" mandatory dense color="primary lighten-1">
-              <v-btn text :value="false">Base</v-btn>
-              <v-btn text :value="true">Optional</v-btn>
-            </v-btn-toggle>
+            <v-switch
+              inset
+              v-model="optional"
+              :value="optional"
+              mandatory
+              dense
+              hide-details
+              :label="`${npcClass ? 'Class' : 'Template'} Feature`"
+            />
           </v-col>
         </v-row>
         <v-row>
@@ -145,7 +150,8 @@ export default Vue.extend({
       this.name = trait.name
       this.effect = trait.effect
       this.type = trait.type
-      this.optional = trait.optional
+      this.recharge = trait.recharge
+      this.optional = trait.origin.optional
       this.hide_active = trait.hide_active
       this.tags = trait.tags
       this.actions = trait.actions

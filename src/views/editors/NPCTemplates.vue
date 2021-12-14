@@ -123,8 +123,8 @@
                     <v-col cols="auto">option(s) from the NPC's Class Features list</v-col>
                     <v-col cols="3" class="mx-2 mt-n2">
                       <v-select
-                        :value="selected.optionalPerTier"
-                        v-model="selected.optionalPerTier"
+                        :value="selected.optionalClassPerTier"
+                        v-model="selected.optionalClassPerTier"
                         :items="[
                           { text: 'when choosing optional systems.', value: false },
                           { text: 'per Tier.', value: true },
@@ -170,7 +170,7 @@
                         hide-details
                       />
                     </v-col>
-                    <v-col cols="auto">option(s) from the {{ selected.name }} Featureslist</v-col>
+                    <v-col cols="auto">option(s) from the {{ selected.name }} Features list</v-col>
                     <v-col cols="3" class="mx-2 mt-n2">
                       <v-select
                         :value="selected.optionalPerTier"

@@ -31,6 +31,23 @@ const convert = async (payload: any): Promise<any> => {
               optional: Number(j) === 0,
               origin_id: c.id,
             }
+            let delIdx = -1
+            match.tags.forEach((t: any, i: number) => {
+              if (t.id === 'tg_recharge') {
+                match.recharge = t.val
+                delIdx = i
+              }
+              else if (t.id === 'tg_protocol') {
+                match.type = "Protocol"
+                delIdx = i
+              } else if (t.id === 'tg_reaction') {
+                match.type = "Reaction"
+                delIdx = i
+              }
+              else if (t.val && !Array.isArray(t.val))
+                t.val = [t.val, t.val, t.val]
+            });
+            if (delIdx > -1) match.tags.splice(delIdx, 1)
           });
           delete c[ftypes[j]]
           delete c.power

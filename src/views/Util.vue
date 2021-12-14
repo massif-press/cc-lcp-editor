@@ -24,6 +24,12 @@
         />
       </v-card-text>
     </v-card>
+    <v-snackbar v-model="toast" dark :color="toastColor">
+      <span v-html="toastText" />
+      <template slot="action">
+        <v-btn dark text @click="toast = false">Close</v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -37,6 +43,9 @@ export default Vue.extend({
   data: () => ({
     loading: false,
     converterFile: null,
+    toast: false,
+    toastText: '',
+    toastColor: '',
   }),
   methods: {
     async loadConverter(file: HTMLInputElement): Promise<void> {
@@ -44,10 +53,17 @@ export default Vue.extend({
       this.loading = true
       const fileData = await PromisifyFileReader.readAsBinaryString(file)
       try {
-        await converter.convert(fileData).then(() => console.log('all done'))
+        await converter.convert(fileData).then(() => {
+          this.toastColor = 'success darken-2'
+          this.toastText = `Conversion Successful`
+          this.toast = true
+        })
         this.loading = false
       } catch (e: any) {
         console.error(e)
+        this.toastColor = 'error darken-2'
+        this.toastText = `<b>ERROR</b> -- This file could not be converted. See console for details.`
+        this.toast = true
         this.loading = false
       }
     },
