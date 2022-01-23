@@ -1,5 +1,5 @@
 import JSZip from 'jszip'
-import { getZipData } from '@/utilities/zip_reader'
+import { getZipData } from './zip_reader'
 import { saveAs } from 'file-saver'
 
 const etypes = ['npc_classes', 'npc_templates']

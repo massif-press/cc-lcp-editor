@@ -1,5 +1,5 @@
 import JSZip from 'jszip'
-import { getZipData } from '@/utilities/zip_reader'
+import { getZipData } from '@/views/utilities/zip_reader'
 import Vue from 'vue'
 
 export default {
