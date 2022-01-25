@@ -1,6 +1,6 @@
 {
   "name": "cc-lcp-editor",
-  "version": "0.1.4",
+  "version": "0.2",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

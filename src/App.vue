@@ -39,7 +39,7 @@
         </v-list>
       </v-menu>
       <v-divider vertical class="ml-2 mr-4" />
-      <h2>COMP/CON LCP Editor v.0.1.5</h2>
+      <h2>COMP/CON LCP Editor v.0.2</h2>
       <h3 class="warning--text pl-2">[EXPERIMENTAL]</h3>
       <v-spacer />
       <v-btn icon to="/" active-class="indigo"><v-icon>mdi-home</v-icon></v-btn>

@@ -40,9 +40,9 @@
     <p class="ml-3">Bluhman, sealtrowitz, BoltsJ, GNUtopia</p>
     <v-divider class="my-2" />
     <div class="text-h5">Changelog</div>
-    <div class="text-h6 ml-3">v0.1.0 (10/29/2020)</div>
+    <div class="text-h6 ml-3">v0.1.0 (10/29/2021)</div>
     <p class="ml-6">Initial release</p>
-    <div class="text-h6 ml-3">v0.1.1 (11/2/2020)</div>
+    <div class="text-h6 ml-3">v0.1.1 (11/2/2021)</div>
     <div class="ml-6">
       <ul>
         <li>
@@ -63,7 +63,7 @@
         </li>
       </ul>
     </div>
-    <div class="text-h6 ml-3">v0.1.2 (11/3/2020)</div>
+    <div class="text-h6 ml-3">v0.1.2 (11/3/2021)</div>
     <div class="ml-6">
       <ul>
         <li>
@@ -88,7 +88,7 @@
         </li>
       </ul>
     </div>
-    <div class="text-h6 ml-3">v0.1.3 (11/5/2020)</div>
+    <div class="text-h6 ml-3">v0.1.3 (11/5/2021)</div>
     <div class="ml-6">
       <ul>
         <li>
@@ -103,7 +103,7 @@
         </li>
       </ul>
     </div>
-    <div class="text-h6 ml-3">v0.1.4 (11/6/2020)</div>
+    <div class="text-h6 ml-3">v0.1.4 (11/6/2021)</div>
     <div class="ml-6">
       <ul>
         <li>
@@ -120,13 +120,26 @@
         </li>
       </ul>
     </div>
-    <div class="text-h6 ml-3">v0.1.5 (11/23/2020)</div>
+    <div class="text-h6 ml-3">v0.1.5 (11/23/2021)</div>
     <div class="ml-6">
       <ul>
         <li>
           Fixed License page not allowing for new equipment on core manufacturers in an empty LCP
           <a href="https://github.com/massif-press/cc-lcp-editor/issues/19" target="_blank">
             (#19)
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="text-h6 ml-3">v0.2 (1/25/2022)</div>
+    <div class="ml-6">
+      <ul>
+        <li>First draft implementation of NPC editors</li>
+        <li>Added Community LCP Metadata update tool</li>
+        <li>
+          Correct Changelog dates
+          <a href="https://github.com/massif-press/cc-lcp-editor/issues/21" target="_blank">
+            (#21)
           </a>
         </li>
       </ul>
