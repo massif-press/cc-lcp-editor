@@ -92,7 +92,12 @@
             </v-btn>
           </v-col>
         </v-row>
-
+        <v-divider class="my-4" />
+        <v-alert outlined color="red" icon="mdi-alert">
+          The editors below are only compatible with the forthcoming GM tools update. They
+          <b>SHOULD NOT</b>
+          be used to create NPC data for the current version of COMP/CON
+        </v-alert>
         <v-row justify="space-around">
           <v-col v-for="(t, i) in gmCategories" :key="`gm_btn_${i}`" cols="2">
             <v-btn large block color="primary darken-3" :to="`editor/${t}`">
