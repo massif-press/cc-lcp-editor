@@ -340,7 +340,7 @@
 </template>
 
 <script lang="ts">
-import {
+import Lancer, {
   IActionData,
   IBonusData,
   ICoreSystemData,
@@ -348,9 +348,7 @@ import {
   IFrameTraitData,
   ISynergyData,
   MechType,
-  MECH_TYPES,
   MountType,
-  MOUNT_TYPES,
 } from '@tenebrae-press/lancer-types'
 
 import Vue from 'vue'
@@ -389,8 +387,8 @@ export default Vue.extend({
 
   data: (): FrameEditorData => ({
     dialog: false,
-    mechTypes: MECH_TYPES,
-    mountTypes: MOUNT_TYPES,
+    mechTypes: Lancer.MECH_TYPES,
+    mountTypes: Lancer.MOUNT_TYPES,
     id: '',
     license_level: 2,
     name: '',

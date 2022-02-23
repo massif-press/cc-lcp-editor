@@ -145,11 +145,9 @@
 
 <script lang="ts">
 import IProfileBuilder from '@/components/IProfileBuilder.vue'
-import {
+import Lancer, {
   WeaponType,
   WeaponSize,
-  WEAPON_TYPES,
-  WEAPON_SIZES,
   IDamageData,
   IRangeData,
   IActionData,
@@ -212,8 +210,8 @@ export default Vue.extend({
   },
   data: (): WeaponEditorData => ({
     dialog: false,
-    weaponTypes: WEAPON_TYPES,
-    weaponSizes: WEAPON_SIZES,
+    weaponTypes: Lancer.WEAPON_TYPES,
+    weaponSizes: Lancer.WEAPON_SIZES,
     id: '',
     name: '',
     license: '',

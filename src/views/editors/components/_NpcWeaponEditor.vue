@@ -106,7 +106,7 @@
 
 <script lang="ts">
 import TieredStatInput from '@/components/TieredStatInput.vue'
-import {
+import Lancer, {
   IActionData,
   IBonusData,
   IClockData,
@@ -119,8 +119,6 @@ import {
   ITagData,
   WeaponSize,
   WeaponType,
-  WEAPON_SIZES,
-  WEAPON_TYPES,
 } from '@tenebrae-press/lancer-types'
 import Vue from 'vue'
 
@@ -163,8 +161,8 @@ export default Vue.extend({
   },
   data: (): NpcWeaponEditorData => ({
     dialog: false,
-    weaponTypes: WEAPON_TYPES,
-    weaponSizes: WEAPON_SIZES,
+    weaponTypes: Lancer.WEAPON_TYPES,
+    weaponSizes: Lancer.WEAPON_SIZES,
     id: '',
     name: '',
     recharge: 0,

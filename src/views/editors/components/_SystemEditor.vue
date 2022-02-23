@@ -75,7 +75,7 @@
 </template>
 
 <script lang="ts">
-import {
+import Lancer, {
   IActionData,
   IBonusData,
   ICounterData,
@@ -83,7 +83,6 @@ import {
   ISynergyData,
   ITagData,
   SystemType,
-  SYSTEM_TYPES,
 } from '@tenebrae-press/lancer-types'
 
 import Vue from 'vue'
@@ -119,7 +118,7 @@ export default Vue.extend({
 
   data: (): SystemEditorData => ({
     dialog: false,
-    systemTypes: SYSTEM_TYPES,
+    systemTypes: Lancer.SYSTEM_TYPES,
     id: '',
     name: '',
     license: '',
