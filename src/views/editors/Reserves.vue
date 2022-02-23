@@ -2,8 +2,7 @@
   <editor-base
     itemKey="reserves"
     :checkDupes="['id', 'name']"
-    :checkEmpty="['id', 'name', 'label', 'type']"
-  >
+    :checkEmpty="['id', 'name', 'label', 'type']">
     <template v-slot="{ item }">
       <v-toolbar dense color="primary" class="white--text text-h6">{{ item.name }}</v-toolbar>
       <v-card-text>
@@ -15,8 +14,7 @@
             <v-select
               label="Reserve Type"
               :items="['Mech', 'Tactical', 'Resource', 'Bonus']"
-              v-model="item.type"
-            />
+              v-model="item.type" />
           </v-col>
           <v-col cols="auto">
             <v-switch label="Consumable" v-model="item.consumable" />

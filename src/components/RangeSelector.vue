@@ -10,8 +10,7 @@
         class="mx-1"
         close-icon="mdi-close"
         @click="edit(range, i)"
-        @click:close="remove(i)"
-      >
+        @click:close="remove(i)">
         {{ range.val }} {{ range.type }}
       </v-chip>
       <v-menu v-model="menu" :close-on-click="false" :close-on-content-click="false">
@@ -29,8 +28,7 @@
                   item-value="id"
                   label="range"
                   :items="rangeTypes"
-                  hide-details
-                />
+                  hide-details />
               </v-col>
               <v-col>
                 <tiered-stat-input v-if="npc" v-model="range.val" title="Value" />
@@ -56,18 +54,28 @@
 import Vue from 'vue'
 import { rangeType } from '@/assets/enums'
 import TieredStatInput from './TieredStatInput.vue'
+import { IRangeData, RangeType } from '@tenebrae-press/lancer-types'
+
+type RangeSelectorData = {
+  menu: boolean
+  range: IRangeData
+  isEdit: boolean
+  editIndex: number
+  rangeTypes: Array<RangeType>
+}
 
 export default Vue.extend({
   components: { TieredStatInput },
   name: 'range-selector',
   props: { item: { type: Object, required: true }, npc: { type: Boolean } },
-  data: () => ({
-    menu: false,
-    range: {},
-    isEdit: false,
-    editIndex: -1,
-    rangeTypes: rangeType,
-  }),
+  data: () =>
+    ({
+      menu: false,
+      range: {},
+      isEdit: false,
+      editIndex: -1,
+      rangeTypes: rangeType,
+    } as RangeSelectorData),
   methods: {
     submit() {
       if (!this.range) return
@@ -82,8 +90,8 @@ export default Vue.extend({
       this.editIndex = -1
       this.menu = false
     },
-    edit(range: any, index: number) {
-      this.range = JSON.parse(JSON.stringify(range))
+    edit(range: IRangeData, index: number) {
+      this.range = { ...range }
       this.isEdit = true
       this.editIndex = index
       this.menu = true

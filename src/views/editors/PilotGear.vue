@@ -2,8 +2,7 @@
   <editor-base
     itemKey="pilot_gear"
     :checkDupes="['id', 'name']"
-    :checkEmpty="['id', 'name', 'type']"
-  >
+    :checkEmpty="['id', 'name', 'type']">
     <template v-slot="{ item }">
       <v-toolbar dense color="primary" class="white--text text-h6">{{ item.name }}</v-toolbar>
       <v-card-text>
@@ -16,8 +15,7 @@
               label="Type"
               :items="['Armor', 'Weapon', 'Gear']"
               outlined
-              v-model="item.type"
-            />
+              v-model="item.type" />
           </v-col>
         </v-row>
         <v-row dense>

@@ -12,8 +12,7 @@
             outlined
             dense
             hide-details
-            multiple
-          />
+            multiple />
         </v-col>
         <v-col>
           <v-select
@@ -24,8 +23,7 @@
             outlined
             dense
             hide-details
-            multiple
-          />
+            multiple />
         </v-col>
         <v-col>
           <v-select
@@ -36,8 +34,7 @@
             outlined
             dense
             hide-details
-            multiple
-          />
+            multiple />
         </v-col>
       </v-row>
     </v-card>
@@ -52,12 +49,10 @@ export default Vue.extend({
   computed: {
     val: {
       get() {
-        const self = this as any
-        return self.value
+        return [this.value]
       },
-      set(val) {
-        const self = this as any
-        self.$emit('input', val)
+      set(val: Array<number>) {
+        this.$emit('input', val)
       },
     },
   },

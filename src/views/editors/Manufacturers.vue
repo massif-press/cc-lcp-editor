@@ -6,10 +6,11 @@
           <v-list-item
             v-for="(m, i) in allManufacturers"
             :key="`${m.id}_${i}`"
-            :class="selected && selected.id === m.id ? 'primary darken-3' : ''"
+            :class="
+              selected && selected !== 'none' && selected.id === m.id ? 'primary darken-3' : ''
+            "
             selectable
-            @click="selected = m"
-          >
+            @click="selected = m">
             <v-list-item-content class="mt-n2">
               <v-list-item-title>
                 <span class="text-h6 mr-1">{{ m.id }}</span>
@@ -29,8 +30,7 @@
           <v-list-item
             :class="selected && selected === 'none' ? 'primary darken-3' : ''"
             selectable
-            @click="selected = 'none'"
-          >
+            @click="selected = 'none'">
             <v-list-item-content class="mt-n2">
               <v-list-item-title>
                 <span class="text-h6 mr-1">No Source</span>
@@ -70,16 +70,14 @@
                         v-model="selected.id"
                         hide-details
                         label="ID"
-                        :readonly="isCore(selected.id)"
-                      />
+                        :readonly="isCore(selected.id)" />
                     </v-col>
                     <v-col cols="9">
                       <v-text-field
                         v-model="selected.name"
                         hide-details
                         label="Name"
-                        :readonly="isCore(selected.id)"
-                      />
+                        :readonly="isCore(selected.id)" />
                     </v-col>
                   </v-row>
                   <v-row dense justify="space-around" align="center">
@@ -89,23 +87,20 @@
                         persistent-hint
                         hint="SVG"
                         label="Logo URL"
-                        :readonly="isCore(selected.id)"
-                      />
+                        :readonly="isCore(selected.id)" />
                       <v-img :src="selected.logo_url" max-height="222" max-width="450" contain />
                     </v-col>
                     <v-col>
                       <color-selector
                         v-model="selected.light"
                         title="Light Color"
-                        :disabled="isCore(selected.id)"
-                      />
+                        :disabled="isCore(selected.id)" />
                     </v-col>
                     <v-col>
                       <color-selector
                         v-model="selected.dark"
                         title="Dark Color"
-                        :disabled="isCore(selected.id)"
-                      />
+                        :disabled="isCore(selected.id)" />
                     </v-col>
                     <v-col cols="12">
                       <rich-text-editor title="Flavor Quote" v-model="selected.quote" />
@@ -202,13 +197,29 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import _ from 'lodash'
 import { manufacturers } from 'lancer-data'
 
 import ColorSelector from '@/components/ColorSelector.vue'
 import CoreBonusEditor from './components/CoreBonus.vue'
 import LicenseEditor from './components/Licenses.vue'
 import SourcelessEquipment from './components/SourcelessEquipment.vue'
+import {
+  ICoreBonusData,
+  IFrameData,
+  IManufacturerData,
+  IMechSystemData,
+  IMechWeaponData,
+} from '@tenebrae-press/lancer-types'
+import { ILCPContent } from '@tenebrae-press/lancer-types/src/lcp'
+
+const typedManufacturers = manufacturers as unknown as Array<IManufacturerData>
+
+type ManufacturerEditorData = {
+  panels: number
+  core_manufacturers: Array<IManufacturerData>
+  selected?: IManufacturerData | 'none' | null
+  importKey: string
+}
 
 export default Vue.extend({
   name: 'manufacturer-editor',
@@ -218,38 +229,40 @@ export default Vue.extend({
     SourcelessEquipment,
     ColorSelector,
   },
-  data: () => ({
+  data: (): ManufacturerEditorData => ({
     panels: 0,
-    core_manufacturers: manufacturers,
-    selected: null as any,
+    core_manufacturers: typedManufacturers,
+    selected: null,
     importKey: '',
   }),
   computed: {
-    lcp(): any {
+    lcp(): ILCPContent {
       return this.$store.getters.lcp
     },
-    allManufacturers(): any[] {
-      const local = this.lcp.manufacturers ? this.lcp.manufacturers : []
+    allManufacturers(): Array<IManufacturerData> {
+      const local: Array<IManufacturerData> = this.lcp.manufacturers ? this.lcp.manufacturers : []
       return [
-        ...new Map(
-          local.concat(this.core_manufacturers).map((item: any) => [item.id, item])
-        ).values(),
+        ...new Map(local.concat(this.core_manufacturers).map(item => [item.id, item])).values(),
       ]
     },
     liteColorRaw: {
       get() {
-        return this.selected.light
+        return this.selected !== 'none' ? this.selected?.light : undefined
       },
-      set(v: any) {
-        this.selected.light = v['hex']
+      set(v: { hex: string }) {
+        if (this.selected && this.selected !== 'none') {
+          this.selected.light = v['hex']
+        }
       },
     },
     darkColorRaw: {
       get() {
-        return this.selected.dark
+        return this.selected !== 'none' ? this.selected?.dark : undefined
       },
-      set(v: any) {
-        this.selected.dark = v['hex']
+      set(v: { hex: string }) {
+        if (this.selected && this.selected !== 'none') {
+          this.selected.dark = v['hex']
+        }
       },
     },
   },
@@ -258,21 +271,40 @@ export default Vue.extend({
       if (!this.lcp.manufacturers) {
         this.$set(this.lcp, 'manufacturers', [])
       }
-      this.lcp.manufacturers.push({
+      this.lcp.manufacturers?.push({
         id: 'new',
         name: 'New Manufacturer',
         light: '#ff0000',
         dark: '#ff0000',
+        description: '',
+        quote: '',
       })
     },
-    itemsByMID(id: string, type: string) {
-      if (!this.lcp[type]) return []
-      return this.lcp[type].filter((x: any) => x.source === id)
+    itemsByMID(
+      id: string,
+      type: 'core_bonuses' | 'frames' | 'weapons' | 'systems' | 'mods'
+    ): Array<IMechWeaponData | IFrameData | ICoreBonusData | IMechSystemData> {
+      if (!this.lcp[type]) {
+        return []
+      } else {
+        switch (type) {
+          case 'core_bonuses':
+            return this.lcp.core_bonuses?.filter(x => x.source === id) ?? []
+          case 'frames':
+            return this.lcp.frames?.filter(x => x.source === id) ?? []
+          case 'weapons':
+            return this.lcp.weapons?.filter(x => x.source === id) ?? []
+          case 'systems':
+            return this.lcp.systems?.filter(x => x.source === id) ?? []
+          case 'mods':
+            return this.lcp.mods?.filter(x => x.source === id) ?? []
+        }
+      }
     },
     isCore(id: string) {
-      return this.core_manufacturers.map((x: any) => x.id).some((y: string) => y === id)
+      return this.core_manufacturers.map(x => x.id).some((y: string) => y === id)
     },
-    exportJSON(itemKey: string) {
+    exportJSON(itemKey: keyof ILCPContent) {
       const blob = new Blob([JSON.stringify(this.lcp[itemKey])])
       const elem = window.document.createElement('a')
       elem.href = window.URL.createObjectURL(blob)
@@ -285,8 +317,9 @@ export default Vue.extend({
       this.importKey = itemKey
       if (this.$refs.fileUpload) (this.$refs.fileUpload as HTMLElement).click()
     },
-    importFile(evt: any) {
-      const file = evt.target.files[0]
+    importFile(evt: Event) {
+      const file = (evt.target as HTMLInputElement).files?.item(0)
+      if (!file) return
       const reader = new FileReader()
 
       reader.onload = e =>

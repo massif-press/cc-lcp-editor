@@ -2,8 +2,7 @@
   <editor-base
     itemKey="actions"
     :checkDupes="['id', 'name']"
-    :checkEmpty="['id', 'name', 'activation', 'detail']"
-  >
+    :checkEmpty="['id', 'name', 'activation', 'detail']">
     <template v-slot="{ item }">
       <v-toolbar dense color="primary" class="white--text text-h6">{{ item.name }}</v-toolbar>
       <v-card-text>

@@ -2,8 +2,7 @@
   <editor-base
     itemKey="tags"
     :checkDupes="['id', 'name']"
-    :checkEmpty="['id', 'name', 'description']"
-  >
+    :checkEmpty="['id', 'name', 'description']">
     <template v-slot="{ item }">
       <v-toolbar dense color="primary" class="white--text text-h6">{{ item.name }}</v-toolbar>
       <v-card-text>
@@ -15,8 +14,7 @@
               label="Filter Ignore"
               v-model="item.filter_ignore"
               hint="Prevent this tag from appearing in equipment filters"
-              persistent-hint
-            />
+              persistent-hint />
           </v-col>
         </v-row>
         <rich-text-editor title="Description" v-model="item.description" />

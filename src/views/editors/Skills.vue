@@ -2,8 +2,7 @@
   <editor-base
     itemKey="skills"
     :checkDupes="['id', 'name']"
-    :checkEmpty="['id', 'name', 'description', 'detail', 'family']"
-  >
+    :checkEmpty="['id', 'name', 'description', 'detail', 'family']">
     <template v-slot="{ item }">
       <v-toolbar dense color="primary" class="white--text text-h6">{{ item.name }}</v-toolbar>
       <v-card-text>
@@ -16,8 +15,7 @@
               :items="['str', 'con', 'int', 'dex', 'cha']"
               v-model="item.family"
               hint="This deremines where on the Skill Trigger list the item appears and has no mechanical effect"
-              persistent-hint
-            />
+              persistent-hint />
           </v-col>
         </v-row>
         <v-text-field label="Short Description" v-model="item.description" />

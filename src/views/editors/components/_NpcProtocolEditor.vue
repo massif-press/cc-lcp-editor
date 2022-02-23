@@ -22,8 +22,7 @@
               hide-details
               outlined
               dense
-              clearable
-            />
+              clearable />
           </v-col>
           <v-col cols="auto">
             <v-switch v-model="hide_active" dense hide-details label="Hide in Active Mode" />
@@ -36,8 +35,7 @@
               mandatory
               dense
               hide-details
-              :label="`${npcClass ? 'Class' : 'Template'} Feature`"
-            />
+              :label="`${npcClass ? 'Class' : 'Template'} Feature`" />
           </v-col>
         </v-row>
         <v-row>

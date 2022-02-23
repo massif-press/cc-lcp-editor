@@ -22,8 +22,7 @@
               hide-details
               outlined
               dense
-              clearable
-            />
+              clearable />
           </v-col>
           <v-col cols="auto">
             <v-switch v-model="hide_active" dense hide-details label="Hide in Active Mode" />
@@ -36,8 +35,7 @@
               mandatory
               dense
               hide-details
-              :label="`${npcClass ? 'Class' : 'Template'} Feature`"
-            />
+              :label="`${npcClass ? 'Class' : 'Template'} Feature`" />
           </v-col>
         </v-row>
         <v-row>
@@ -73,14 +71,45 @@
 </template>
 
 <script lang="ts">
+import {
+  ITagData,
+  IActionData,
+  IBonusData,
+  ISynergyData,
+  IDeployableData,
+  ICounterData,
+  IClockData,
+  IOriginData,
+} from '@tenebrae-press/lancer-types'
 import Vue from 'vue'
+
+type NpcTraitEditorData = {
+  dialog: boolean
+  optional: boolean
+  hide_active: boolean
+  id: string
+  name: string
+  recharge: number
+  effect: string
+  type: 'Trait'
+  tags: Array<ITagData>
+  actions: Array<IActionData>
+  bonuses: Array<IBonusData>
+  synergies: Array<ISynergyData>
+  deployables: Array<IDeployableData>
+  counters: Array<ICounterData>
+  clocks: Array<IClockData>
+  isEdit: boolean
+  origin?: IOriginData
+}
+
 export default Vue.extend({
   name: 'npc-trait-editor',
   props: {
     npcClass: { type: Object, required: false },
     npcTemplate: { type: Object, required: false },
   },
-  data: () => ({
+  data: (): NpcTraitEditorData => ({
     dialog: false,
     optional: false,
     hide_active: false,
@@ -99,17 +128,21 @@ export default Vue.extend({
     isEdit: false,
   }),
   computed: {
-    origin(): any {
+    origin(): IOriginData {
       if (this.npcClass || this.npcTemplate)
         return {
           type: this.npcClass ? 'Class' : 'Template',
           name: this[this.npcClass ? 'npcClass' : 'npcTemplate'].name,
+          base: false,
           optional: this.optional,
           origin_id: this[this.npcClass ? 'npcClass' : 'npcTemplate'].id,
         }
       else
         return {
           type: 'Generic',
+          base: false,
+          name: '',
+          optional: false,
         }
     },
     confirmOK(): boolean {
@@ -145,13 +178,13 @@ export default Vue.extend({
       this.reset()
       this.dialog = false
     },
-    edit(trait: any): void {
+    edit(trait: NpcTraitEditorData): void {
       this.id = trait.id
       this.name = trait.name
       this.effect = trait.effect
       this.type = trait.type
       this.recharge = trait.recharge
-      this.optional = trait.origin.optional
+      this.optional = trait.origin?.optional ?? false
       this.hide_active = trait.hide_active
       this.tags = trait.tags
       this.actions = trait.actions

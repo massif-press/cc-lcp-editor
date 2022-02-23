@@ -8,8 +8,7 @@
             :key="`${c.id || 'new'}_${i}`"
             :class="selected && selected.id === c.id ? 'primary darken-3' : ''"
             selectable
-            @click="selected = c"
-          >
+            @click="selected = c">
             <v-list-item-content class="mt-n2">
               <v-list-item-title>
                 <span class="text-h6 mr-1">{{ c.name }}</span>
@@ -20,16 +19,6 @@
               </v-list-item-action-text>
             </v-list-item-content>
           </v-list-item>
-          <!-- <v-list-item @click="selected = 'generic'">
-            <v-list-item-content class="mt-n2">
-              <v-list-item-title>
-                <span class="text-h6 mr-1">Generic Features</span>
-              </v-list-item-title>
-              <v-list-item-action-text class="mt-n2">
-                TODO base features / TODO optional
-              </v-list-item-action-text>
-            </v-list-item-content>
-          </v-list-item> -->
         </v-list>
         <v-divider class="my-2" />
         <v-btn block color="secondary" @click="addNew">
@@ -38,9 +27,7 @@
         </v-btn>
       </v-col>
       <v-col>
-        <v-container v-if="selected && selected === 'generic'">todo</v-container>
-
-        <v-container v-else-if="selected">
+        <v-container v-if="selected">
           <v-card outlined>
             <v-toolbar dense color="primary" class="white--text text-h6">
               {{ selected.name }}
@@ -60,8 +47,7 @@
                     :items="roles"
                     v-model="selected.role"
                     dense
-                    hide-details
-                  />
+                    hide-details />
                 </v-col>
               </v-row>
               <v-row dense justify="space-around" align="center">
@@ -72,8 +58,7 @@
                     outlined
                     hide-details
                     rows="2"
-                    v-model="selected.info.terse"
-                  />
+                    v-model="selected.info.terse" />
                 </v-col>
                 <v-col cols="12">
                   <rich-text-editor title="Flavor" v-model="selected.info.flavor" />
@@ -89,8 +74,7 @@
                   v-for="key in Object.keys(selected.stats)"
                   :key="`stat_${key}`"
                   cols="2"
-                  class="pa-1"
-                >
+                  class="pa-1">
                   <tiered-stat-input v-model="selected.stats[key]" :title="key" />
                 </v-col>
                 <v-col class="pa-1"><tiered-size-input v-model="selected.stats.size" /></v-col>
@@ -104,8 +88,7 @@
                       <v-row>
                         <v-col
                           v-for="(item, i) in getFeatures(selected)"
-                          :key="`base_feature_${i}`"
-                        >
+                          :key="`base_feature_${i}`">
                           <v-btn block :color="colorByType(item)" @click="openByType(item)">
                             {{ item.name }}
                           </v-btn>
@@ -121,8 +104,7 @@
                       <v-row>
                         <v-col
                           v-for="(item, i) in getFeatures(selected, true)"
-                          :key="`optional_feature_${i}`"
-                        >
+                          :key="`optional_feature_${i}`">
                           <v-btn block :color="colorByType(item)" @click="openByType(item)">
                             {{ item.name }}
                           </v-btn>
@@ -179,35 +161,34 @@
       ref="systems"
       :npcClass="selected"
       @save="saveItem($event)"
-      @remove="removeItem($event)"
-    />
+      @remove="removeItem($event)" />
     <npc-trait-editor
       ref="traits"
       :npcClass="selected"
       @save="saveItem($event)"
-      @remove="removeItem($event)"
-    />
+      @remove="removeItem($event)" />
     <npc-weapon-editor
       ref="weapons"
       :npcClass="selected"
       @save="saveItem($event)"
-      @remove="removeItem($event)"
-    />
+      @remove="removeItem($event)" />
   </v-container>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import { ILCPContent } from '@tenebrae-press/lancer-types/src/lcp'
 import { npcRole } from '@/assets/enums'
 import NpcSystemEditor from './components/_NpcSystemEditor.vue'
 import NpcTraitEditor from './components/_NpcTraitEditor.vue'
 import NpcWeaponEditor from './components/_NpcWeaponEditor.vue'
+import { INpcClassData, INpcFeatureData } from '@tenebrae-press/lancer-types'
 
 export default Vue.extend({
   name: 'npc-class-editor',
   components: { NpcSystemEditor, NpcTraitEditor, NpcWeaponEditor },
   computed: {
-    lcp(): any {
+    lcp(): ILCPContent {
       return this.$store.getters.lcp
     },
     classes() {
@@ -216,43 +197,36 @@ export default Vue.extend({
       return this.$store.getters.lcp.npc_classes
     },
   },
-  data: () => ({
+  data: (): {
+    roles: typeof npcRole
+    selected?: INpcClassData
+  } => ({
     roles: npcRole,
-    selected: null as any,
   }),
   methods: {
-    colorByType(item: any) {
+    colorByType(item: INpcFeatureData) {
       if (item.type === 'Weapon') return 'deep-orange darken-4'
       if (item.type === 'Trait') return 'pink darken-4'
       return 'teal darken-4'
     },
-    openByType(item: any) {
+    openByType(item: INpcFeatureData) {
       const type =
         item.type === 'Weapon' ? 'weapons' : item.type === 'System' ? 'systems' : 'traits'
       if (this.$refs && this.$refs[type]) {
-        const r = this.$refs[type] as any
+        const r = this.$refs[type] as unknown as { edit: (item: INpcFeatureData) => void }
         r.edit(item)
       }
     },
-    getFeatures(c: any, isOptional?: boolean) {
+    getFeatures(c: INpcClassData, isOptional?: boolean) {
       if (!this.lcp.npc_features) return []
-      if (c === 'generic') {
-        return this.lcp.npc_features.filter((x: any) => x.origin.type === 'Generic')
-      }
-
       const fArr = this.lcp.npc_features.filter(
-        (x: any) => x.origin.type === 'Class' && x.origin.origin_id === c.id
+        (x: INpcFeatureData) => x.origin.type === 'Class' && x.origin.origin_id === c.id
       )
 
-      return isOptional
-        ? fArr.filter((x: any) => x.origin.optional)
-        : fArr.filter((x: any) => !x.origin.optional)
+      return isOptional ? fArr.filter(x => x.origin.optional) : fArr.filter(x => !x.origin.optional)
     },
     addNew() {
-      if (!this.lcp.npc_classes) {
-        this.$set(this.lcp, 'npc_classes', [])
-      }
-      this.lcp.npc_classes.push({
+      const e: INpcClassData = {
         id: 'new',
         name: 'New Class',
         info: {
@@ -260,30 +234,40 @@ export default Vue.extend({
           tactics: '',
           terse: '',
         },
+        role: '',
+        power: 0,
+        base_features: [],
+        optional_features: [],
         stats: this.generateStatObject(),
         tables: [],
         clocks: [],
-      })
+      }
+      if (!this.lcp.npc_classes) {
+        this.$set(this.lcp, 'npc_classes', [e])
+      } else {
+        this.lcp.npc_classes.push(e)
+      }
     },
     newFeature(type: string) {
       if (this.$refs && this.$refs[type]) {
-        const r = this.$refs[type] as any
+        const r = this.$refs[type] as unknown as { reset: () => void; open: () => void }
         r.reset()
         r.open()
       }
     },
-    saveItem(item: any) {
-      if (!this.lcp.npc_features) this.$set(this.lcp, 'npc_features', [])
-      const idx = this.lcp.npc_features.findIndex((x: any) => x.id === item.id)
+    saveItem(item: INpcFeatureData) {
+      const npc_features = this.lcp.npc_features || []
+      const idx = npc_features.findIndex((x: INpcFeatureData) => x.id === item.id)
       if (idx < 0) {
-        this.lcp.npc_features.push(item)
-      } else this.$set(this.lcp.npc_features, idx, item)
+        this.lcp.npc_features?.push(item)
+      } else this.$set(this.lcp.npc_features as Array<INpcFeatureData>, idx, item)
     },
     removeItem(id: string) {
-      const idx = this.lcp.npc_features.findIndex((x: any) => x.id === id)
-      if (idx > -1) this.lcp.npc_features.splice(idx, 1)
+      const npc_features = this.lcp.npc_features || []
+      const idx = npc_features.findIndex((x: INpcFeatureData) => x.id === id)
+      if (idx > -1) this.lcp.npc_features?.splice(idx, 1)
     },
-    _exportJSON(type: string) {
+    _exportJSON(type: 'npc_features' | 'npc_classes' | 'npc_templates') {
       const blob = new Blob([JSON.stringify(this.lcp[type])])
       const elem = window.document.createElement('a')
       elem.href = window.URL.createObjectURL(blob)
@@ -299,8 +283,9 @@ export default Vue.extend({
     importJSON() {
       if (this.$refs.fileUpload) (this.$refs.fileUpload as HTMLElement).click()
     },
-    importFile(evt: any) {
-      const file = evt.target.files[0]
+    importFile(evt: Event) {
+      const file = (evt.target as HTMLInputElement).files?.item(0)
+      if (!file) return
       const reader = new FileReader()
 
       reader.onload = e =>

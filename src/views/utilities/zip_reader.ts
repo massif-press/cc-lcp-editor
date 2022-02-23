@@ -1,13 +1,16 @@
 import JSZip, { JSZipObject } from 'jszip'
 
-const readZipJSON = async function (zip: JSZip, filename: string): Promise<any> {
+const readZipJSON = async function (
+  zip: JSZip,
+  filename: string
+): Promise<Array<Record<string, unknown>> | null> {
   const file: JSZipObject | null = zip.file(filename)
   if (!file) return null
   const text = await file.async('text')
   return JSON.parse(text)
 }
 
-async function getZipData(zip: JSZip, filename: string): Promise<any> {
+async function getZipData(zip: JSZip, filename: string): Promise<Array<Record<string, unknown>>> {
   let readResult
   try {
     readResult = await readZipJSON(zip, filename)
@@ -19,7 +22,4 @@ async function getZipData(zip: JSZip, filename: string): Promise<any> {
   return readResult || []
 }
 
-export {
-  readZipJSON,
-  getZipData
-}
+export { readZipJSON, getZipData }

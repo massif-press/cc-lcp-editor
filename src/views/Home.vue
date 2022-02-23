@@ -12,8 +12,7 @@
           hide-details
           :loading="loading"
           @click:clear="clearLcp()"
-          @change="loadLcp($event)"
-        />
+          @change="loadLcp($event)" />
       </v-col>
       <v-col cols="5">
         <v-btn large block color="primary" @click="createNew">Create New LCP</v-btn>
@@ -24,7 +23,7 @@
       <v-card-text class="text--disabled text-center">No LCP loaded</v-card-text>
     </v-card>
 
-    <v-card v-else :key="loaded">
+    <v-card v-else>
       <v-toolbar dense color="pink darken-3" dark>
         <span class="text-h4">{{ lcp.lcp_manifest.name }}</span>
       </v-toolbar>
@@ -58,8 +57,7 @@
                     outlined
                     auto-grow
                     rows="3"
-                    label="Description"
-                  />
+                    label="Description" />
                 </v-col>
               </v-row>
             </v-col>
@@ -140,12 +138,13 @@ export default Vue.extend({
       'sitreps',
       'environments',
     ],
-    gmCategories: ['npc_classes', 'npc_templates', 'eidolon_shells'],
+    gmCategories: ['npc_classes', 'npc_templates'],
   }),
   computed: {
     loaded(): boolean {
       return this.$store.getters.loaded
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     lcp(): any {
       return this.$store.getters.lcp
     },
@@ -153,9 +152,11 @@ export default Vue.extend({
       if (!this.lcp.manufacturers && !this.lcp.frames) return 0
       const m =
         this.lcp.manufacturers && this.lcp.manufacturers.length
-          ? this.lcp.manufacturers.map((x: any) => x.id)
+          ? this.lcp.manufacturers.map((x: { id: string }) => x.id)
           : []
-      const f = this.lcp.frames ? _.uniq(this.lcp.frames.map((x: any) => x.source)) : []
+      const f = this.lcp.frames
+        ? _.uniq(this.lcp.frames.map((x: { source: string }) => x.source))
+        : []
       return _.uniq(m.concat(f)).length
     },
   },
@@ -175,7 +176,7 @@ export default Vue.extend({
         this.$store.dispatch('loadLcp', fileData).then(() => {
           this.loading = false
         })
-      } catch (e: any) {
+      } catch (e: unknown) {
         console.error(e)
         this.loading = false
       }
@@ -199,7 +200,7 @@ export default Vue.extend({
         saveAs(blob, filename)
       })
     },
-    prepareJSON(obj: any): string {
+    prepareJSON(obj: Record<string, unknown>): string {
       const d = JSON.stringify(obj)
       // tiptap's default <p> wrapping doesn't look good in C/C
       d.replaceAll('<p', '<div')

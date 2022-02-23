@@ -22,8 +22,7 @@
               hide-details
               outlined
               dense
-              clearable
-            />
+              clearable />
           </v-col>
           <v-col v-show="npcClass || npcTemplate" cols="auto">
             <v-switch
@@ -33,8 +32,7 @@
               mandatory
               dense
               hide-details
-              :label="`${npcClass ? 'Class' : 'Template'} Feature`"
-            />
+              :label="`${npcClass ? 'Class' : 'Template'} Feature`" />
           </v-col>
         </v-row>
         <v-row>
@@ -70,14 +68,47 @@
 </template>
 
 <script lang="ts">
+import {
+  ITagData,
+  IActionData,
+  IBonusData,
+  ISynergyData,
+  IDeployableData,
+  ICounterData,
+  IClockData,
+  IOriginData,
+  INpcSystemData,
+  INpcClassData,
+  INpcTemplateData,
+} from '@tenebrae-press/lancer-types'
 import Vue from 'vue'
+
+type NpcSystemEditorData = {
+  dialog: boolean
+  id: string
+  name: string
+  recharge: number
+  optional: boolean
+  effect: string
+  type: 'System'
+  tags: Array<ITagData>
+  actions: Array<IActionData>
+  bonuses: Array<IBonusData>
+  synergies: Array<ISynergyData>
+  deployables: Array<IDeployableData>
+  counters: Array<ICounterData>
+  clocks: Array<IClockData>
+  isEdit: boolean
+  origin?: IOriginData
+}
+
 export default Vue.extend({
   name: 'npc-system-editor',
   props: {
-    npcClass: { type: Object, required: false },
-    npcTemplate: { type: Object, required: false },
+    npcClass: { type: Object as () => INpcClassData, required: false },
+    npcTemplate: { type: Object as () => INpcTemplateData, required: false },
   },
-  data: () => ({
+  data: (): NpcSystemEditorData => ({
     dialog: false,
     id: '',
     name: '',
@@ -98,17 +129,21 @@ export default Vue.extend({
     confirmOK(): boolean {
       return !!this.id && !!this.name
     },
-    origin(): any {
+    origin(): IOriginData {
       if (this.npcClass || this.npcTemplate)
         return {
           type: this.npcClass ? 'Class' : 'Template',
           name: this[this.npcClass ? 'npcClass' : 'npcTemplate'].name,
+          base: false,
           optional: this.optional,
           origin_id: this[this.npcClass ? 'npcClass' : 'npcTemplate'].id,
         }
       else
         return {
           type: 'Generic',
+          name: '',
+          base: false,
+          optional: false,
         }
     },
   },
@@ -120,7 +155,7 @@ export default Vue.extend({
       this.dialog = false
     },
     submit(): void {
-      const e = {
+      const e: INpcSystemData = {
         id: this.id,
         name: this.name,
         origin: this.origin,
@@ -135,17 +170,19 @@ export default Vue.extend({
         deployables: this.deployables,
         counters: this.counters,
         clocks: this.clocks,
+        locked: false,
+        hide_active: false,
       }
       this.$emit('save', e)
       this.reset()
       this.dialog = false
     },
-    edit(system: any): void {
+    edit(system: NpcSystemEditorData): void {
       this.id = system.id
       this.name = system.name
       this.effect = system.effect
       this.recharge = system.recharge
-      this.optional = system.origin.optional
+      this.optional = system.origin?.optional ?? false
       this.type = system.type
       this.tags = system.tags
       this.actions = system.actions

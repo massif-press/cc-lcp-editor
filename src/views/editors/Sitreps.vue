@@ -2,8 +2,7 @@
   <editor-base
     itemKey="sitreps"
     :checkDupes="['id', 'name']"
-    :checkEmpty="['id', 'name', 'description']"
-  >
+    :checkEmpty="['id', 'name', 'description']">
     <template v-slot="{ item }">
       <v-toolbar dense color="primary" class="white--text text-h6">{{ item.name }}</v-toolbar>
       <v-card-text>

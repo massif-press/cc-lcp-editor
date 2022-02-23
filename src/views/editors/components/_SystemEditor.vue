@@ -27,8 +27,7 @@
               hide-details
               outlined
               dense
-              v-model="license_level"
-            />
+              v-model="license_level" />
           </v-col>
           <v-col>
             <v-text-field label="SP Cost" type="number" hide-details outlined dense v-model="sp" />
@@ -76,9 +75,41 @@
 </template>
 
 <script lang="ts">
-import { systemType } from '@/assets/enums'
+import {
+  IActionData,
+  IBonusData,
+  ICounterData,
+  IDeployableData,
+  ISynergyData,
+  ITagData,
+  SystemType,
+  SYSTEM_TYPES,
+} from '@tenebrae-press/lancer-types'
 
 import Vue from 'vue'
+
+type SystemEditorData = {
+  dialog: boolean
+  systemTypes: Array<SystemType>
+  id: string
+  name: string
+  license: string
+  license_level: number
+  effect: string
+  type: 'System'
+  sp: string
+  description: string
+  tags: Array<ITagData>
+  actions: Array<IActionData>
+  bonuses: Array<IBonusData>
+  synergies: Array<ISynergyData>
+  deployables: Array<IDeployableData>
+  counters: Array<ICounterData>
+  integrated: Array<string>
+  special_equipment: Array<string>
+  isEdit: boolean
+}
+
 export default Vue.extend({
   name: 'system-editor',
   props: {
@@ -86,9 +117,9 @@ export default Vue.extend({
     licenses: { type: Array, required: false, default: () => [] },
   },
 
-  data: () => ({
+  data: (): SystemEditorData => ({
     dialog: false,
-    systemTypes: systemType,
+    systemTypes: SYSTEM_TYPES,
     id: '',
     name: '',
     license: '',
@@ -113,7 +144,7 @@ export default Vue.extend({
     },
     source(): string {
       if (this.manufacturer) return this.manufacturer.id
-      if (this.tags.some((x: any) => x.id === 'tg_exotic')) return 'EXOTIC'
+      if (this.tags.some(x => x.id === 'tg_exotic')) return 'EXOTIC'
       return ''
     },
   },
@@ -148,7 +179,7 @@ export default Vue.extend({
       this.reset()
       this.dialog = false
     },
-    edit(system: any): void {
+    edit(system: SystemEditorData): void {
       this.id = system.id
       this.name = system.name
       this.license = system.license

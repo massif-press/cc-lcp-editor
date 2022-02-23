@@ -2,8 +2,7 @@
   <editor-base
     itemKey="talents"
     :checkDupes="['id', 'name']"
-    :checkEmpty="['id', 'name', 'description', 'ranks']"
-  >
+    :checkEmpty="['id', 'name', 'description', 'ranks']">
     <template v-slot="{ item }">
       <v-toolbar dense color="primary" class="white--text text-h6">{{ item.name }}</v-toolbar>
       <v-card-text>
@@ -15,8 +14,7 @@
               label="Icon URL"
               persistent-hint
               hint="Must be .svg"
-              v-model="item.icon_url"
-            />
+              v-model="item.icon_url" />
           </v-col>
         </v-row>
         <v-row dense>

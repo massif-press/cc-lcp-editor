@@ -6,8 +6,7 @@
         v-for="(action, i) in item.actions"
         :key="`action_chip_${item.id || item.name}-${i}`"
         top
-        max-width="50vw"
-      >
+        max-width="50vw">
         <template v-slot:activator="{ on }">
           <v-chip
             small
@@ -17,8 +16,7 @@
             close-icon="mdi-close"
             @click="edit(action, i)"
             @click:close="remove(i)"
-            v-on="on"
-          >
+            v-on="on">
             {{ action.name || `Activate ${item.name || '---'}` }}
           </v-chip>
         </template>
@@ -55,8 +53,7 @@
                   label="Name"
                   :placeholder="`Activate ${item.name || '---'}`"
                   hide-details
-                  v-model="name"
-                />
+                  v-model="name" />
               </v-col>
               <v-col>
                 <activator-selector :item="this" />
@@ -78,8 +75,7 @@
                   label="Use Cost"
                   dense
                   outlined
-                  hide-details
-                />
+                  hide-details />
               </v-col>
               <v-col v-if="!npc" cols="auto" class="mt-n4">
                 <v-switch v-model="pilot" label="Pilot" dense hide-details />
@@ -133,6 +129,19 @@ import SynergySelector from './SynergyLocationSelector.vue'
 import RangeSelector from './RangeSelector.vue'
 
 import Vue from 'vue'
+import { Duration, IActionData, IDamageData, IRangeData } from '@tenebrae-press/lancer-types'
+import { synergyLocations } from '@/assets/enums'
+
+type ActionBuilderDataType = IActionData & {
+  damage: Array<IDamageData>
+  range: Array<IRangeData>
+  tech_attack: boolean
+  frequency: Duration
+  init: string
+  trigger: string
+  synergy_locations: Array<typeof synergyLocations>
+}
+
 export default Vue.extend({
   name: 'action-builder',
   props: { item: { type: Object, required: true }, npc: { type: Boolean } },
@@ -144,9 +153,9 @@ export default Vue.extend({
     detail: '',
     cost: 0,
     pilot: false,
-    synergy_locations: [],
-    damage: [],
-    range: [],
+    synergy_locations: [] as Array<typeof synergyLocations>,
+    damage: [] as Array<IDamageData>,
+    range: [] as Array<IRangeData>,
     tech_attack: false,
     frequency: 'Unlimited',
     init: '',
@@ -190,15 +199,15 @@ export default Vue.extend({
       this.reset()
       this.dialog = false
     },
-    edit(action: any, index: number): void {
+    edit(action: ActionBuilderDataType, index: number): void {
       this.reset()
       this.name = action.name
       this.activation = action.activation
       this.detail = action.detail
-      this.cost = action.cost
-      this.pilot = action.pilot
-      this.damage = action.damage
-      this.range = action.range
+      this.cost = action.cost ?? 0
+      this.pilot = action.pilot ?? false
+      this.damage = action.damage ?? []
+      this.range = action.range ?? []
       this.synergy_locations = action.synergy_locations
       this.tech_attack = action.tech_attack
       this.frequency = action.frequency

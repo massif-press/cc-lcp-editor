@@ -35,14 +35,12 @@
     <system-editor
       ref="systems"
       @save="saveItem('systems', $event)"
-      @remove="removeItem('systems', $event)"
-    />
+      @remove="removeItem('systems', $event)" />
     <mod-editor ref="mods" @save="saveItem('mods', $event)" @remove="removeItem('mods', $event)" />
     <weapon-editor
       ref="weapons"
       @save="saveItem('weapons', $event)"
-      @remove="removeItem('weapons', $event)"
-    />
+      @remove="removeItem('weapons', $event)" />
   </div>
 </template>
 
@@ -51,61 +49,77 @@ import Vue from 'vue'
 import SystemEditor from './_SystemEditor.vue'
 import ModEditor from './_ModEditor.vue'
 import WeaponEditor from './_WeaponEditor.vue'
+import {
+  IWeaponProfileData,
+  IMechSystemData,
+  IWeaponModData,
+  ILCPContent,
+} from '@tenebrae-press/lancer-types'
+
+type ISourcelessEquipmentData = IWeaponProfileData | IMechSystemData | IWeaponModData
+type SourcelessEquipmentLCPKeys = 'weapons' | 'frames' | 'mods' | 'systems'
 
 export default Vue.extend({
   name: 'sourceless-editor',
   components: { SystemEditor, ModEditor, WeaponEditor },
   computed: {
-    lcp(): any {
+    lcp(): ILCPContent {
       return this.$store.getters.lcp
     },
-    sourcelessItems(): any[] {
-      let items = (this.lcp.weapons || [])
+    sourcelessItems(): Array<ISourcelessEquipmentData> {
+      let items: Array<ISourcelessEquipmentData> = []
+      items
+        .concat(this.lcp.weapons || [])
         .concat(this.lcp.systems || [])
         .concat(this.lcp.mods || [])
-      return items.filter((x: any) => x.source === 'EXOTIC' || !x.source)
+      return items.filter(x => x.source === 'EXOTIC' || !x.source)
     },
   },
   methods: {
-    getType(item: any) {
+    getType(item: ISourcelessEquipmentData): SourcelessEquipmentLCPKeys {
       if (item.mount) return 'weapons'
       if (item.mounts) return 'frames'
       if (item.allowed_types) return 'mods'
       return 'systems'
     },
-    colorByType(item: any) {
+    colorByType(item: ISourcelessEquipmentData) {
       const type = this.getType(item)
       if (type === 'weapons') return 'deep-orange darken-4'
       if (type === 'frames') return 'deep-purple darken-4'
       if (type === 'mods') return 'cyan darken-3'
       return 'teal darken-4'
     },
-    openByType(item: any) {
+    openByType(item: ISourcelessEquipmentData) {
       this.openItem(this.getType(item), item)
     },
     newItem(type: string) {
       if (this.$refs && this.$refs[type]) {
-        const r = this.$refs[type] as any
+        const r = this.$refs[type] as unknown as { reset: () => void; open: () => void }
         r.reset()
         r.open()
       }
     },
-    openItem(type: string, item: any) {
+    openItem(type: string, item: ISourcelessEquipmentData) {
       if (this.$refs && this.$refs[type]) {
-        const r = this.$refs[type] as any
+        const r = this.$refs[type] as unknown as {
+          edit: (item: IWeaponProfileData | IMechSystemData | IWeaponModData) => void
+        }
         r.edit(item)
       }
     },
-    saveItem(type: string, item: any) {
-      if (!this.lcp[type]) this.$set(this.lcp, type, [])
-      const idx = this.lcp[type].findIndex((x: any) => x.id === item.id)
-      if (idx < 0) {
-        this.lcp[type].push(item)
-      } else this.$set(this.lcp[type], idx, item)
+    saveItem(type: SourcelessEquipmentLCPKeys, item: ISourcelessEquipmentData) {
+      const idx = this.lcp[type]?.findIndex((x: { id: string }) => x.id === item.id)
+      if (!this.lcp[type] || !idx) {
+        this.$set(this.lcp, type, [item])
+      } else {
+        if (idx < 0) {
+          ;(this.lcp[type] as unknown as Array<ISourcelessEquipmentData>).push(item)
+        } else this.$set(this.lcp[type] as unknown as Array<ISourcelessEquipmentData>, idx, item)
+      }
     },
-    removeItem(type: string, id: string) {
-      const idx = this.lcp[type].findIndex((x: any) => x.id === id)
-      if (idx > -1) this.lcp[type].splice(idx, 1)
+    removeItem(type: SourcelessEquipmentLCPKeys, id: string) {
+      const idx = this.lcp[type]?.findIndex((x: { id: string }) => x.id === id)
+      if (idx && idx > -1) this.lcp[type]?.splice(idx, 1)
     },
   },
 })

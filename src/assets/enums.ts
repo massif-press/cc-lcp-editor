@@ -221,65 +221,34 @@ const npcBonuses = [
   { value: 'drone_speed', desc: 'Add speed to all deployed Drones', type: 'integer' },
 ]
 
-const systemType = [
-  'AI',
-  'Deployable',
-  'Drone',
-  'Flight',
-  'Shield',
-  'System',
-  'Tech',
-]
+const systemType = ['AI', 'Deployable', 'Drone', 'Flight', 'Shield', 'System', 'Tech']
 
-const mountType = [
-  'Main',
-  'Main/Aux',
-  'Aux/Aux',
-  'Heavy',
-  'Flex',
-  'Integrated',
-]
+const mountType = ['Main', 'Main/Aux', 'Aux/Aux', 'Heavy', 'Flex', 'Integrated']
 
 const weaponType = ['Rifle', 'Cannon', 'Launcher', 'CQB', 'Nexus', 'Melee']
 
 const weaponSize = ['Auxiliary', 'Main', 'Heavy', 'Superheavy']
 
-const rangeType = [
-  'Range',
-  'Threat',
-  'Thrown',
-  'Line',
-  'Cone',
-  'Blast',
-  'Burst',
-]
+const rangeType = ['Range', 'Threat', 'Thrown', 'Line', 'Cone', 'Blast', 'Burst']
 
-const damageType = [
-  'Kinetic',
-  'Energy',
-  'Explosive',
-  'Heat',
-  'Burn',
-  'Variable',
-]
+const damageType = ['Kinetic', 'Energy', 'Explosive', 'Heat', 'Burn', 'Variable']
 
-const mechType = [
-  'Balanced',
-  'Artillery',
-  'Striker',
-  'Controller',
-  'Support',
-  'Defender',
-]
+const mechType = ['Balanced', 'Artillery', 'Striker', 'Controller', 'Support', 'Defender']
 
-const npcRole = [
-  'Striker',
-  'Artillery',
-  'Controller',
-  'Support',
-  'Tank',
-  'Defender',
-  'Special',
-]
+const npcRole = ['Striker', 'Artillery', 'Controller', 'Support', 'Tank', 'Defender', 'Special']
 
-export { activationTypes, synergyLocations, npcSynergyLocations, bonuses, npcBonuses, systemType, mountType, weaponType, weaponSize, rangeType, damageType, mechType, npcRole }
+export {
+  activationTypes,
+  synergyLocations,
+  npcSynergyLocations,
+  bonuses,
+  npcBonuses,
+  systemType,
+  mountType,
+  weaponType,
+  weaponSize,
+  rangeType,
+  damageType,
+  mechType,
+  npcRole,
+}

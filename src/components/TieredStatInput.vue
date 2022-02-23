@@ -11,8 +11,7 @@
             @change="setTier($event, 0)"
             outlined
             dense
-            hide-details
-          />
+            hide-details />
         </v-col>
         <v-col>
           <v-text-field
@@ -22,8 +21,7 @@
             @change="setTier($event, 1)"
             outlined
             dense
-            hide-details
-          />
+            hide-details />
         </v-col>
         <v-col>
           <v-text-field
@@ -33,8 +31,7 @@
             @change="setTier($event, 2)"
             outlined
             dense
-            hide-details
-          />
+            hide-details />
         </v-col>
       </v-row>
     </v-card>
@@ -49,12 +46,10 @@ export default Vue.extend({
   computed: {
     val: {
       get() {
-        const self = this as any
-        return self.value
+        return [...this.value] as Array<number>
       },
-      set(val) {
-        const self = this as any
-        self.$emit('input', val)
+      set(val: Array<number>) {
+        this.$emit('input', val)
       },
     },
   },

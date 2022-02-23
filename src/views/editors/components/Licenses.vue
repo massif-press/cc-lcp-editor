@@ -5,15 +5,13 @@
       <v-card-text>
         <v-row
           v-for="(lvl, j) in itemsByLevel(licensesByFrame[l])"
-          :key="`license_${i}_level_${j}`"
-        >
+          :key="`license_${i}_level_${j}`">
           <v-col cols="1" class="text-h5 text-center">LL{{ j }}</v-col>
           <v-col>
             <v-row>
               <v-col
                 v-for="(item, k) in itemsByLevel(licensesByFrame[l])[j]"
-                :key="`license_${i}_level_${j}_item_${k}`"
-              >
+                :key="`license_${i}_level_${j}_item_${k}`">
                 <v-btn block :color="colorByType(item)" @click="openByType(item)">
                   {{ item.name }}
                 </v-btn>
@@ -54,29 +52,25 @@
       ref="frames"
       :manufacturer="manufacturer"
       @save="saveItem('frames', $event)"
-      @remove="removeItem('frames', $event)"
-    />
+      @remove="removeItem('frames', $event)" />
     <system-editor
       ref="systems"
       :manufacturer="manufacturer"
       :licenses="licenseNames"
       @save="saveItem('systems', $event)"
-      @remove="removeItem('systems', $event)"
-    />
+      @remove="removeItem('systems', $event)" />
     <mod-editor
       ref="mods"
       :manufacturer="manufacturer"
       :licenses="licenseNames"
       @save="saveItem('mods', $event)"
-      @remove="removeItem('mods', $event)"
-    />
+      @remove="removeItem('mods', $event)" />
     <weapon-editor
       ref="weapons"
       :manufacturer="manufacturer"
       :licenses="licenseNames"
       @save="saveItem('weapons', $event)"
-      @remove="removeItem('weapons', $event)"
-    />
+      @remove="removeItem('weapons', $event)" />
   </div>
 </template>
 
@@ -87,26 +81,36 @@ import FrameEditor from './_FrameEditor.vue'
 import SystemEditor from './_SystemEditor.vue'
 import ModEditor from './_ModEditor.vue'
 import WeaponEditor from './_WeaponEditor.vue'
+import {
+  IFrameData,
+  ILCPContent,
+  IMechSystemData,
+  IWeaponModData,
+  IWeaponProfileData,
+} from '@tenebrae-press/lancer-types'
+
+type ValidLCPKeys = 'weapons' | 'mods' | 'systems'
+type ValidContentItems = IMechSystemData | IWeaponModData | IWeaponProfileData | IFrameData
 
 export default Vue.extend({
   name: 'license-editor',
   components: { FrameEditor, SystemEditor, ModEditor, WeaponEditor },
   props: { manufacturer: { type: Object, required: true } },
   computed: {
-    lcp(): any {
+    lcp(): ILCPContent {
       return this.$store.getters.lcp
     },
-    licensesByFrame(): any {
-      let items = this.collect('weapons')
+    licensesByFrame(): _.Dictionary<Array<ValidContentItems>> {
+      let ungroupedContent = this.collect('weapons')
         .concat(this.collect('systems'))
         .concat(this.collect('mods'))
-      items = items.filter((x: any) => x.source === this.manufacturer.id)
-      items = _.groupBy(items, 'license')
+      ungroupedContent = ungroupedContent.filter(x => x.source === this.manufacturer.id)
+      let items = _.groupBy(ungroupedContent, 'license')
 
       if (this.lcp.frames && this.lcp.frames.length) {
         this.lcp.frames
-          .filter((x: any) => x.source === this.manufacturer.id)
-          .forEach((frame: any) => {
+          .filter(x => x.source === this.manufacturer.id)
+          .forEach((frame: IFrameData) => {
             if (this.manufacturer.id === 'GMS' && frame.source === 'GMS') {
               if (!items['GMS']) this.$set(items, 'GMS', [])
               items['GMS'].push(frame)
@@ -123,51 +127,87 @@ export default Vue.extend({
     },
   },
   methods: {
-    collect(key: string) {
-      if (this.lcp[key]) return this.lcp[key].map((obj: any) => ({ ...obj, itemType: key }))
-      return []
+    collect(key: ValidLCPKeys): Array<ValidContentItems & { itemType?: ValidLCPKeys }> {
+      switch (key) {
+        case 'weapons':
+          return this.lcp.weapons?.map(x => ({ ...x, itemType: key })) ?? []
+        case 'mods':
+          return this.lcp.mods?.map(x => ({ ...x, itemType: key })) ?? []
+        case 'systems':
+          return this.lcp.mods?.map(x => ({ ...x, itemType: key })) ?? []
+        default:
+          return []
+      }
     },
-    getType(item: any) {
+    getType(item: ValidContentItems & { itemType?: string }): string {
       if (item.itemType) return item.itemType
       return 'frames'
     },
-    colorByType(item: any) {
+    colorByType(item: ValidContentItems & { itemType?: string }) {
       const type = this.getType(item)
       if (type === 'weapons') return 'deep-orange darken-4'
       if (type === 'frames') return 'deep-purple darken-4'
       if (type === 'mods') return 'cyan darken-3'
       return 'teal darken-4'
     },
-    itemsByLevel(arr: any[]) {
+    itemsByLevel(arr: ValidContentItems[]) {
       return _.groupBy(arr, 'license_level')
     },
-    openByType(item: any) {
+    openByType(item: ValidContentItems & { itemType?: string }) {
       this.openItem(this.getType(item), item)
     },
     newItem(type: string) {
       if (this.$refs && this.$refs[type]) {
-        const r = this.$refs[type] as any
+        const r = this.$refs[type] as unknown as { reset: () => void; open: () => void }
         r.reset()
         r.open()
       }
     },
-    openItem(type: string, item: any) {
+    openItem(type: string, item: ValidContentItems) {
       if (this.$refs && this.$refs[type]) {
-        const r = this.$refs[type] as any
+        const r = this.$refs[type] as unknown as { edit: (item: ValidContentItems) => void }
         r.edit(item)
       }
     },
-    saveItem(type: string, item: any) {
+    saveItem(type: ValidLCPKeys | 'frames', item: ValidContentItems | IFrameData) {
       if (!this.lcp[type]) this.$set(this.lcp, type, [])
-      const idx = this.lcp[type].findIndex((x: any) => x.id === item.id)
-      if (idx < 0) {
-        this.lcp[type].push(item)
-      } else this.$set(this.lcp[type], idx, item)
+      const idx = ((type: ValidLCPKeys | 'frames') => {
+        switch (type) {
+          case 'frames':
+            return this.lcp.frames?.findIndex(x => x.id === item.id)
+          case 'mods':
+            return this.lcp.mods?.findIndex(x => x.id === item.id)
+          case 'systems':
+            return this.lcp.systems?.findIndex(x => x.id === item.id)
+          case 'weapons':
+            return this.lcp.weapons?.findIndex(x => x.id === item.id)
+          default:
+            return undefined
+        }
+      })(type)
+      if (idx === undefined) {
+        this.$set(this.lcp, type, [item])
+      } else if (idx < 0) {
+        ;(this.lcp[type] as unknown as Array<ValidContentItems | IFrameData>)?.push(item)
+      } else
+        this.$set(this.lcp[type] as unknown as Array<ValidContentItems | IFrameData>, idx, item)
     },
-    removeItem(type: string, id: string) {
-      const idx = this.lcp[type].findIndex((x: any) => x.id === id)
-      console.log(idx)
-      if (idx > -1) this.lcp[type].splice(idx, 1)
+    removeItem(type: ValidLCPKeys | 'frames', id: string) {
+      const idx = ((type: ValidLCPKeys | 'frames') => {
+        switch (type) {
+          case 'frames':
+            return this.lcp.frames?.findIndex(x => x.id === id)
+          case 'mods':
+            return this.lcp.mods?.findIndex(x => x.id === id)
+          case 'systems':
+            return this.lcp.systems?.findIndex(x => x.id === id)
+          case 'weapons':
+            return this.lcp.weapons?.findIndex(x => x.id === id)
+          default:
+            return undefined
+        }
+      })(type)
+      if (idx && idx > -1) this.lcp[type]?.splice(idx, 1)
     },
   },
 })

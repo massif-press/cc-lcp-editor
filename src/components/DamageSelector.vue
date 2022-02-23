@@ -11,8 +11,7 @@
         close-icon="mdi-close"
         :color="getColor(damage.type)"
         @click="edit(damage, i)"
-        @click:close="remove(i)"
-      >
+        @click:close="remove(i)">
         {{ damage.val }} {{ damage.type }}
       </v-chip>
       <v-menu v-model="menu" :close-on-click="false" :close-on-content-click="false">
@@ -30,8 +29,7 @@
                   item-value="id"
                   label="Damage"
                   :items="damageTypes"
-                  hide-details
-                />
+                  hide-details />
               </v-col>
               <v-col>
                 <tiered-stat-input v-if="npc" v-model="damage.val" title="Value" />
@@ -55,6 +53,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { IDamageData } from '@tenebrae-press/lancer-types'
 import { damageType } from '@/assets/enums'
 
 export default Vue.extend({
@@ -62,7 +61,7 @@ export default Vue.extend({
   props: { item: { type: Object, required: true }, npc: { type: Boolean } },
   data: () => ({
     menu: false,
-    damage: {},
+    damage: {} as IDamageData,
     isEdit: false,
     editIndex: -1,
     damageTypes: damageType,
@@ -98,7 +97,7 @@ export default Vue.extend({
       this.editIndex = -1
       this.menu = false
     },
-    edit(damage: any, index: number) {
+    edit(damage: IDamageData, index: number) {
       this.damage = JSON.parse(JSON.stringify(damage))
       this.isEdit = true
       this.editIndex = index

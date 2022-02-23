@@ -4,9 +4,9 @@
       <v-toolbar dense color="primary darken-2" class="text-h6">{{ t.name }}</v-toolbar>
       <div class="caption text-right">{{ t.location }}</div>
       <v-card-text>
-        <v-row dense v-for="(item, i) in lcp.tables[t.key]" :key="`item_${t.key}_${i}`">
+        <v-row dense v-for="(item, i) in lcpTables(t.key)" :key="`item_${t.key}_${i}`">
           <v-col>
-            <v-text-field v-model="lcp.tables[t.key][i]" dense hide-details outlined />
+            <v-text-field v-model="lcpTables(t.key)[i]" dense hide-details outlined />
           </v-col>
           <v-col cols="auto">
             <v-btn icon color="error" @click="deleteItem(t.key, i)">
@@ -47,6 +47,7 @@
 </template>
 
 <script lang="ts">
+import { ILCPContent } from '@tenebrae-press/lancer-types'
 import Vue from 'vue'
 
 export default Vue.extend({
@@ -80,23 +81,32 @@ export default Vue.extend({
     loaded(): boolean {
       return this.$store.getters.loaded
     },
-    lcp(): any {
+    lcp(): ILCPContent {
       return this.$store.getters.lcp
     },
   },
   created() {
-    if (!this.lcp.tables) this.$set(this.lcp, 'tables', [])
-
-    this.tables.forEach(e => {
-      if (!this.lcp.tables[e.key]) this.$set(this.lcp.tables, e.key, [])
-    })
+    if (!this.lcp.tables) {
+      const newTables: Record<string, Array<string>> = {}
+      for (const { key } of this.tables) {
+        newTables[key] = []
+      }
+      this.$set(this.lcp, 'tables', newTables)
+    } else {
+      for (const { key } of this.tables) {
+        this.lcp.tables[key] = []
+      }
+    }
   },
   methods: {
+    lcpTables(key: string): Array<string> {
+      return this.lcp.tables?.[key] ?? []
+    },
     addNew(key: string) {
-      this.lcp.tables[key].push('')
+      this.lcp.tables?.[key].push('')
     },
     deleteItem(key: string, index: number) {
-      this.lcp.tables[key].splice(index, 1)
+      this.lcp.tables?.[key].splice(index, 1)
     },
     exportJson() {
       const blob = new Blob([JSON.stringify(this.lcp.tables)])
@@ -110,8 +120,9 @@ export default Vue.extend({
     importJson() {
       if (this.$refs.fileUpload) (this.$refs.fileUpload as HTMLElement).click()
     },
-    importFile(evt: any) {
-      const file = evt.target.files[0]
+    importFile(evt: Event) {
+      const file = (evt.target as HTMLInputElement).files?.item(0)
+      if (!file) return
       const reader = new FileReader()
 
       reader.onload = e =>

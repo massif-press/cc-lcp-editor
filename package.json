@@ -1,6 +1,6 @@
 {
   "name": "cc-lcp-editor",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@mdi/font": "^6.2.95",
+    "@tenebrae-press/lancer-types": "^0.5.6",
     "axios": "^0.25.0",
     "core-js": "^3.6.5",
     "file-saver": "^2.0.5",
@@ -25,6 +26,8 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.175",
+    "@types/vue": "^2.0.0",
+    "@types/vue-router": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -43,6 +46,7 @@
     "sass-loader": "^10.0.0",
     "typescript": "~4.1.5",
     "vue-cli-plugin-vuetify": "^2.4.3",
+    "vue-template-babel-compiler": "^1.1.3",
     "vue-template-compiler": "^2.6.11",
     "vuetify-loader": "^1.7.0"
   },

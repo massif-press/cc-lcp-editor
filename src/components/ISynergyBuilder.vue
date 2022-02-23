@@ -12,8 +12,7 @@
             close-icon="mdi-close"
             @click="edit(synergy, i)"
             @click:close="remove(i)"
-            v-on="on"
-          >
+            v-on="on">
             {{ synergy.locations.join(', ') }}
           </v-chip>
         </template>
@@ -36,8 +35,7 @@
                   multiple
                   outlined
                   hide-details
-                  v-model="locations"
-                />
+                  v-model="locations" />
               </v-col>
               <v-col cols="12">
                 <rich-text-editor title="Detail" v-model="detail" />
@@ -55,8 +53,7 @@
                     outlined
                     multiple
                     hide-details
-                    label="Weapon Types"
-                  />
+                    label="Weapon Types" />
                 </v-col>
                 <v-col cols="4">
                   <v-select
@@ -66,8 +63,7 @@
                     outlined
                     multiple
                     hide-details
-                    label="Weapon Sizes"
-                  />
+                    label="Weapon Sizes" />
                 </v-col>
                 <v-col cols="4">
                   <v-select
@@ -77,8 +73,7 @@
                     outlined
                     multiple
                     hide-details
-                    label="System Types"
-                  />
+                    label="System Types" />
                 </v-col>
               </v-row>
             </div>
@@ -90,8 +85,7 @@
             <v-btn
               color="success darken-2"
               :disabled="!locations.length || !detail"
-              @click="submit"
-            >
+              @click="submit">
               {{ isEdit ? 'save' : 'confirm' }}
             </v-btn>
           </v-card-actions>
@@ -102,35 +96,59 @@
 </template>
 
 <script lang="ts">
-import {
-  synergyLocations,
-  npcSynergyLocations,
-  weaponType,
-  weaponSize,
-  systemType,
-} from '@/assets/enums'
+import { synergyLocations, npcSynergyLocations } from '@/assets/enums'
 import RichTextEditor from './RichTextEditor.vue'
 
 import Vue from 'vue'
+import Lancer, {
+  ISynergyData,
+  SystemType,
+  WeaponSize,
+  WeaponType,
+} from '@tenebrae-press/lancer-types'
+
+type SynergyBuilderData = {
+  synergies: Array<{
+    value: string
+    desc: string
+  }>
+  npcSynergies: Array<{
+    value: string
+    desc: string
+  }>
+  weaponType: Array<WeaponType>
+  weaponSize: Array<WeaponSize>
+  systemType: Array<SystemType>
+  detail: string
+  locations: Array<string>
+  editIndex: number
+  dialog: boolean
+  isEdit: boolean
+  wt: Array<WeaponType>
+  ws: Array<WeaponSize>
+  st: Array<SystemType>
+}
+
 export default Vue.extend({
   name: 'synergy-builder',
   components: { RichTextEditor },
   props: { item: { type: Object, required: true }, npc: { type: Boolean } },
-  data: () => ({
-    synergies: synergyLocations,
-    npcSynergies: npcSynergyLocations,
-    weaponType: weaponType,
-    weaponSize: weaponSize,
-    systemType: systemType,
-    dialog: false,
-    locations: [],
-    detail: '',
-    wt: [],
-    ws: [],
-    st: [],
-    isEdit: false,
-    editIndex: -1,
-  }),
+  data: () =>
+    ({
+      synergies: synergyLocations,
+      npcSynergies: npcSynergyLocations,
+      weaponType: Lancer.WEAPON_TYPES,
+      weaponSize: Lancer.WEAPON_SIZES,
+      systemType: Lancer.SYSTEM_TYPES,
+      dialog: false,
+      locations: [],
+      detail: '',
+      wt: [],
+      ws: [],
+      st: [],
+      isEdit: false,
+      editIndex: -1,
+    } as SynergyBuilderData),
   methods: {
     newItem(): void {
       this.reset()
@@ -143,7 +161,7 @@ export default Vue.extend({
         weapon_types: this.wt,
         weapon_sizes: this.ws,
         system_types: this.st,
-      }
+      } as ISynergyData
       if (this.isEdit) {
         this.$set(this.item.synergies, this.editIndex, e)
       } else {
@@ -153,7 +171,7 @@ export default Vue.extend({
       this.reset()
       this.dialog = false
     },
-    edit(synergy: any, index: number): void {
+    edit(synergy: SynergyBuilderData, index: number): void {
       this.reset()
       this.locations = synergy.locations
       this.detail = synergy.detail

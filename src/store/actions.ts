@@ -1,11 +1,14 @@
+import { ActionContext } from 'vuex'
+import { AppState } from './shape'
+
 export default {
-  loadLcp({ commit }: any, file: any): void {
+  loadLcp({ commit }: ActionContext<AppState, AppState>, file: Blob): void {
     commit('LOAD_LCP', file)
   },
-  clearLcp({ commit }: any): void {
+  clearLcp({ commit }: ActionContext<AppState, AppState>): void {
     commit('CLEAR_LCP')
   },
-  newLcp({ commit }: any): void {
+  newLcp({ commit }: ActionContext<AppState, AppState>): void {
     commit('NEW_LCP')
   },
 }

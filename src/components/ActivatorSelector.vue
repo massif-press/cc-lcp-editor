@@ -5,13 +5,12 @@
     item-text="desc"
     hide-details
     :clearable="optional"
-    v-model="item[field]"
-  />
+    v-model="item[field]" />
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { activationTypes } from '@/assets/enums'
+import Lancer from '@tenebrae-press/lancer-types'
 
 export default Vue.extend({
   name: 'activator-selector',
@@ -35,7 +34,7 @@ export default Vue.extend({
     },
   },
   data: () => ({
-    activationTypes: activationTypes,
+    activationTypes: Lancer.ACTIVATION_TYPES,
   }),
 })
 </script>
