@@ -62,7 +62,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { synergyLocations, activationTypes } from '@/assets/enums'
-import { ILCPContent } from '@tenebrae-press/lancer-types'
+import { ILCPContent, LCPContentKeys } from '@tenebrae-press/lancer-types'
 
 function getDuplicateProperties(arr: Record<string, unknown>[], prop: string) {
   let sorted = arr.map(x => x[prop]).sort()
@@ -83,10 +83,10 @@ export default Vue.extend({
   name: 'editor-base',
   props: {
     itemKey: {
-      type: String as () => keyof ILCPContent,
+      type: String as () => LCPContentKeys,
     },
-    checkDupes: { type: Object },
-    checkEmpty: { type: Object },
+    checkDupes: { type: Array as () => Array<string> },
+    checkEmpty: { type: Array as () => Array<string> },
   },
   data: () => ({
     synergyLocations: synergyLocations,
@@ -103,12 +103,7 @@ export default Vue.extend({
       const arr: string[] = []
       if (!this.lcp[this.itemKey] || !this.lcp[this.itemKey]?.length) return arr
 
-      let content: Array<Record<string, unknown>>
-      if (this.itemKey === 'lcp_manifest' || this.itemKey === 'tables') {
-        return arr
-      } else {
-        content = this.lcp[this.itemKey] ?? []
-      }
+      let content: Array<Record<string, unknown>> = this.lcp[this.itemKey] ?? []
 
       this.checkDupes.forEach((prop: string) => {
         getDuplicateProperties(content, prop).forEach(p => {
@@ -124,12 +119,8 @@ export default Vue.extend({
     },
   },
   methods: {
-    lcpContentKey(key: keyof ILCPContent): Array<{ id?: string; name?: string }> {
-      if (key === 'lcp_manifest' || key === 'tables') {
-        return []
-      } else {
-        return this.lcp[key] ?? []
-      }
+    lcpContentKey(key: LCPContentKeys): Array<{ id?: string; name?: string }> {
+      return this.lcp[key] ?? []
     },
     addNew() {
       if (!this.lcp[this.itemKey]) {

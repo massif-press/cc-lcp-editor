@@ -86,7 +86,12 @@
           <v-col v-for="(t, i) in categories" :key="`player_btn_${i}`" cols="2">
             <v-btn large block color="primary darken-3" :to="`editor/${t}`">
               {{ t.replace('_', ' ') }}
-              <span v-show="t !== 'tables'" class="item-count">({{ catLength(t) }})</span>
+              <span class="item-count">({{ catLength(t) }})</span>
+            </v-btn>
+          </v-col>
+          <v-col cols="2">
+            <v-btn :to="'editor/tables'" large block color="primary darken-3">
+              {{ 'Tables' }}
             </v-btn>
           </v-col>
         </v-row>
@@ -119,33 +124,36 @@ import _ from 'lodash'
 import PromisifyFileReader from 'promisify-file-reader'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
+import Lancer, { ILCPContent, LCPContentKeys, LCPContentTypes } from '@tenebrae-press/lancer-types'
+
+const skipCategories = [
+  'manufacturers',
+  'frames',
+  'weapons',
+  'systems',
+  'mods',
+  'core_bonuses',
+  'npc_features',
+]
+const gmCategories = ['npc_classes', 'npc_templates']
 
 export default Vue.extend({
   name: 'Home',
   data: () => ({
     lcpFile: null,
     loading: false,
-    categories: [
-      'actions',
-      'backgrounds',
-      'pilot_gear',
-      'reserves',
-      'skills',
-      'statuses',
-      'tables',
-      'tags',
-      'talents',
-      'sitreps',
-      'environments',
-    ],
-    gmCategories: ['npc_classes', 'npc_templates'],
+    categories: Lancer.LCP_CONTENT_KEYS.filter(
+      key => !gmCategories.includes(key) && !skipCategories.includes(key)
+    ),
+    gmCategories: Lancer.LCP_CONTENT_KEYS.filter(
+      key => gmCategories.includes(key) && !skipCategories.includes(key)
+    ),
   }),
   computed: {
     loaded(): boolean {
       return this.$store.getters.loaded
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    lcp(): any {
+    lcp(): ILCPContent {
       return this.$store.getters.lcp
     },
     manuCount(): number {
@@ -161,8 +169,8 @@ export default Vue.extend({
     },
   },
   methods: {
-    catLength(type: string) {
-      if (this.lcp[type]) return this.lcp[type].length
+    catLength(type: LCPContentKeys) {
+      if (this.lcp[type]) return this.lcp[type]?.length
       return 0
     },
 
@@ -193,14 +201,14 @@ export default Vue.extend({
         this.lcp.lcp_manifest.version
       }.lcp`
       const zip = new JSZip()
-      Object.keys(this.lcp).forEach(key => {
-        zip.file(`${key}.json`, this.prepareJSON(this.lcp[key]))
+      Lancer.LCP_CONTENT_KEYS.forEach((key: LCPContentKeys) => {
+        zip.file(`${key}.json`, this.prepareJSON(this.lcp[key] ?? []))
       })
       zip.generateAsync({ type: 'blob' }).then(function (blob) {
         saveAs(blob, filename)
       })
     },
-    prepareJSON(obj: Record<string, unknown>): string {
+    prepareJSON(obj: LCPContentTypes): string {
       const d = JSON.stringify(obj)
       // tiptap's default <p> wrapping doesn't look good in C/C
       d.replaceAll('<p', '<div')
