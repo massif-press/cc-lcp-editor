@@ -71,14 +71,45 @@
 </template>
 
 <script lang="ts">
+import {
+  IActionData,
+  IBonusData,
+  IClockData,
+  ICounterData,
+  IDeployableData,
+  IOriginData,
+  ISynergyData,
+  ITagData,
+  INpcProtocolData,
+} from '@tenebrae-press/lancer-types'
 import Vue from 'vue'
+
+type NpcProtocolEditorData = {
+  dialog: boolean
+  optional: boolean
+  hide_active: boolean
+  id: string
+  name: string
+  recharge: number
+  effect: string
+  type: 'Protocol'
+  tags: Array<ITagData>
+  actions: Array<IActionData>
+  bonuses: Array<IBonusData>
+  synergies: Array<ISynergyData>
+  deployables: Array<IDeployableData>
+  counters: Array<ICounterData>
+  clocks: Array<IClockData>
+  isEdit: boolean
+}
+
 export default Vue.extend({
   name: 'npc-trait-editor',
   props: {
     npcClass: { type: Object, required: false },
     npcTemplate: { type: Object, required: false },
   },
-  data: () => ({
+  data: (): NpcProtocolEditorData => ({
     dialog: false,
     optional: false,
     hide_active: false,
@@ -97,17 +128,21 @@ export default Vue.extend({
     isEdit: false,
   }),
   computed: {
-    origin(): any {
+    origin(): IOriginData {
       if (this.npcClass || this.npcTemplate)
         return {
           type: this.npcClass ? 'Class' : 'Template',
           name: this[this.npcClass ? 'npcClass' : 'npcTemplate'].name,
           optional: this.optional,
+          base: false,
           origin_id: this[this.npcClass ? 'npcClass' : 'npcTemplate'].id,
         }
       else
         return {
           type: 'Generic',
+          base: false,
+          optional: false,
+          name: '',
         }
     },
     confirmOK(): boolean {
@@ -122,7 +157,7 @@ export default Vue.extend({
       this.dialog = false
     },
     submit(): void {
-      const e = {
+      const e: INpcProtocolData = {
         id: this.id,
         name: this.name,
         origin: this.origin,
@@ -143,7 +178,7 @@ export default Vue.extend({
       this.reset()
       this.dialog = false
     },
-    edit(trait: any): void {
+    edit(trait: INpcProtocolData): void {
       this.id = trait.id
       this.name = trait.name
       this.effect = trait.effect
