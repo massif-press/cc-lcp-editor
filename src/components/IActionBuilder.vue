@@ -198,7 +198,7 @@ export default Vue.extend({
         name: this.name,
         activation: this.activation || ACTIVATION_TYPES[0],
         detail: this.detail,
-        cost: this.cost || 0,
+        cost: this.cost ?? 0,
         pilot: this.pilot,
         damage: this.damage,
         range: this.range,
