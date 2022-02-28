@@ -85,12 +85,12 @@ import {
   IFrameData,
   ILCPContent,
   IMechSystemData,
+  IMechWeaponData,
   IWeaponModData,
-  IWeaponProfileData,
 } from '@tenebrae-press/lancer-types'
 
 type ValidLCPKeys = 'weapons' | 'mods' | 'systems'
-type ValidContentItems = IMechSystemData | IWeaponModData | IWeaponProfileData | IFrameData
+type ValidContentItems = IMechSystemData | IWeaponModData | IMechWeaponData | IFrameData
 
 export default Vue.extend({
   name: 'license-editor',

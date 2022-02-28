@@ -157,6 +157,7 @@ import Lancer, {
   ICounterData,
   ISynergyData,
   ITagData,
+  IMechWeaponData,
 } from '@tenebrae-press/lancer-types'
 
 import Vue from 'vue'
@@ -263,7 +264,7 @@ export default Vue.extend({
       this.dialog = false
     },
     submit(): void {
-      const e = {
+      const e: IMechWeaponData = {
         id: this.id,
         name: this.name,
         source: this.source,
@@ -271,9 +272,9 @@ export default Vue.extend({
         license_level: Number(this.license_level),
         description: this.description,
         effect: this.effect,
-        on_attack: this.on_attack,
-        on_hit: this.on_hit,
-        on_crit: this.on_crit,
+        on_attack: this.on_attack ?? '',
+        on_hit: this.on_hit ?? '',
+        on_crit: this.on_crit ?? '',
         mount: this.mount,
         type: this.type,
         cost: this.cost,
@@ -301,38 +302,38 @@ export default Vue.extend({
       this.reset()
       this.dialog = false
     },
-    edit(weapon: WeaponEditorData): void {
+    edit(weapon: IMechWeaponData): void {
       this.id = weapon.id
       this.name = weapon.name
       this.license = weapon.license
       this.license_level = Number(weapon.license_level)
-      this.description = weapon.description
-      this.effect = weapon.effect
-      this.on_attack = weapon.on_attack
-      this.on_hit = weapon.on_hit
-      this.on_crit = weapon.on_crit
+      this.description = weapon.description ?? ''
+      this.effect = weapon.effect ?? ''
+      this.on_attack = weapon.on_attack ?? ''
+      this.on_hit = weapon.on_hit ?? ''
+      this.on_crit = weapon.on_crit ?? ''
       this.mount = weapon.mount
       this.type = weapon.type
-      this.cost = weapon.cost
-      this.barrage = weapon.barrage
-      this.skirmish = weapon.skirmish
-      this.no_attack = weapon.no_attack
-      this.no_mods = weapon.no_mods
-      this.no_core_bonus = weapon.no_core_bonus
-      this.no_bonus = weapon.no_bonus
-      this.no_synergy = weapon.no_synergy
-      this.damage = weapon.damage
-      this.range = weapon.range
-      this.sp = weapon.sp
-      this.tags = weapon.tags
-      this.actions = weapon.actions
-      this.bonuses = weapon.bonuses
-      this.synergies = weapon.synergies
-      this.deployables = weapon.deployables
-      this.counters = weapon.counters
-      this.integrated = weapon.integrated
-      this.special_equipment = weapon.special_equipment
-      this.profiles = weapon.profiles
+      this.cost = weapon.cost ?? 0
+      this.barrage = weapon.barrage ?? true
+      this.skirmish = weapon.skirmish ?? true
+      this.no_attack = false
+      this.no_mods = false
+      this.no_core_bonus = false
+      this.no_bonus = weapon.bonuses?.length == 0
+      this.no_synergy = weapon.synergies?.length == 0
+      this.damage = weapon.damage ?? []
+      this.range = weapon.range ?? []
+      this.sp = weapon.sp ?? 0
+      this.tags = weapon.tags ?? []
+      this.actions = weapon.actions ?? []
+      this.bonuses = weapon.bonuses ?? []
+      this.synergies = weapon.synergies ?? []
+      this.deployables = weapon.deployables ?? []
+      this.counters = weapon.counters ?? []
+      this.integrated = weapon.integrated ?? []
+      this.special_equipment = []
+      this.profiles = weapon.profiles ?? []
       this.isEdit = true
       this.dialog = true
     },

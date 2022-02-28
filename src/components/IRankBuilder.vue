@@ -2,10 +2,7 @@
   <v-card outlined>
     <div class="caption mb-n1 mt-n3">TALENT RANKS</div>
     <v-card flat>
-      <v-tooltip
-        v-for="(rank, i) in item.ranks"
-        :key="`rank_chip_${item.id || item.name}-${i}`"
-        top>
+      <v-tooltip v-for="(rank, i) in item.ranks" :key="`rank_chip_${item.name}-${i}`" top>
         <template v-slot:activator="{ on }">
           <v-chip
             large
@@ -84,7 +81,7 @@
 </template>
 
 <script lang="ts">
-import { ITalentRankData } from '@tenebrae-press/lancer-types'
+import { ITalentData, ITalentRankData } from '@tenebrae-press/lancer-types'
 import Vue from 'vue'
 
 type TalentRankBuilderData = ITalentRankData & {
@@ -95,23 +92,23 @@ type TalentRankBuilderData = ITalentRankData & {
 
 export default Vue.extend({
   name: 'rank-builder',
-  props: { item: { type: Object, required: true } },
+  props: { item: { type: Object as () => ITalentData, required: true } },
 
-  data: () =>
-    ({
-      dialog: false,
-      name: '',
-      description: '',
-      synergies: [],
-      actions: [],
-      bonuses: [],
-      deployables: [],
-      counters: [],
-      integrated: [],
-      exclusive: false,
-      isEdit: false,
-      editIndex: -1,
-    } as TalentRankBuilderData),
+  data: (): TalentRankBuilderData => ({
+    id: '',
+    dialog: false,
+    name: '',
+    description: '',
+    synergies: [],
+    actions: [],
+    bonuses: [],
+    deployables: [],
+    counters: [],
+    integrated: [],
+    exclusive: false,
+    isEdit: false,
+    editIndex: -1,
+  }),
   computed: {
     confirmOK(): boolean {
       return !!this.name && !!this.description
@@ -123,7 +120,7 @@ export default Vue.extend({
       this.dialog = true
     },
     submit(): void {
-      const e = {
+      const e: ITalentRankData = {
         name: this.name,
         description: this.description,
         synergies: this.synergies,

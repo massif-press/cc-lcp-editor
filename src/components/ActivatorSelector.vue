@@ -11,6 +11,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Lancer from '@tenebrae-press/lancer-types'
+import { activationTypes } from '@/assets/enums'
 
 export default Vue.extend({
   name: 'activator-selector',
@@ -34,7 +35,9 @@ export default Vue.extend({
     },
   },
   data: () => ({
-    activationTypes: Lancer.ACTIVATION_TYPES,
+    activationTypes: Lancer.ACTIVATION_TYPES.map(
+      key => activationTypes.find(val => val.value === key)?.desc ?? key
+    ),
   }),
 })
 </script>

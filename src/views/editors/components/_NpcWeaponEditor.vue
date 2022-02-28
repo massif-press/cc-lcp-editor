@@ -111,8 +111,9 @@ import Lancer, {
   IBonusData,
   IClockData,
   ICounterData,
-  IDamageData,
   IDeployableData,
+  INpcDamageData,
+  INpcWeaponData,
   IOriginData,
   IRangeData,
   ISynergyData,
@@ -137,7 +138,7 @@ type NpcWeaponEditorData = {
   on_crit: string
   weapon_size: WeaponSize
   weapon_type: WeaponType
-  damage: Array<IDamageData>
+  damage: Array<INpcDamageData>
   range: Array<IRangeData>
   attack_bonus: Array<number>
   accuracy: Array<number>
@@ -217,14 +218,14 @@ export default Vue.extend({
       this.dialog = false
     },
     submit(): void {
-      const e = {
+      const e: INpcWeaponData = {
         id: this.id,
         name: this.name,
         origin: this.origin,
         effect: this.effect,
         recharge: this.recharge,
         optional: this.optional,
-        damage: this.damage,
+        damage: this.damage ?? [],
         range: this.range,
         on_attack: this.on_attack,
         on_hit: this.on_hit,
@@ -241,6 +242,8 @@ export default Vue.extend({
         deployables: this.deployables,
         counters: this.counters,
         clocks: this.clocks,
+        locked: false,
+        hide_active: false,
       }
       this.$emit('save', e)
       this.reset()

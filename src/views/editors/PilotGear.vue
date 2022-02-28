@@ -55,7 +55,6 @@ export default Vue.extend({
   name: 'tags-editor',
   components: {
     EditorBase,
-
     SynergySelector,
   },
 })

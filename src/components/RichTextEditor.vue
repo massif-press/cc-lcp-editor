@@ -65,7 +65,7 @@ export default Vue.extend({
   computed: {
     val: {
       get(): string {
-        return `${this.value}`
+        return `${this.value ?? ''}`
       },
       set(val: string) {
         this.$emit('input', val)

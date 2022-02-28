@@ -270,7 +270,7 @@ export default Vue.extend({
       this.reset()
       this.dialog = false
     },
-    edit(mod: ModEditorData): void {
+    edit(mod: IWeaponModData): void {
       this.id = mod.id
       this.name = mod.name
       this.license = mod.license
@@ -283,9 +283,9 @@ export default Vue.extend({
       this.restricted_types = mod.restricted_types ?? []
       this.restricted_sizes = mod.restricted_sizes ?? []
       this.added = {
-        damage: mod.added.damage ?? [],
-        range: mod.added.range ?? [],
-        tags: mod.added.tags ?? [],
+        damage: mod.added_damage ?? [],
+        range: mod.added_range ?? [],
+        tags: mod.added_tags ?? [],
       }
       this.tags = mod.tags ?? []
       this.actions = mod.actions ?? []
@@ -294,7 +294,7 @@ export default Vue.extend({
       this.deployables = mod.deployables ?? []
       this.counters = mod.counters ?? []
       this.integrated = mod.integrated ?? []
-      this.special_equipment = mod.special_equipment ?? []
+      this.special_equipment = []
       this.isEdit = true
       this.dialog = true
     },

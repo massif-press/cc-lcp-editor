@@ -155,13 +155,13 @@ export default Vue.extend({
       this.dialog = true
     },
     submit() {
-      const e = {
+      const e: ISynergyData = {
         locations: this.locations,
         detail: this.detail,
         weapon_types: this.wt,
         weapon_sizes: this.ws,
         system_types: this.st,
-      } as ISynergyData
+      }
       if (this.isEdit) {
         this.$set(this.item.synergies, this.editIndex, e)
       } else {

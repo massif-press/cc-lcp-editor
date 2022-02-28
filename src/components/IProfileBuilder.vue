@@ -128,8 +128,8 @@
 </template>
 
 <script lang="ts">
-import { weaponType, weaponSize } from '@/assets/enums'
 import {
+  DamageType,
   IActionData,
   IBonusData,
   ICounterData,
@@ -141,20 +141,22 @@ import {
   IWeaponProfileData,
   WeaponSize,
   WeaponType,
+  WEAPON_SIZES,
+  WEAPON_TYPES,
 } from '@tenebrae-press/lancer-types'
 
 type ProfileBuilderData = {
   dialog: boolean
   weaponTypes: Array<WeaponType>
   weaponSizes: Array<WeaponSize>
-  name: ''
-  description: ''
-  effect: ''
-  on_attack: ''
-  on_hit: ''
-  on_crit: ''
-  type: ''
-  cost: 1
+  name: string
+  description: string
+  effect: string
+  on_attack: string
+  on_hit: string
+  on_crit: string
+  type: DamageType
+  cost: number
   damage: Array<IDamageData>
   range: Array<IRangeData>
   actions: Array<IActionData>
@@ -175,32 +177,31 @@ export default Vue.extend({
   props: {
     item: { type: Object, required: true },
   },
-  data: () =>
-    ({
-      dialog: false,
-      weaponTypes: weaponType,
-      weaponSizes: weaponSize,
-      name: '',
-      description: '',
-      effect: '',
-      on_attack: '',
-      on_hit: '',
-      on_crit: '',
-      type: '',
-      cost: 1,
-      damage: [],
-      range: [],
-      actions: [],
-      bonuses: [],
-      synergies: [],
-      deployables: [],
-      counters: [],
-      integrated: [],
-      special_equipment: [],
-      tags: [],
-      isEdit: false,
-      editIndex: -1,
-    } as ProfileBuilderData),
+  data: (): ProfileBuilderData => ({
+    dialog: false,
+    weaponTypes: WEAPON_TYPES,
+    weaponSizes: WEAPON_SIZES,
+    name: '',
+    description: '',
+    effect: '',
+    on_attack: '',
+    on_hit: '',
+    on_crit: '',
+    type: 'Variable',
+    cost: 1,
+    damage: [],
+    range: [],
+    actions: [],
+    bonuses: [],
+    synergies: [],
+    deployables: [],
+    counters: [],
+    integrated: [],
+    special_equipment: [],
+    tags: [],
+    isEdit: false,
+    editIndex: -1,
+  }),
   computed: {
     confirmOK(): boolean {
       return !!this.name
@@ -216,7 +217,7 @@ export default Vue.extend({
       this.dialog = false
     },
     submit(): void {
-      const e = {
+      const e: IWeaponProfileData = {
         name: this.name,
         description: this.description,
         effect: this.effect,
@@ -235,7 +236,7 @@ export default Vue.extend({
         integrated: this.integrated,
         special_equipment: this.special_equipment,
         tags: this.tags,
-      } as IWeaponProfileData
+      }
       if (!this.item.profiles) this.$set(this.item, 'profiles', [])
       if (this.isEdit && this.editIndex > -1) {
         this.$set(this.item.profiles, this.editIndex, e)
@@ -278,7 +279,7 @@ export default Vue.extend({
       this.on_hit = ''
       this.on_crit = ''
       this.cost = 1
-      this.type = ''
+      this.type = 'Variable'
       this.damage = []
       this.range = []
       this.actions = []

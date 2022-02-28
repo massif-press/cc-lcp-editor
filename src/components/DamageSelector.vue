@@ -12,7 +12,7 @@
         :color="getColor(damage.type)"
         @click="edit(damage, i)"
         @click:close="remove(i)">
-        {{ damage.val }} {{ damage.type }}
+        {{ damage.val }} {{ sanitizedDamageType(item.type) }}
       </v-chip>
       <v-menu v-model="menu" :close-on-click="false" :close-on-content-click="false">
         <template v-slot:activator="{ on, attrs }">
@@ -53,7 +53,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { IDamageData } from '@tenebrae-press/lancer-types'
+import { DamageType, DAMAGE_TYPES, IDamageData } from '@tenebrae-press/lancer-types'
 import { damageType } from '@/assets/enums'
 
 export default Vue.extend({
@@ -68,7 +68,7 @@ export default Vue.extend({
   }),
   methods: {
     getColor(type: string) {
-      switch (type) {
+      switch (this.sanitizedDamageType(type)) {
         case 'Energy':
           return 'blue darken-2'
         case 'Explosive':
@@ -84,6 +84,13 @@ export default Vue.extend({
           return ''
       }
     },
+    sanitizedDamageType(dt: string): DamageType {
+      return (
+        DAMAGE_TYPES.find(bt => {
+          return bt === `${dt.charAt(0).toUpperCase()}${dt.substring(1)}`
+        }) ?? 'Variable'
+      )
+    },
     submit() {
       if (!this.damage) return
       if (this.isEdit) {
@@ -98,7 +105,12 @@ export default Vue.extend({
       this.menu = false
     },
     edit(damage: IDamageData, index: number) {
-      this.damage = JSON.parse(JSON.stringify(damage))
+      const damageType = this.sanitizedDamageType(damage.type)
+
+      this.damage = {
+        ...damage,
+        type: damageType,
+      }
       this.isEdit = true
       this.editIndex = index
       this.menu = true

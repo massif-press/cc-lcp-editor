@@ -50,13 +50,14 @@ import SystemEditor from './_SystemEditor.vue'
 import ModEditor from './_ModEditor.vue'
 import WeaponEditor from './_WeaponEditor.vue'
 import {
-  IWeaponProfileData,
   IMechSystemData,
   IWeaponModData,
   ILCPContent,
+  IMechWeaponData,
+  IFrameData,
 } from '@tenebrae-press/lancer-types'
 
-type ISourcelessEquipmentData = IWeaponProfileData | IMechSystemData | IWeaponModData
+type ISourcelessEquipmentData = IMechWeaponData | IMechSystemData | IWeaponModData | IFrameData
 type SourcelessEquipmentLCPKeys = 'weapons' | 'frames' | 'mods' | 'systems'
 
 export default Vue.extend({
@@ -68,10 +69,10 @@ export default Vue.extend({
     },
     sourcelessItems(): Array<ISourcelessEquipmentData> {
       let items: Array<ISourcelessEquipmentData> = []
-      items
-        .concat(this.lcp.weapons || [])
-        .concat(this.lcp.systems || [])
-        .concat(this.lcp.mods || [])
+      items = items
+        .concat(this.lcp.weapons ?? [])
+        .concat(this.lcp.systems ?? [])
+        .concat(this.lcp.mods ?? [])
       return items.filter(x => x.source === 'EXOTIC' || !x.source)
     },
   },
@@ -102,7 +103,7 @@ export default Vue.extend({
     openItem(type: string, item: ISourcelessEquipmentData) {
       if (this.$refs && this.$refs[type]) {
         const r = this.$refs[type] as unknown as {
-          edit: (item: IWeaponProfileData | IMechSystemData | IWeaponModData) => void
+          edit: (item: ISourcelessEquipmentData) => void
         }
         r.edit(item)
       }

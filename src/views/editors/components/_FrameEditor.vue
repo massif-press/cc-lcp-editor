@@ -344,6 +344,7 @@ import Lancer, {
   IActionData,
   IBonusData,
   ICoreSystemData,
+  IFrameData,
   IFrameStats,
   IFrameTraitData,
   ISynergyData,
@@ -453,24 +454,17 @@ export default Vue.extend({
       this.dialog = false
     },
     submit(): void {
-      const cs = JSON.parse(JSON.stringify(this.core_system))
-      cs.active_actions = this.active.actions
-      cs.active_bonuses = this.active.bonuses
-      cs.active_synergies = this.active.synergies
-      cs.passive_actions = this.passive.actions
-      cs.passive_bonuses = this.passive.bonuses
-      cs.passive_synergies = this.passive.synergies
-      const e = {
+      const e: IFrameData = {
         id: this.id,
         source: this.manufacturer.id,
-        license_level: Number(this.license_level),
+        license_level: this.license_level,
         name: this.name,
         mechtype: this.mechtype,
         description: this.description,
         mounts: this.mounts,
         stats: this.stats,
         traits: this.traits,
-        core_system: cs,
+        core_system: this.core_system,
         image_url: this.image_url,
         y_pos: this.y_pos,
       }
@@ -478,15 +472,30 @@ export default Vue.extend({
       this.reset()
       this.dialog = false
     },
-    edit(frame: FrameEditorData): void {
+    edit(frame: IFrameData): void {
       this.id = frame.id
       this.license_level = Number(frame.license_level)
-      this.name = frame.name
-      this.mechtype = frame.mechtype
-      this.description = frame.description
-      this.mounts = frame.mounts
-      this.stats = frame.stats
-      this.traits = frame.traits
+      this.name = frame.name ?? ''
+      this.mechtype = frame.mechtype ?? 'Balanced'
+      this.description = frame.description ?? ''
+      this.mounts = frame.mounts ?? []
+      this.stats = frame.stats ?? {
+        size: 1,
+        structure: 4,
+        stress: 4,
+        armor: 0,
+        hp: 10,
+        evasion: 6,
+        edef: 6,
+        heatcap: 6,
+        repcap: 6,
+        sensor_range: 10,
+        tech_attack: 0,
+        save: 20,
+        speed: 4,
+        sp: 6,
+      }
+      this.traits = frame.traits ?? []
       this.core_system = {
         description: '',
         deactivation: 'Free',
@@ -516,8 +525,8 @@ export default Vue.extend({
         bonuses: frame.core_system.passive_bonuses ?? [],
         synergies: frame.core_system.passive_synergies ?? [],
       }
-      this.image_url = frame.image_url
-      this.y_pos = frame.y_pos
+      this.image_url = frame.image_url ?? ''
+      this.y_pos = frame.y_pos ?? 0
       this.isEdit = true
       this.dialog = true
     },

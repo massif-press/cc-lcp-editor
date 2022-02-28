@@ -80,6 +80,7 @@ import Lancer, {
   IBonusData,
   ICounterData,
   IDeployableData,
+  IMechSystemData,
   ISynergyData,
   ITagData,
   SystemType,
@@ -95,8 +96,8 @@ type SystemEditorData = {
   license: string
   license_level: number
   effect: string
-  type: 'System'
-  sp: string
+  type: SystemType
+  sp: number
   description: string
   tags: Array<ITagData>
   actions: Array<IActionData>
@@ -125,7 +126,7 @@ export default Vue.extend({
     license_level: 1,
     effect: '',
     type: 'System',
-    sp: '',
+    sp: 0,
     description: '',
     tags: [],
     actions: [],
@@ -155,7 +156,7 @@ export default Vue.extend({
       this.dialog = false
     },
     submit(): void {
-      const e = {
+      const e: IMechSystemData = {
         id: this.id,
         name: this.name,
         source: this.source,
@@ -178,23 +179,23 @@ export default Vue.extend({
       this.reset()
       this.dialog = false
     },
-    edit(system: SystemEditorData): void {
+    edit(system: IMechSystemData): void {
       this.id = system.id
-      this.name = system.name
+      this.name = system.name ?? ''
       this.license = system.license
       this.license_level = Number(system.license_level)
-      this.effect = system.effect
-      this.type = system.type
-      this.sp = system.sp
-      this.description = system.description
-      this.tags = system.tags
-      this.actions = system.actions
-      this.bonuses = system.bonuses
-      this.synergies = system.synergies
-      this.deployables = system.deployables
-      this.counters = system.counters
-      this.integrated = system.integrated
-      this.special_equipment = system.special_equipment
+      this.effect = system.effect ?? ''
+      this.type = system.type ?? 'System'
+      this.sp = system.sp ?? 0
+      this.description = system.description ?? ''
+      this.tags = system.tags ?? []
+      this.actions = system.actions ?? []
+      this.bonuses = system.bonuses ?? []
+      this.synergies = system.synergies ?? []
+      this.deployables = system.deployables ?? []
+      this.counters = system.counters ?? []
+      this.integrated = system.integrated ?? []
+      this.special_equipment = []
       this.isEdit = true
       this.dialog = true
     },
@@ -209,7 +210,7 @@ export default Vue.extend({
       this.license_level = 1
       this.effect = ''
       this.type = 'System'
-      this.sp = ''
+      this.sp = 0
       this.description = ''
       this.tags = []
       this.actions = []

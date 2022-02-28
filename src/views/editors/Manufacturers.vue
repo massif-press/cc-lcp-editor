@@ -209,6 +209,7 @@ import {
   IManufacturerData,
   IMechSystemData,
   IMechWeaponData,
+  IWeaponModData,
 } from '@tenebrae-press/lancer-types'
 import { ILCPContent } from '@tenebrae-press/lancer-types/src/lcp'
 
@@ -283,21 +284,23 @@ export default Vue.extend({
     itemsByMID(
       id: string,
       type: 'core_bonuses' | 'frames' | 'weapons' | 'systems' | 'mods'
-    ): Array<IMechWeaponData | IFrameData | ICoreBonusData | IMechSystemData> {
+    ): Array<IMechWeaponData | IFrameData | ICoreBonusData | IMechSystemData | IWeaponModData> {
       if (!this.lcp[type]) {
         return []
       } else {
         switch (type) {
           case 'core_bonuses':
-            return this.lcp.core_bonuses?.filter(x => x.source === id) ?? []
+            return (
+              this.lcp.core_bonuses?.filter(x => x.source === id || x.source === 'EXOTIC') ?? []
+            )
           case 'frames':
-            return this.lcp.frames?.filter(x => x.source === id) ?? []
+            return this.lcp.frames?.filter(x => x.source === id || x.source === 'EXOTIC') ?? []
           case 'weapons':
-            return this.lcp.weapons?.filter(x => x.source === id) ?? []
+            return this.lcp.weapons?.filter(x => x.source === id || x.source === 'EXOTIC') ?? []
           case 'systems':
-            return this.lcp.systems?.filter(x => x.source === id) ?? []
+            return this.lcp.systems?.filter(x => x.source === id || x.source === 'EXOTIC') ?? []
           case 'mods':
-            return this.lcp.mods?.filter(x => x.source === id) ?? []
+            return this.lcp.mods?.filter(x => x.source === id || x.source === 'EXOTIC') ?? []
         }
       }
     },

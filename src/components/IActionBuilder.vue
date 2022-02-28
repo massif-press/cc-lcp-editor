@@ -48,6 +48,7 @@
           <v-toolbar dense color="pink darken-4" class="text-h6">Add Action</v-toolbar>
           <v-card-text>
             <v-row justify="space-around" align="center" class="mt-2">
+              <v-col><id-input v-model="item.id" /></v-col>
               <v-col>
                 <v-text-field
                   label="Name"
@@ -129,33 +130,49 @@ import SynergySelector from './SynergyLocationSelector.vue'
 import RangeSelector from './RangeSelector.vue'
 
 import Vue from 'vue'
-import { Duration, IActionData, IDamageData, IRangeData } from '@tenebrae-press/lancer-types'
-import { synergyLocations } from '@/assets/enums'
+import {
+  ActivationType,
+  ACTIVATION_TYPES,
+  IActionData,
+  IDamageData,
+  IRangeData,
+} from '@tenebrae-press/lancer-types'
 
-type ActionBuilderDataType = IActionData & {
+type ActionBuilderDataType = {
+  dialog: boolean
+  id: string
+  name: string
+  activation: ActivationType | ''
+  detail: string
+  cost: number | null
+  pilot: boolean
+  synergy_locations: Array<string>
   damage: Array<IDamageData>
   range: Array<IRangeData>
   tech_attack: boolean
-  frequency: Duration
+  frequency: 'Unlimited'
   init: string
-  trigger: string
-  synergy_locations: Array<typeof synergyLocations>
+  trigger: ''
+  frequencies: ['Unlimited', '1/round', '1/encounter', '1/mission']
+  isEdit: boolean
+  editIndex: number
 }
 
 export default Vue.extend({
   name: 'action-builder',
   props: { item: { type: Object, required: true }, npc: { type: Boolean } },
   components: { SynergySelector, RangeSelector },
-  data: () => ({
+  data: (): ActionBuilderDataType => ({
     dialog: false,
+    id: '',
     name: '',
     activation: '',
     detail: '',
     cost: 0,
     pilot: false,
-    synergy_locations: [] as Array<typeof synergyLocations>,
-    damage: [] as Array<IDamageData>,
-    range: [] as Array<IRangeData>,
+    synergy_locations: [],
+    damage: [],
+    range: [],
     tech_attack: false,
     frequency: 'Unlimited',
     init: '',
@@ -176,11 +193,12 @@ export default Vue.extend({
       this.dialog = true
     },
     submit(): void {
-      const e = {
+      const e: IActionData = {
+        id: this.id,
         name: this.name,
-        activation: this.activation,
+        activation: this.activation || ACTIVATION_TYPES[0],
         detail: this.detail,
-        cost: this.cost,
+        cost: this.cost || 0,
         pilot: this.pilot,
         damage: this.damage,
         range: this.range,
@@ -201,6 +219,7 @@ export default Vue.extend({
     },
     edit(action: ActionBuilderDataType, index: number): void {
       this.reset()
+      this.id = action.id
       this.name = action.name
       this.activation = action.activation
       this.detail = action.detail
@@ -221,10 +240,11 @@ export default Vue.extend({
       this.item.actions.splice(index, 1)
     },
     reset(): void {
+      this.id = ''
       this.name = ''
       this.activation = ''
       this.detail = ''
-      this.cost = 0
+      this.cost = null
       this.pilot = false
       this.damage = []
       this.range = []
