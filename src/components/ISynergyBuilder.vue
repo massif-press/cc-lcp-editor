@@ -133,22 +133,21 @@ export default Vue.extend({
   name: 'synergy-builder',
   components: { RichTextEditor },
   props: { item: { type: Object, required: true }, npc: { type: Boolean } },
-  data: () =>
-    ({
-      synergies: synergyLocations,
-      npcSynergies: npcSynergyLocations,
-      weaponType: Lancer.WEAPON_TYPES,
-      weaponSize: Lancer.WEAPON_SIZES,
-      systemType: Lancer.SYSTEM_TYPES,
-      dialog: false,
-      locations: [],
-      detail: '',
-      wt: [],
-      ws: [],
-      st: [],
-      isEdit: false,
-      editIndex: -1,
-    } as SynergyBuilderData),
+  data: (): SynergyBuilderData => ({
+    synergies: synergyLocations,
+    npcSynergies: npcSynergyLocations,
+    weaponType: Lancer.WEAPON_TYPES,
+    weaponSize: Lancer.WEAPON_SIZES,
+    systemType: Lancer.SYSTEM_TYPES,
+    dialog: false,
+    locations: [],
+    detail: '',
+    wt: [],
+    ws: [],
+    st: [],
+    isEdit: false,
+    editIndex: -1,
+  }),
   methods: {
     newItem(): void {
       this.reset()

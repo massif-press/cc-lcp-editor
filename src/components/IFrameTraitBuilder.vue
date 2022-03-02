@@ -118,22 +118,21 @@ export default Vue.extend({
   name: 'trait-builder',
   props: { item: { type: Object, required: true } },
 
-  data: () =>
-    ({
-      dialog: false,
-      name: '',
-      use: '',
-      description: '',
-      actions: [],
-      bonuses: [],
-      counters: [],
-      deployables: [],
-      synergies: [],
-      integrated: [],
-      special_equipment: [],
-      isEdit: false,
-      editIndex: -1,
-    } as IFrameTraitBuilderData),
+  data: (): IFrameTraitBuilderData => ({
+    dialog: false,
+    name: '',
+    use: '',
+    description: '',
+    actions: [],
+    bonuses: [],
+    counters: [],
+    deployables: [],
+    synergies: [],
+    integrated: [],
+    special_equipment: [],
+    isEdit: false,
+    editIndex: -1,
+  }),
   computed: {
     confirmOK(): boolean {
       return !!this.name && !!this.description

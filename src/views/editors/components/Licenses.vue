@@ -134,7 +134,7 @@ export default Vue.extend({
         case 'mods':
           return this.lcp.mods?.map(x => ({ ...x, itemType: key })) ?? []
         case 'systems':
-          return this.lcp.mods?.map(x => ({ ...x, itemType: key })) ?? []
+          return this.lcp.systems?.map(x => ({ ...x, itemType: key })) ?? []
         default:
           return []
       }

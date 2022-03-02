@@ -38,7 +38,7 @@
           </v-card-text>
           <v-divider />
           <v-card-actions>
-            <v-btn text color="error" @click="menu = false">cancel</v-btn>
+            <v-btn text color="error" @click="reset">cancel</v-btn>
             <v-spacer />
             <v-btn color="success darken-2" :disabled="!range.type || !range.type" @click="submit">
               {{ isEdit ? 'save' : 'confirm' }}
@@ -52,9 +52,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { rangeType } from '@/assets/enums'
 import TieredStatInput from './TieredStatInput.vue'
-import { IRangeData, RangeType } from '@tenebrae-press/lancer-types'
+import { IRangeData, RangeType, RANGE_TYPES } from '@tenebrae-press/lancer-types'
 
 type RangeSelectorData = {
   menu: boolean
@@ -68,14 +67,13 @@ export default Vue.extend({
   components: { TieredStatInput },
   name: 'range-selector',
   props: { item: { type: Object, required: true }, npc: { type: Boolean } },
-  data: () =>
-    ({
-      menu: false,
-      range: {},
-      isEdit: false,
-      editIndex: -1,
-      rangeTypes: rangeType,
-    } as RangeSelectorData),
+  data: (): RangeSelectorData => ({
+    menu: false,
+    range: {} as IRangeData,
+    isEdit: false,
+    editIndex: -1,
+    rangeTypes: RANGE_TYPES,
+  }),
   methods: {
     submit() {
       if (!this.range) return
@@ -85,10 +83,7 @@ export default Vue.extend({
         if (!this.item.range) this.$set(this.item, 'range', [])
         this.item.range.push(this.range)
       }
-      this.$set(this, 'range', {})
-      this.isEdit = false
-      this.editIndex = -1
-      this.menu = false
+      this.reset()
     },
     edit(range: IRangeData, index: number) {
       this.range = { ...range }
@@ -98,6 +93,12 @@ export default Vue.extend({
     },
     remove(index: number) {
       this.item.range.splice(index, 1)
+    },
+    reset() {
+      this.$set(this, 'range', {})
+      this.isEdit = false
+      this.editIndex = -1
+      this.menu = false
     },
   },
 })

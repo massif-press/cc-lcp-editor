@@ -12,7 +12,7 @@
         :color="getColor(damage.type)"
         @click="edit(damage, i)"
         @click:close="remove(i)">
-        {{ damage.val }} {{ sanitizedDamageType(item.type) }}
+        {{ damage.val }} {{ sanitizedDamageType(damage.type) }}
       </v-chip>
       <v-menu v-model="menu" :close-on-click="false" :close-on-content-click="false">
         <template v-slot:activator="{ on, attrs }">
@@ -39,7 +39,7 @@
           </v-card-text>
           <v-divider />
           <v-card-actions>
-            <v-btn text color="error" @click="menu = false">cancel</v-btn>
+            <v-btn text color="error" @click="reset">cancel</v-btn>
             <v-spacer />
             <v-btn color="success darken-2" @click="submit">
               {{ isEdit ? 'save' : 'confirm' }}
@@ -68,7 +68,7 @@ export default Vue.extend({
   }),
   methods: {
     getColor(type: string) {
-      switch (this.sanitizedDamageType(type)) {
+      switch (`${type.charAt(0).toUpperCase()}${type.substring(1)}`) {
         case 'Energy':
           return 'blue darken-2'
         case 'Explosive':
@@ -99,10 +99,7 @@ export default Vue.extend({
         if (!this.item.damage) this.$set(this.item, 'damage', [])
         this.item.damage.push(this.damage)
       }
-      this.$set(this, 'damage', {})
-      this.isEdit = false
-      this.editIndex = -1
-      this.menu = false
+      this.reset()
     },
     edit(damage: IDamageData, index: number) {
       const damageType = this.sanitizedDamageType(damage.type)
@@ -117,6 +114,12 @@ export default Vue.extend({
     },
     remove(index: number) {
       this.item.damage.splice(index, 1)
+    },
+    reset() {
+      this.$set(this, 'damage', {})
+      this.isEdit = false
+      this.editIndex = -1
+      this.menu = false
     },
   },
 })
