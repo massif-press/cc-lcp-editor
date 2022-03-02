@@ -53,7 +53,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import TieredStatInput from './TieredStatInput.vue'
-import { IRangeData, RangeType, RANGE_TYPES } from '@tenebrae-press/lancer-types'
+import Lancer, { IRangeData, RangeType } from '@tenebrae-press/lancer-types'
 
 type RangeSelectorData = {
   menu: boolean
@@ -72,7 +72,7 @@ export default Vue.extend({
     range: {} as IRangeData,
     isEdit: false,
     editIndex: -1,
-    rangeTypes: RANGE_TYPES,
+    rangeTypes: Lancer.RANGE_TYPES,
   }),
   methods: {
     submit() {
