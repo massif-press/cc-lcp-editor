@@ -124,7 +124,12 @@ import _ from 'lodash'
 import PromisifyFileReader from 'promisify-file-reader'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
-import Lancer, { ILCPContent, LCPContentKeys, LCPContentTypes } from '@tenebrae-press/lancer-types'
+import Lancer, {
+  ILCPContent,
+  IManifest,
+  LCPContentKeys,
+  LCPContentTypes,
+} from '@tenebrae-press/lancer-types'
 
 const skipCategories = [
   'manufacturers',
@@ -202,13 +207,19 @@ export default Vue.extend({
       }.lcp`
       const zip = new JSZip()
       Lancer.LCP_CONTENT_KEYS.forEach((key: LCPContentKeys) => {
-        zip.file(`${key}.json`, this.prepareJSON(this.lcp[key] ?? []))
+        if (this.lcp[key] && this.lcp[key]?.length) {
+          zip.file(`${key}.json`, this.prepareJSON(this.lcp[key] ?? []))
+        }
       })
+      zip.file('lcp_manifest.json', this.prepareJSON(this.lcp.lcp_manifest))
+      if (this.lcp.tables) {
+        zip.file('tables.json', this.prepareJSON(this.lcp.tables))
+      }
       zip.generateAsync({ type: 'blob' }).then(function (blob) {
         saveAs(blob, filename)
       })
     },
-    prepareJSON(obj: LCPContentTypes): string {
+    prepareJSON(obj: LCPContentTypes | IManifest | Record<string, unknown>): string {
       const d = JSON.stringify(obj)
       // tiptap's default <p> wrapping doesn't look good in C/C
       d.replaceAll('<p', '<div')
