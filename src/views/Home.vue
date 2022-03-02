@@ -165,11 +165,9 @@ export default Vue.extend({
       if (!this.lcp.manufacturers && !this.lcp.frames) return 0
       const m =
         this.lcp.manufacturers && this.lcp.manufacturers.length
-          ? this.lcp.manufacturers.map((x: { id: string }) => x.id)
+          ? this.lcp.manufacturers.map(x => x.id)
           : []
-      const f = this.lcp.frames
-        ? _.uniq(this.lcp.frames.map((x: { source: string }) => x.source))
-        : []
+      const f = this.lcp.frames ? _.uniq(this.lcp.frames.map(x => x.source)) : []
       return _.uniq(m.concat(f)).length
     },
   },
