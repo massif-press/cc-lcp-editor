@@ -20,6 +20,7 @@ RUN mkdir -p /usr/app/public
 
 COPY src ./src
 COPY public ./public
+COPY .prettierrc .
 COPY vue.config.js .
 COPY babel.config.js .
 COPY tsconfig.json .
