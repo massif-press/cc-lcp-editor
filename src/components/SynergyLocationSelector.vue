@@ -9,8 +9,7 @@
     deletable-chips
     hide-details
     :items="synergyLocations.map(x => x.value)"
-    v-model="item.synergy_locations"
-  />
+    v-model="item.synergy_locations" />
 </template>
 
 <script lang="ts">

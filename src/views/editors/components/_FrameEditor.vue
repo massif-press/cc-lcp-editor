@@ -27,8 +27,7 @@
                   hide-details
                   outlined
                   dense
-                  v-model="license_level"
-                />
+                  v-model="license_level" />
               </v-col>
               <v-col cols="3">
                 <v-combobox
@@ -38,8 +37,7 @@
                   hide-details
                   multiple
                   clearable
-                  :items="mechTypes"
-                />
+                  :items="mechTypes" />
               </v-col>
               <v-col cols="7">
                 <v-text-field label="Image URL" hide-details v-model="image_url" />
@@ -51,8 +49,7 @@
                   hide-details
                   outlined
                   dense
-                  v-model="y_pos"
-                />
+                  v-model="y_pos" />
               </v-col>
               <v-col v-show="!!image_url" cols="8" class="ml-auto mt-n2">
                 Banner Preview
@@ -62,8 +59,7 @@
                       :src="image_url"
                       max-height="100%"
                       :position="'top ' + y_pos + '% left 0px'"
-                      style="position: absolute; top: 0; right: 0; z-index: 9"
-                    />
+                      style="position: absolute; top: 0; right: 0; z-index: 9" />
                   </div>
                 </div>
               </v-col>
@@ -81,8 +77,7 @@
                   close
                   class="mx-1"
                   close-icon="mdi-close"
-                  @click:close="mounts.splice(i, 1)"
-                >
+                  @click:close="mounts.splice(i, 1)">
                   {{ m }}
                 </v-chip>
                 <v-menu>
@@ -121,8 +116,7 @@
               label="Structure"
               dense
               outlined
-              hide-details
-            />
+              hide-details />
           </v-col>
           <v-col cols="2">
             <v-text-field
@@ -131,8 +125,7 @@
               label="Stress"
               dense
               outlined
-              hide-details
-            />
+              hide-details />
           </v-col>
           <v-col cols="2">
             <v-text-field
@@ -141,8 +134,7 @@
               label="Armor"
               dense
               outlined
-              hide-details
-            />
+              hide-details />
           </v-col>
           <v-col cols="2">
             <v-text-field v-model="stats.hp" type="number" label="HP" dense outlined hide-details />
@@ -154,8 +146,7 @@
               label="Evasion"
               dense
               outlined
-              hide-details
-            />
+              hide-details />
           </v-col>
           <v-col cols="2">
             <v-text-field
@@ -164,8 +155,7 @@
               label="E-Defense"
               dense
               outlined
-              hide-details
-            />
+              hide-details />
           </v-col>
           <v-col cols="2">
             <v-text-field
@@ -174,8 +164,7 @@
               label="Heat Capacity"
               dense
               outlined
-              hide-details
-            />
+              hide-details />
           </v-col>
           <v-col cols="2">
             <v-text-field
@@ -184,8 +173,7 @@
               label="Repair Capacity"
               dense
               outlined
-              hide-details
-            />
+              hide-details />
           </v-col>
           <v-col cols="2">
             <v-text-field
@@ -194,8 +182,7 @@
               label="Sensor Range"
               dense
               outlined
-              hide-details
-            />
+              hide-details />
           </v-col>
           <v-col cols="2">
             <v-text-field
@@ -204,8 +191,7 @@
               label="Tech Attack"
               dense
               outlined
-              hide-details
-            />
+              hide-details />
           </v-col>
           <v-col cols="2">
             <v-text-field
@@ -214,8 +200,7 @@
               label="Save"
               dense
               outlined
-              hide-details
-            />
+              hide-details />
           </v-col>
           <v-col cols="2">
             <v-text-field
@@ -224,8 +209,7 @@
               label="Speed"
               dense
               outlined
-              hide-details
-            />
+              hide-details />
           </v-col>
           <v-col cols="2">
             <v-text-field v-model="stats.sp" type="number" label="SP" dense outlined hide-details />
@@ -237,8 +221,7 @@
               label="Size"
               dense
               outlined
-              hide-details
-            />
+              hide-details />
           </v-col>
         </v-row>
         <v-divider class="mb-5" />
@@ -275,8 +258,7 @@
                     <v-text-field
                       label="Active Name"
                       hide-details
-                      v-model="core_system.active_name"
-                    />
+                      v-model="core_system.active_name" />
                   </v-col>
                   <v-col>
                     <v-select
@@ -294,8 +276,7 @@
                       dense
                       outlined
                       hide-details
-                      clearable
-                    />
+                      clearable />
                   </v-col>
                   <v-col>
                     <activator-selector :item="core_system" />
@@ -305,8 +286,7 @@
                       field="deactivation"
                       label="Deactivation"
                       optional
-                      :item="core_system"
-                    />
+                      :item="core_system" />
                   </v-col>
                   <v-col cols="12">
                     <rich-text-editor title="Active Effect" v-model="core_system.active_effect" />
@@ -330,8 +310,7 @@
                     <v-text-field
                       label="Passive Name"
                       hide-details
-                      v-model="core_system.passive_name"
-                    />
+                      v-model="core_system.passive_name" />
                   </v-col>
                   <v-col cols="12">
                     <rich-text-editor title="Passive Effect" v-model="core_system.passive_effect" />
@@ -361,17 +340,56 @@
 </template>
 
 <script lang="ts">
-import { mechType, mountType } from '@/assets/enums'
+import Lancer, {
+  IActionData,
+  IBonusData,
+  ICoreSystemData,
+  IFrameData,
+  IFrameStats,
+  IFrameTraitData,
+  ISynergyData,
+  MechType,
+  MountType,
+} from '@tenebrae-press/lancer-types'
 
 import Vue from 'vue'
+
+type FrameEditorData = {
+  dialog: boolean
+  mechTypes: Array<MechType>
+  mountTypes: Array<MountType>
+  id: string
+  license_level: number
+  name: string
+  mechtype: Array<MechType>
+  description: string
+  mounts: Array<MountType>
+  stats: IFrameStats
+  traits: Array<IFrameTraitData>
+  core_system: ICoreSystemData
+  active: {
+    actions: Array<IActionData>
+    bonuses: Array<IBonusData>
+    synergies: Array<ISynergyData>
+  }
+  passive: {
+    actions: Array<IActionData>
+    bonuses: Array<IBonusData>
+    synergies: Array<ISynergyData>
+  }
+  image_url: string
+  y_pos: number
+  isEdit: boolean
+}
+
 export default Vue.extend({
   name: 'frame-editor',
   props: { manufacturer: { type: Object, required: true } },
 
-  data: () => ({
+  data: (): FrameEditorData => ({
     dialog: false,
-    mechTypes: mechType,
-    mountTypes: mountType,
+    mechTypes: Lancer.MECH_TYPES,
+    mountTypes: Lancer.MOUNT_TYPES,
     id: '',
     license_level: 2,
     name: '',
@@ -399,10 +417,10 @@ export default Vue.extend({
       name: '',
       active_name: '',
       active_effect: '',
-      activation: '',
+      activation: 'Free',
       description: '',
-      deactivation: '',
-      use: '',
+      deactivation: 'Free',
+      use: 'Free',
       active_actions: [],
       active_bonuses: [],
       active_synergies: [],
@@ -436,24 +454,17 @@ export default Vue.extend({
       this.dialog = false
     },
     submit(): void {
-      const cs = JSON.parse(JSON.stringify(this.core_system))
-      cs.active_actions = this.active.actions
-      cs.active_bonuses = this.active.bonuses
-      cs.active_synergies = this.active.synergies
-      cs.passive_actions = this.passive.actions
-      cs.passive_bonuses = this.passive.bonuses
-      cs.passive_synergies = this.passive.synergies
-      const e = {
+      const e: IFrameData = {
         id: this.id,
         source: this.manufacturer.id,
-        license_level: Number(this.license_level),
+        license_level: this.license_level,
         name: this.name,
         mechtype: this.mechtype,
         description: this.description,
         mounts: this.mounts,
         stats: this.stats,
         traits: this.traits,
-        core_system: cs,
+        core_system: this.core_system,
         image_url: this.image_url,
         y_pos: this.y_pos,
       }
@@ -461,28 +472,61 @@ export default Vue.extend({
       this.reset()
       this.dialog = false
     },
-    edit(frame: any): void {
+    edit(frame: IFrameData): void {
       this.id = frame.id
       this.license_level = Number(frame.license_level)
-      this.name = frame.name
-      this.mechtype = frame.mechtype
-      this.description = frame.description
-      this.mounts = frame.mounts
-      this.stats = frame.stats
-      this.traits = frame.traits
-      this.core_system = frame.core_system
+      this.name = frame.name ?? ''
+      this.mechtype = frame.mechtype ?? 'Balanced'
+      this.description = frame.description ?? ''
+      this.mounts = frame.mounts ?? []
+      this.stats = frame.stats ?? {
+        size: 1,
+        structure: 4,
+        stress: 4,
+        armor: 0,
+        hp: 10,
+        evasion: 6,
+        edef: 6,
+        heatcap: 6,
+        repcap: 6,
+        sensor_range: 10,
+        tech_attack: 0,
+        save: 20,
+        speed: 4,
+        sp: 6,
+      }
+      this.traits = frame.traits ?? []
+      this.core_system = {
+        description: '',
+        deactivation: 'Free',
+        use: 'Free',
+        active_actions: [],
+        active_bonuses: [],
+        active_synergies: [],
+        passive_name: '',
+        passive_effect: '',
+        passive_actions: [],
+        passive_bonuses: [],
+        passive_synergies: [],
+        deployables: [],
+        counters: [],
+        integrated: [],
+        special_equipment: [],
+        tags: [],
+        ...frame.core_system,
+      }
       this.active = {
-        actions: frame.core_system.active_actions,
-        bonuses: frame.core_system.active_bonuses,
-        synergies: frame.core_system.active_synergies,
+        actions: frame.core_system.active_actions ?? [],
+        bonuses: frame.core_system.active_bonuses ?? [],
+        synergies: frame.core_system.active_synergies ?? [],
       }
       this.passive = {
-        actions: frame.core_system.passive_actions,
-        bonuses: frame.core_system.passive_bonuses,
-        synergies: frame.core_system.passive_synergies,
+        actions: frame.core_system.passive_actions ?? [],
+        bonuses: frame.core_system.passive_bonuses ?? [],
+        synergies: frame.core_system.passive_synergies ?? [],
       }
-      this.image_url = frame.image_url
-      this.y_pos = frame.y_pos
+      this.image_url = frame.image_url ?? ''
+      this.y_pos = frame.y_pos ?? 0
       this.isEdit = true
       this.dialog = true
     },
@@ -518,10 +562,10 @@ export default Vue.extend({
         name: '',
         active_name: '',
         active_effect: '',
-        activation: '',
+        activation: 'Free',
         description: '',
-        deactivation: '',
-        use: '',
+        deactivation: 'Free',
+        use: 'Free',
         active_actions: [],
         active_bonuses: [],
         active_synergies: [],

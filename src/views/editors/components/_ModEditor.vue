@@ -24,8 +24,7 @@
               hide-details
               outlined
               dense
-              v-model="license_level"
-            />
+              v-model="license_level" />
           </v-col>
           <v-col>
             <v-text-field label="SP Cost" type="number" hide-details outlined dense v-model="sp" />
@@ -70,8 +69,7 @@
               outlined
               multiple
               hide-details
-              label="Allowed Weapon Types"
-            />
+              label="Allowed Weapon Types" />
           </v-col>
           <v-col>
             <v-select
@@ -81,8 +79,7 @@
               outlined
               multiple
               hide-details
-              label="Allowed Weapon Sizes"
-            />
+              label="Allowed Weapon Sizes" />
           </v-col>
         </v-row>
         <div class="text-h6">RESTRICTED:</div>
@@ -96,8 +93,7 @@
               outlined
               multiple
               hide-details
-              label="Restricted Weapon Types"
-            />
+              label="Restricted Weapon Types" />
           </v-col>
           <v-col>
             <v-select
@@ -107,8 +103,7 @@
               outlined
               multiple
               hide-details
-              label="Restricted Weapon Sizes"
-            />
+              label="Restricted Weapon Sizes" />
           </v-col>
         </v-row>
         <v-row>
@@ -142,26 +137,72 @@
 </template>
 
 <script lang="ts">
-import { weaponType, weaponSize } from '@/assets/enums'
+import Lancer, {
+  IActionData,
+  IBonusData,
+  ICounterData,
+  IDamageData,
+  IDeployableData,
+  IManufacturerData,
+  IRangeData,
+  ISynergyData,
+  ITagData,
+  IWeaponModData,
+  MountType,
+  WeaponSize,
+  WeaponType,
+} from '@tenebrae-press/lancer-types'
 
 import Vue from 'vue'
+
+type ModEditorData = {
+  dialog: boolean
+  weaponType: Array<WeaponType>
+  weaponSize: Array<WeaponSize>
+  id: string
+  name: string
+  license: string
+  license_level: number
+  effect: string
+  sp: number
+  description: string
+  allowed_types: Array<WeaponType>
+  allowed_sizes: Array<MountType>
+  restricted_types: Array<WeaponType>
+  restricted_sizes: Array<MountType>
+  tags: Array<ITagData>
+  actions: Array<IActionData>
+  bonuses: Array<IBonusData>
+  synergies: Array<ISynergyData>
+  deployables: Array<IDeployableData>
+  counters: Array<ICounterData>
+  integrated: string[]
+  special_equipment: string[]
+  added: {
+    damage: Array<IDamageData>
+    range: Array<IRangeData>
+    tags: Array<ITagData>
+  }
+  isEdit: boolean
+}
+
 export default Vue.extend({
   name: 'mod-editor',
   props: {
-    manufacturer: { type: Object, required: false },
+    manufacturer: { type: Object as () => IManufacturerData, required: false },
     licenses: { type: Array, required: false, default: () => [] },
   },
 
-  data: () => ({
+  data: (): ModEditorData => ({
     dialog: false,
-    weaponType: weaponType,
-    weaponSize: weaponSize,
+    weaponType: Lancer.WEAPON_TYPES,
+    weaponSize: Lancer.WEAPON_SIZES,
     id: '',
     name: '',
     license: '',
     license_level: 1,
     effect: '',
-    sp: '',
+    sp: 0,
     description: '',
     allowed_types: [],
     allowed_sizes: [],
@@ -188,7 +229,7 @@ export default Vue.extend({
     },
     source(): string {
       if (this.manufacturer) return this.manufacturer.id
-      if (this.tags.some((x: any) => x.id === 'tg_exotic')) return 'EXOTIC'
+      if (this.tags.some(x => x.id === 'tg_exotic')) return 'EXOTIC'
       return ''
     },
   },
@@ -200,7 +241,7 @@ export default Vue.extend({
       this.dialog = false
     },
     submit(): void {
-      const e = {
+      const e: IWeaponModData = {
         id: this.id,
         name: this.name,
         source: this.source,
@@ -229,31 +270,31 @@ export default Vue.extend({
       this.reset()
       this.dialog = false
     },
-    edit(mod: any): void {
+    edit(mod: IWeaponModData): void {
       this.id = mod.id
       this.name = mod.name
       this.license = mod.license
       this.license_level = Number(mod.license_level)
-      this.effect = mod.effect
-      this.sp = mod.sp
-      this.description = mod.description
-      this.allowed_types = mod.allowed_types
-      this.allowed_sizes = mod.allowed_sizes
-      this.restricted_types = mod.restricted_types
-      this.restricted_sizes = mod.restricted_sizes
+      this.effect = mod.effect ?? ''
+      this.sp = mod.sp ?? 0
+      this.description = mod.description ?? ''
+      this.allowed_types = mod.allowed_types ?? []
+      this.allowed_sizes = mod.allowed_sizes ?? []
+      this.restricted_types = mod.restricted_types ?? []
+      this.restricted_sizes = mod.restricted_sizes ?? []
       this.added = {
-        damage: mod.added_damage,
-        range: mod.added_range,
-        tags: mod.added_tags,
+        damage: mod.added_damage ?? [],
+        range: mod.added_range ?? [],
+        tags: mod.added_tags ?? [],
       }
-      this.tags = mod.tags
-      this.actions = mod.actions
-      this.bonuses = mod.bonuses
-      this.synergies = mod.synergies
-      this.deployables = mod.deployables
-      this.counters = mod.counters
-      this.integrated = mod.integrated
-      this.special_equipment = mod.special_equipment
+      this.tags = mod.tags ?? []
+      this.actions = mod.actions ?? []
+      this.bonuses = mod.bonuses ?? []
+      this.synergies = mod.synergies ?? []
+      this.deployables = mod.deployables ?? []
+      this.counters = mod.counters ?? []
+      this.integrated = mod.integrated ?? []
+      this.special_equipment = []
       this.isEdit = true
       this.dialog = true
     },
@@ -267,7 +308,7 @@ export default Vue.extend({
       this.license = ''
       this.license_level = 1
       this.effect = ''
-      this.sp = ''
+      this.sp = 0
       this.description = ''
       this.allowed_types = []
       this.allowed_sizes = []

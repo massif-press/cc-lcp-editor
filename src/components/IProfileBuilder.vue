@@ -59,8 +59,7 @@
                 hide-details
                 outlined
                 dense
-                v-model="cost"
-              />
+                v-model="cost" />
             </v-col>
             <v-col>
               <v-select label="Type" :items="weaponTypes" hide-details v-model="type" />
@@ -129,7 +128,48 @@
 </template>
 
 <script lang="ts">
-import { weaponType, weaponSize } from '@/assets/enums'
+import {
+  DamageType,
+  IActionData,
+  IBonusData,
+  ICounterData,
+  IDamageData,
+  IDeployableData,
+  IRangeData,
+  ISynergyData,
+  ITagData,
+  IWeaponProfileData,
+  WeaponSize,
+  WeaponType,
+  WEAPON_SIZES,
+  WEAPON_TYPES,
+} from '@tenebrae-press/lancer-types'
+
+type ProfileBuilderData = {
+  dialog: boolean
+  weaponTypes: Array<WeaponType>
+  weaponSizes: Array<WeaponSize>
+  name: string
+  description: string
+  effect: string
+  on_attack: string
+  on_hit: string
+  on_crit: string
+  type: DamageType
+  cost: number
+  damage: Array<IDamageData>
+  range: Array<IRangeData>
+  actions: Array<IActionData>
+  bonuses: Array<IBonusData>
+  synergies: Array<ISynergyData>
+  deployables: Array<IDeployableData>
+  counters: Array<ICounterData>
+  integrated: Array<string>
+  special_equipment: Array<string>
+  tags: Array<ITagData>
+  isEdit: boolean
+  editIndex: number
+}
 
 import Vue from 'vue'
 export default Vue.extend({
@@ -137,17 +177,17 @@ export default Vue.extend({
   props: {
     item: { type: Object, required: true },
   },
-  data: () => ({
+  data: (): ProfileBuilderData => ({
     dialog: false,
-    weaponTypes: weaponType,
-    weaponSizes: weaponSize,
+    weaponTypes: WEAPON_TYPES,
+    weaponSizes: WEAPON_SIZES,
     name: '',
     description: '',
     effect: '',
     on_attack: '',
     on_hit: '',
     on_crit: '',
-    type: '',
+    type: 'Variable',
     cost: 1,
     damage: [],
     range: [],
@@ -177,7 +217,7 @@ export default Vue.extend({
       this.dialog = false
     },
     submit(): void {
-      const e = {
+      const e: IWeaponProfileData = {
         name: this.name,
         description: this.description,
         effect: this.effect,
@@ -204,7 +244,7 @@ export default Vue.extend({
       this.reset()
       this.dialog = false
     },
-    edit(weapon: any, index: number): void {
+    edit(weapon: ProfileBuilderData, index: number): void {
       this.name = weapon.name
       this.description = weapon.description
       this.effect = weapon.effect
@@ -239,7 +279,7 @@ export default Vue.extend({
       this.on_hit = ''
       this.on_crit = ''
       this.cost = 1
-      this.type = ''
+      this.type = 'Variable'
       this.damage = []
       this.range = []
       this.actions = []

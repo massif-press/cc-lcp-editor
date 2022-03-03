@@ -12,8 +12,7 @@
             close-icon="mdi-close"
             @click="edit(bonus, i)"
             @click:close="remove(i)"
-            v-on="on"
-          >
+            v-on="on">
             {{ bonus.id }}, {{ bonus.val }}
           </v-chip>
         </template>
@@ -43,8 +42,7 @@
                   :items="npc ? npcBonuses : bonuses"
                   return-object
                   item-text="desc"
-                  v-model="bonus"
-                />
+                  v-model="bonus" />
               </v-col>
               <v-col cols="3">
                 <div v-if="!bonus" class="text--disabled">Select Bonus</div>
@@ -75,8 +73,7 @@
                   outlined
                   multiple
                   hide-details
-                  label="Damage Types"
-                />
+                  label="Damage Types" />
               </v-col>
               <v-col cols="3">
                 <v-select
@@ -86,8 +83,7 @@
                   outlined
                   multiple
                   hide-details
-                  label="Range Types"
-                />
+                  label="Range Types" />
               </v-col>
               <v-col cols="3">
                 <v-select
@@ -97,8 +93,7 @@
                   outlined
                   multiple
                   hide-details
-                  label="Weapon Types"
-                />
+                  label="Weapon Types" />
               </v-col>
               <v-col cols="3">
                 <v-select
@@ -108,8 +103,7 @@
                   outlined
                   multiple
                   hide-details
-                  label="Weapon Sizes"
-                />
+                  label="Weapon Sizes" />
               </v-col>
             </v-row>
             <v-divider />
@@ -162,28 +156,56 @@
 </template>
 
 <script lang="ts">
-import { bonuses, npcBonuses, weaponType, weaponSize, damageType, rangeType } from '@/assets/enums'
+import Lancer, {
+  DamageType,
+  IBonusData,
+  RangeType,
+  WeaponSize,
+  WeaponType,
+} from '@tenebrae-press/lancer-types'
+import { bonuses, npcBonuses } from '@/assets/enums'
 
 import Vue from 'vue'
 import TieredStatInput from './TieredStatInput.vue'
+
+type BonusBuilderDataType = {
+  bonuses: typeof bonuses
+  npcBonuses: typeof npcBonuses
+  weaponType?: Array<WeaponType>
+  weaponSize?: Array<WeaponSize>
+  damageType?: Array<DamageType>
+  rangeType?: Array<RangeType>
+  dialog: boolean
+  bonus?: typeof bonuses[0] | null
+  value?: string
+  dt: Array<DamageType>
+  wt: Array<WeaponType>
+  rt: Array<RangeType>
+  ws: Array<WeaponSize>
+  overwrite: boolean
+  replace: boolean
+  isEdit: boolean
+  editIndex: number
+}
+
 export default Vue.extend({
   components: { TieredStatInput },
   name: 'bonus-builder',
   props: { item: { type: Object, required: true }, npc: { type: Boolean } },
-  data: () => ({
+  data: (): BonusBuilderDataType => ({
     bonuses: bonuses,
     npcBonuses: npcBonuses,
-    weaponType: weaponType,
-    weaponSize: weaponSize,
-    damageType: damageType,
-    rangeType: rangeType,
+    weaponType: Lancer.WEAPON_TYPES,
+    weaponSize: Lancer.WEAPON_SIZES,
+    damageType: Lancer.DAMAGE_TYPES,
+    rangeType: Lancer.RANGE_TYPES,
     dialog: false,
     bonus: null,
     value: '',
-    dt: [],
-    wt: [],
-    rt: [],
-    ws: [],
+    dt: [] as Array<DamageType>,
+    wt: [] as Array<WeaponType>,
+    rt: [] as Array<RangeType>,
+    ws: [] as Array<WeaponSize>,
     overwrite: false,
     replace: false,
     isEdit: false,
@@ -197,7 +219,7 @@ export default Vue.extend({
     submit() {
       if (!this.bonus) return
       const e = {
-        id: (this.bonus as any).value,
+        id: (this.bonus as typeof bonuses[0]).value,
         val: this.value,
         damage_types: this.dt,
         range_types: this.rt,
@@ -215,16 +237,16 @@ export default Vue.extend({
       this.reset()
       this.dialog = false
     },
-    edit(bonus: any, index: number): void {
+    edit(bonus: IBonusData, index: number): void {
       this.reset()
-      this.bonus = this.bonuses.find(x => x.value === bonus.id) as any
-      this.value = bonus.val
-      this.dt = bonus.damage_types
-      this.rt = bonus.range_types
-      this.wt = bonus.weapon_types
-      this.ws = bonus.weapon_sizes
-      this.overwrite = bonus.overwrite
-      this.replace = bonus.replace
+      this.bonus = this.bonuses.find(x => x.value === bonus.id)
+      this.value = bonus.val.toString()
+      this.dt = bonus.damage_types ?? []
+      this.rt = bonus.range_types ?? []
+      this.wt = bonus.weapon_types ?? []
+      this.ws = bonus.weapon_sizes ?? []
+      this.overwrite = bonus.overwrite ?? false
+      this.replace = bonus.replace ?? false
       this.isEdit = true
       this.editIndex = index
       this.dialog = true
@@ -235,12 +257,12 @@ export default Vue.extend({
     descById(id: string) {
       return this.bonuses.find(x => x.value === id)?.desc || 'err'
     },
-    restrictions(bonus: any) {
-      return []
-        .concat(bonus.weapon_types || [])
-        .concat(bonus.weapon_sizes || [])
-        .concat(bonus.range_types || [])
-        .concat(bonus.damage_types || [])
+    restrictions(bonus: IBonusData) {
+      return ([] as Array<WeaponSize | WeaponType | RangeType | DamageType>)
+        .concat(bonus.damage_types ?? [])
+        .concat(bonus.range_types ?? [])
+        .concat(bonus.weapon_types ?? [])
+        .concat(bonus.weapon_sizes ?? [])
     },
     reset() {
       this.bonus = null

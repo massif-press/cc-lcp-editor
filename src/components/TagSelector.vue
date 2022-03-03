@@ -11,8 +11,7 @@
         class="mx-1"
         close-icon="mdi-close"
         @click="edit(tag, i)"
-        @click:close="remove(i)"
-      >
+        @click:close="remove(i)">
         {{ tag.id }}, {{ tag.val }}
       </v-chip>
       <v-menu v-model="menu" :close-on-click="false" :close-on-content-click="false">
@@ -30,8 +29,7 @@
                   item-value="id"
                   label="Tag"
                   :items="tags"
-                  hide-details
-                />
+                  hide-details />
               </v-col>
               <v-col>
                 <tiered-stat-input v-if="npc" v-model="tag.val" title="Value" />
@@ -41,8 +39,7 @@
                   type="number"
                   label="Value"
                   hide-details
-                  outlined
-                />
+                  outlined />
               </v-col>
             </v-row>
           </v-card-text>
@@ -64,6 +61,7 @@
 import Vue from 'vue'
 import { tags } from 'lancer-data'
 import TieredStatInput from './TieredStatInput.vue'
+import { ITagData } from '@tenebrae-press/lancer-types'
 
 export default Vue.extend({
   name: 'tag-selector',
@@ -71,7 +69,7 @@ export default Vue.extend({
   components: { TieredStatInput },
   data: () => ({
     menu: false,
-    tag: {},
+    tag: {} as ITagData,
     isEdit: false,
     editIndex: -1,
   }),
@@ -95,7 +93,7 @@ export default Vue.extend({
       this.editIndex = -1
       this.menu = false
     },
-    edit(tag: any, index: number) {
+    edit(tag: ITagData, index: number) {
       this.tag = JSON.parse(JSON.stringify(tag))
       this.isEdit = true
       this.editIndex = index

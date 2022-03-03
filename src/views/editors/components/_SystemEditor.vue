@@ -27,8 +27,7 @@
               hide-details
               outlined
               dense
-              v-model="license_level"
-            />
+              v-model="license_level" />
           </v-col>
           <v-col>
             <v-text-field label="SP Cost" type="number" hide-details outlined dense v-model="sp" />
@@ -76,9 +75,41 @@
 </template>
 
 <script lang="ts">
-import { systemType } from '@/assets/enums'
+import Lancer, {
+  IActionData,
+  IBonusData,
+  ICounterData,
+  IDeployableData,
+  IMechSystemData,
+  ISynergyData,
+  ITagData,
+  SystemType,
+} from '@tenebrae-press/lancer-types'
 
 import Vue from 'vue'
+
+type SystemEditorData = {
+  dialog: boolean
+  systemTypes: Array<SystemType>
+  id: string
+  name: string
+  license: string
+  license_level: number
+  effect: string
+  type: SystemType
+  sp: number
+  description: string
+  tags: Array<ITagData>
+  actions: Array<IActionData>
+  bonuses: Array<IBonusData>
+  synergies: Array<ISynergyData>
+  deployables: Array<IDeployableData>
+  counters: Array<ICounterData>
+  integrated: Array<string>
+  special_equipment: Array<string>
+  isEdit: boolean
+}
+
 export default Vue.extend({
   name: 'system-editor',
   props: {
@@ -86,16 +117,16 @@ export default Vue.extend({
     licenses: { type: Array, required: false, default: () => [] },
   },
 
-  data: () => ({
+  data: (): SystemEditorData => ({
     dialog: false,
-    systemTypes: systemType,
+    systemTypes: Lancer.SYSTEM_TYPES,
     id: '',
     name: '',
     license: '',
     license_level: 1,
     effect: '',
     type: 'System',
-    sp: '',
+    sp: 0,
     description: '',
     tags: [],
     actions: [],
@@ -113,7 +144,7 @@ export default Vue.extend({
     },
     source(): string {
       if (this.manufacturer) return this.manufacturer.id
-      if (this.tags.some((x: any) => x.id === 'tg_exotic')) return 'EXOTIC'
+      if (this.tags.some(x => x.id === 'tg_exotic')) return 'EXOTIC'
       return ''
     },
   },
@@ -125,7 +156,7 @@ export default Vue.extend({
       this.dialog = false
     },
     submit(): void {
-      const e = {
+      const e: IMechSystemData = {
         id: this.id,
         name: this.name,
         source: this.source,
@@ -148,23 +179,23 @@ export default Vue.extend({
       this.reset()
       this.dialog = false
     },
-    edit(system: any): void {
+    edit(system: IMechSystemData): void {
       this.id = system.id
-      this.name = system.name
+      this.name = system.name ?? ''
       this.license = system.license
       this.license_level = Number(system.license_level)
-      this.effect = system.effect
-      this.type = system.type
-      this.sp = system.sp
-      this.description = system.description
-      this.tags = system.tags
-      this.actions = system.actions
-      this.bonuses = system.bonuses
-      this.synergies = system.synergies
-      this.deployables = system.deployables
-      this.counters = system.counters
-      this.integrated = system.integrated
-      this.special_equipment = system.special_equipment
+      this.effect = system.effect ?? ''
+      this.type = system.type ?? 'System'
+      this.sp = Number(system.sp) ?? 0
+      this.description = system.description ?? ''
+      this.tags = system.tags ?? []
+      this.actions = system.actions ?? []
+      this.bonuses = system.bonuses ?? []
+      this.synergies = system.synergies ?? []
+      this.deployables = system.deployables ?? []
+      this.counters = system.counters ?? []
+      this.integrated = system.integrated ?? []
+      this.special_equipment = []
       this.isEdit = true
       this.dialog = true
     },
@@ -179,7 +210,7 @@ export default Vue.extend({
       this.license_level = 1
       this.effect = ''
       this.type = 'System'
-      this.sp = ''
+      this.sp = 0
       this.description = ''
       this.tags = []
       this.actions = []

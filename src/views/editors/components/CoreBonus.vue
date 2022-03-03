@@ -4,8 +4,7 @@
       v-for="(cb, i) in core_bonuses"
       :key="`cb_card_${manufacturer.id}-${i}`"
       class="my-2"
-      outlined
-    >
+      outlined>
       <v-toolbar dense class="text-h6">{{ cb.name }}</v-toolbar>
       <v-card-text>
         <div v-html="cb.description" />
@@ -16,7 +15,7 @@
       </v-card-text>
       <v-divider class="my-2" />
       <v-card-actions>
-        <v-btn @click="edit(cb)">edit</v-btn>
+        <v-btn @click="edit(cb, i)">edit</v-btn>
         <v-spacer />
         <v-btn @click="remove(cb)" color="red">delete</v-btn>
       </v-card-actions>
@@ -61,8 +60,7 @@
                 outlined
                 hide-details
                 rows="2"
-                auto-grow
-              />
+                auto-grow />
             </v-col>
           </v-row>
 
@@ -95,13 +93,40 @@
 </template>
 
 <script lang="ts">
+import {
+  IActionData,
+  IBonusData,
+  ICoreBonusData,
+  ICounterData,
+  IDeployableData,
+  ILCPContent,
+  ISynergyData,
+} from '@tenebrae-press/lancer-types'
 import Vue from 'vue'
+
+type CoreBonusEditorData = {
+  dialog: boolean
+  id: string
+  name: string
+  effect: string
+  description: string
+  mounted_effect: string
+  actions: Array<IActionData>
+  bonuses: Array<IBonusData>
+  synergies: Array<ISynergyData>
+  deployables: Array<IDeployableData>
+  counters: Array<ICounterData>
+  integrated: Array<string>
+  special_equipment: Array<string>
+  isEdit: boolean
+  editIndex: number
+}
 
 export default Vue.extend({
   name: 'core-bonus-editor',
   props: { manufacturer: { type: Object, required: true } },
 
-  data: () => ({
+  data: (): CoreBonusEditorData => ({
     dialog: false,
     id: '',
     name: '',
@@ -122,12 +147,12 @@ export default Vue.extend({
     confirmOK(): boolean {
       return !!this.id && !!this.name && !!this.effect && !!this.description
     },
-    lcp(): any {
+    lcp(): ILCPContent {
       return this.$store.getters.lcp
     },
-    core_bonuses(): any[] {
+    core_bonuses(): Array<ICoreBonusData> {
       if (!this.lcp.core_bonuses) return []
-      return this.lcp.core_bonuses.filter((x: any) => x.source === this.manufacturer.id)
+      return this.lcp.core_bonuses.filter(x => x.source === this.manufacturer.id)
     },
   },
   methods: {
@@ -136,7 +161,7 @@ export default Vue.extend({
       this.dialog = true
     },
     submit(): void {
-      const e = {
+      const e: ICoreBonusData = {
         id: this.id,
         name: this.name,
         source: this.manufacturer.id,
@@ -152,16 +177,20 @@ export default Vue.extend({
         special_equipment: this.special_equipment,
       }
       if (this.isEdit) {
-        const index = this.lcp.core_bonuses.findIndex((x: any) => x.id === this.id)
-        this.$set(this.lcp.core_bonuses, index, e)
+        const index = this.lcp.core_bonuses?.findIndex(x => x.id === this.id)
+        if (index === undefined) {
+          this.$set(this.lcp, 'core_bonuses', [e])
+        } else if (index < 0) {
+          this.lcp.core_bonuses?.push(e)
+        } else this.$set(this.lcp.core_bonuses ?? [], index, e)
       } else {
         if (!this.lcp.core_bonuses) this.$set(this.lcp, 'core_bonuses', [])
-        this.lcp.core_bonuses.push(e)
+        this.lcp.core_bonuses?.push(e)
       }
       this.reset()
       this.dialog = false
     },
-    edit(cb: any, index: number): void {
+    edit(cb: ICoreBonusData, index: number): void {
       this.id = cb.id || ''
       this.name = cb.name || ''
       this.effect = cb.effect || ''
@@ -178,9 +207,10 @@ export default Vue.extend({
       this.editIndex = index
       this.dialog = true
     },
-    remove(item: any): void {
-      const index = this.lcp.core_bonuses.findIndex((x: any) => x.id === item.id)
-      this.lcp.core_bonuses.splice(index, 1)
+    remove(item: ICoreBonusData): void {
+      const index = this.lcp.core_bonuses?.findIndex(x => x.id === item.id)
+      if (index === undefined) return
+      this.lcp.core_bonuses?.splice(index, 1)
     },
     reset(): void {
       this.id = ''

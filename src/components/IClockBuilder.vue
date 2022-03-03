@@ -12,8 +12,7 @@
             close-icon="mdi-close"
             @click="edit(clock, i)"
             @click:close="remove(i)"
-            v-on="on"
-          >
+            v-on="on">
             {{ clock.name }}
           </v-chip>
         </template>
@@ -58,12 +57,20 @@
 
 <script lang="ts">
 import Vue from 'vue'
+
+type ClockData = {
+  id: string
+  name: string
+  min: number
+  max: number
+}
+
 export default Vue.extend({
   name: 'clock-builder',
   props: { item: { type: Object, required: true } },
   data: () => ({
     dialog: false,
-    clock: {},
+    clock: {} as ClockData,
     isEdit: false,
     editIndex: -1,
   }),
@@ -81,8 +88,8 @@ export default Vue.extend({
       this.editIndex = -1
       this.dialog = false
     },
-    edit(clock: any, index: number) {
-      this.clock = JSON.parse(JSON.stringify(clock))
+    edit(clock: ClockData, index: number) {
+      this.clock = clock
       this.isEdit = true
       this.editIndex = index
       this.dialog = true

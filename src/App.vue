@@ -72,7 +72,7 @@ export default Vue.extend({
       'sitreps',
       'environments',
     ],
-    gmCategories: ['npc_classes', 'npc_templates', 'eidolon_shells'],
+    gmCategories: ['npc_classes', 'npc_templates'],
   }),
   created() {
     this.$vuetify.theme.dark = true

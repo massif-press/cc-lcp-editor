@@ -6,8 +6,7 @@
         v-for="(trait, i) in item.traits"
         :key="`trait_chip_${item.id || item.name}-${i}`"
         top
-        max-width="50vw"
-      >
+        max-width="50vw">
         <template v-slot:activator="{ on }">
           <v-chip
             small
@@ -17,8 +16,7 @@
             close-icon="mdi-close"
             @click="edit(trait, i)"
             @click:close="remove(i)"
-            v-on="on"
-          >
+            v-on="on">
             {{ trait.name }}
           </v-chip>
         </template>
@@ -53,8 +51,7 @@
                   dense
                   outlined
                   hide-details
-                  clearable
-                />
+                  clearable />
               </v-col>
             </v-row>
             <v-row>
@@ -91,21 +88,37 @@
 </template>
 
 <script lang="ts">
-import RichTextEditor from './RichTextEditor.vue'
-import IActionBuilder from './IActionBuilder.vue'
-import IBonusBuilder from './IBonusBuilder.vue'
-import ISynergyBuilder from './ISynergyBuilder.vue'
-import IDeployableBuilder from './IDeployableBuilder.vue'
-import ICounterBuilder from './ICounterBuilder.vue'
-import IntegratedSelector from './IntegratedSelector.vue'
-import SpecialEquipmentSelector from './SpecialEquipmentSelector.vue'
-
+import {
+  IActionData,
+  IBonusData,
+  ICounterData,
+  IDeployableData,
+  IFrameTraitData,
+  ISynergyData,
+} from '@tenebrae-press/lancer-types'
 import Vue from 'vue'
+
+type IFrameTraitBuilderData = {
+  dialog: boolean
+  name: string
+  use: string
+  description: string
+  actions: Array<IActionData>
+  bonuses: Array<IBonusData>
+  counters: Array<ICounterData>
+  deployables: Array<IDeployableData>
+  synergies: Array<ISynergyData>
+  integrated: Array<string>
+  special_equipment: Array<string>
+  isEdit: boolean
+  editIndex: number
+}
+
 export default Vue.extend({
   name: 'trait-builder',
   props: { item: { type: Object, required: true } },
 
-  data: () => ({
+  data: (): IFrameTraitBuilderData => ({
     dialog: false,
     name: '',
     use: '',
@@ -142,7 +155,7 @@ export default Vue.extend({
         synergies: this.synergies,
         integrated: this.integrated,
         special_equipment: this.special_equipment,
-      }
+      } as IFrameTraitData
       if (this.isEdit) {
         this.$set(this.item.traits, this.editIndex, e)
       } else {
@@ -152,7 +165,7 @@ export default Vue.extend({
       this.reset()
       this.dialog = false
     },
-    edit(trait: any, index: number): void {
+    edit(trait: IFrameTraitBuilderData, index: number): void {
       this.reset()
       this.name = trait.name
       this.use = trait.use

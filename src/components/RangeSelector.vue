@@ -10,8 +10,7 @@
         class="mx-1"
         close-icon="mdi-close"
         @click="edit(range, i)"
-        @click:close="remove(i)"
-      >
+        @click:close="remove(i)">
         {{ range.val }} {{ range.type }}
       </v-chip>
       <v-menu v-model="menu" :close-on-click="false" :close-on-content-click="false">
@@ -29,8 +28,7 @@
                   item-value="id"
                   label="range"
                   :items="rangeTypes"
-                  hide-details
-                />
+                  hide-details />
               </v-col>
               <v-col>
                 <tiered-stat-input v-if="npc" v-model="range.val" title="Value" />
@@ -40,7 +38,7 @@
           </v-card-text>
           <v-divider />
           <v-card-actions>
-            <v-btn text color="error" @click="menu = false">cancel</v-btn>
+            <v-btn text color="error" @click="reset">cancel</v-btn>
             <v-spacer />
             <v-btn color="success darken-2" :disabled="!range.type || !range.type" @click="submit">
               {{ isEdit ? 'save' : 'confirm' }}
@@ -54,42 +52,53 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { rangeType } from '@/assets/enums'
 import TieredStatInput from './TieredStatInput.vue'
+import Lancer, { IRangeData, RangeType } from '@tenebrae-press/lancer-types'
+
+type RangeSelectorData = {
+  menu: boolean
+  range: IRangeData
+  isEdit: boolean
+  editIndex: number
+  rangeTypes: Array<RangeType>
+}
 
 export default Vue.extend({
   components: { TieredStatInput },
   name: 'range-selector',
   props: { item: { type: Object, required: true }, npc: { type: Boolean } },
-  data: () => ({
+  data: (): RangeSelectorData => ({
     menu: false,
-    range: {},
+    range: {} as IRangeData,
     isEdit: false,
     editIndex: -1,
-    rangeTypes: rangeType,
+    rangeTypes: Lancer.RANGE_TYPES,
   }),
   methods: {
     submit() {
       if (!this.range) return
       if (this.isEdit) {
-        this.$set(this.item.range, this.editIndex, this.range)
+        this.$set(this.item.range, this.editIndex, { ...this.range, val: Number(this.range.val) })
       } else {
         if (!this.item.range) this.$set(this.item, 'range', [])
-        this.item.range.push(this.range)
+        this.item.range.push({ ...this.range, val: Number(this.range.val) })
       }
-      this.$set(this, 'range', {})
-      this.isEdit = false
-      this.editIndex = -1
-      this.menu = false
+      this.reset()
     },
-    edit(range: any, index: number) {
-      this.range = JSON.parse(JSON.stringify(range))
+    edit(range: IRangeData, index: number) {
+      this.range = { ...range }
       this.isEdit = true
       this.editIndex = index
       this.menu = true
     },
     remove(index: number) {
       this.item.range.splice(index, 1)
+    },
+    reset() {
+      this.$set(this, 'range', {})
+      this.isEdit = false
+      this.editIndex = -1
+      this.menu = false
     },
   },
 })

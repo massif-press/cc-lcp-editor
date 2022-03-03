@@ -22,8 +22,7 @@
               hide-details
               outlined
               dense
-              clearable
-            />
+              clearable />
           </v-col>
           <v-col cols="auto">
             <v-switch v-model="hide_active" dense hide-details label="Hide in Active Mode" />
@@ -36,8 +35,7 @@
               mandatory
               dense
               hide-details
-              :label="`${npcClass ? 'Class' : 'Template'} Feature`"
-            />
+              :label="`${npcClass ? 'Class' : 'Template'} Feature`" />
           </v-col>
         </v-row>
         <v-row>
@@ -78,14 +76,48 @@
 </template>
 
 <script lang="ts">
+import {
+  IActionData,
+  IBonusData,
+  ICounterData,
+  IDeployableData,
+  INpcClassData,
+  INpcTemplateData,
+  ISynergyData,
+  ITagData,
+  IClockData,
+  IOriginData,
+  INpcReactionData,
+} from '@tenebrae-press/lancer-types'
 import Vue from 'vue'
+
+type NpcReactionEditorData = {
+  dialog: boolean
+  optional: boolean
+  hide_active: boolean
+  id: string
+  name: string
+  recharge: number
+  trigger: string
+  effect: string
+  type: 'Reaction'
+  tags: Array<ITagData>
+  actions: Array<IActionData>
+  bonuses: Array<IBonusData>
+  synergies: Array<ISynergyData>
+  deployables: Array<IDeployableData>
+  counters: Array<ICounterData>
+  clocks: Array<IClockData>
+  isEdit: boolean
+}
+
 export default Vue.extend({
   name: 'npc-trait-editor',
   props: {
-    npcClass: { type: Object, required: false },
-    npcTemplate: { type: Object, required: false },
+    npcClass: { type: Object as () => INpcClassData, required: false },
+    npcTemplate: { type: Object as () => INpcTemplateData, required: false },
   },
-  data: () => ({
+  data: (): NpcReactionEditorData => ({
     dialog: false,
     optional: false,
     hide_active: false,
@@ -105,17 +137,21 @@ export default Vue.extend({
     isEdit: false,
   }),
   computed: {
-    origin(): any {
+    origin(): IOriginData {
       if (this.npcClass || this.npcTemplate)
         return {
           type: this.npcClass ? 'Class' : 'Template',
           name: this[this.npcClass ? 'npcClass' : 'npcTemplate'].name,
+          base: false,
           optional: this.optional,
-          origin_id: this[this.npcClass ? 'npcClass' : 'npcTemplate'].id,
+          origin_id: this.npcClass ? this.npcClass.id : this.npcTemplate.id,
         }
       else
         return {
           type: 'Generic',
+          name: '',
+          base: false,
+          optional: false,
         }
     },
     confirmOK(): boolean {
@@ -130,7 +166,7 @@ export default Vue.extend({
       this.dialog = false
     },
     submit(): void {
-      const e = {
+      const e: INpcReactionData = {
         id: this.id,
         name: this.name,
         origin: this.origin,
@@ -147,12 +183,13 @@ export default Vue.extend({
         deployables: this.deployables,
         counters: this.counters,
         clocks: this.clocks,
+        locked: false,
       }
       this.$emit('save', e)
       this.reset()
       this.dialog = false
     },
-    edit(trait: any): void {
+    edit(trait: NpcReactionEditorData): void {
       this.id = trait.id
       this.name = trait.name
       this.trigger = trait.trigger

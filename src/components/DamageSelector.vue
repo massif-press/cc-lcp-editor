@@ -11,9 +11,8 @@
         close-icon="mdi-close"
         :color="getColor(damage.type)"
         @click="edit(damage, i)"
-        @click:close="remove(i)"
-      >
-        {{ damage.val }} {{ damage.type }}
+        @click:close="remove(i)">
+        {{ damage.val }} {{ sanitizedDamageType(damage.type) }}
       </v-chip>
       <v-menu v-model="menu" :close-on-click="false" :close-on-content-click="false">
         <template v-slot:activator="{ on, attrs }">
@@ -30,8 +29,7 @@
                   item-value="id"
                   label="Damage"
                   :items="damageTypes"
-                  hide-details
-                />
+                  hide-details />
               </v-col>
               <v-col>
                 <tiered-stat-input v-if="npc" v-model="damage.val" title="Value" />
@@ -41,7 +39,7 @@
           </v-card-text>
           <v-divider />
           <v-card-actions>
-            <v-btn text color="error" @click="menu = false">cancel</v-btn>
+            <v-btn text color="error" @click="reset">cancel</v-btn>
             <v-spacer />
             <v-btn color="success darken-2" @click="submit">
               {{ isEdit ? 'save' : 'confirm' }}
@@ -55,6 +53,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { DamageType, DAMAGE_TYPES, IDamageData } from '@tenebrae-press/lancer-types'
 import { damageType } from '@/assets/enums'
 
 export default Vue.extend({
@@ -62,14 +61,14 @@ export default Vue.extend({
   props: { item: { type: Object, required: true }, npc: { type: Boolean } },
   data: () => ({
     menu: false,
-    damage: {},
+    damage: {} as IDamageData,
     isEdit: false,
     editIndex: -1,
     damageTypes: damageType,
   }),
   methods: {
     getColor(type: string) {
-      switch (type) {
+      switch (`${type.charAt(0).toUpperCase()}${type.substring(1)}`) {
         case 'Energy':
           return 'blue darken-2'
         case 'Explosive':
@@ -85,6 +84,13 @@ export default Vue.extend({
           return ''
       }
     },
+    sanitizedDamageType(dt: string): DamageType {
+      return (
+        DAMAGE_TYPES.find(bt => {
+          return bt === `${dt.charAt(0).toUpperCase()}${dt.substring(1)}`
+        }) ?? 'Variable'
+      )
+    },
     submit() {
       if (!this.damage) return
       if (this.isEdit) {
@@ -93,19 +99,27 @@ export default Vue.extend({
         if (!this.item.damage) this.$set(this.item, 'damage', [])
         this.item.damage.push(this.damage)
       }
-      this.$set(this, 'damage', {})
-      this.isEdit = false
-      this.editIndex = -1
-      this.menu = false
+      this.reset()
     },
-    edit(damage: any, index: number) {
-      this.damage = JSON.parse(JSON.stringify(damage))
+    edit(damage: IDamageData, index: number) {
+      const damageType = this.sanitizedDamageType(damage.type)
+
+      this.damage = {
+        ...damage,
+        type: damageType,
+      }
       this.isEdit = true
       this.editIndex = index
       this.menu = true
     },
     remove(index: number) {
       this.item.damage.splice(index, 1)
+    },
+    reset() {
+      this.$set(this, 'damage', {})
+      this.isEdit = false
+      this.editIndex = -1
+      this.menu = false
     },
   },
 })

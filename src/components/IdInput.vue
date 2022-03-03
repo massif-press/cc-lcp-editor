@@ -4,8 +4,7 @@
     hide-details
     v-model="val"
     prepend-icon="mdi-dice-6"
-    @click:prepend="uuid"
-  />
+    @click:prepend="uuid" />
 </template>
 
 <script lang="ts">
@@ -17,13 +16,11 @@ export default Vue.extend({
   props: ['value'],
   computed: {
     val: {
-      get() {
-        const self = this as any
-        return self.value
+      get(): string {
+        return `${this.value ?? ''}`
       },
-      set(val) {
-        const self = this as any
-        self.$emit('input', val)
+      set(val: string) {
+        this.$emit('input', val)
       },
     },
   },

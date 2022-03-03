@@ -2,8 +2,7 @@
   <editor-base
     itemKey="statuses"
     :checkDupes="['name']"
-    :checkEmpty="['name', 'effects', 'type', 'scope']"
-  >
+    :checkEmpty="['name', 'effects', 'type', 'scope']">
     <template v-slot="{ item }">
       <v-toolbar dense color="primary" class="white--text text-h6">{{ item.name }}</v-toolbar>
       <v-card-text>
@@ -22,8 +21,7 @@
               { name: 'Pilot', value: 'Pilot' },
               { name: 'Both', value: '' },
             ]"
-            v-model="item.exclusive"
-          />
+            v-model="item.exclusive" />
         </v-row>
         <v-text-field label="Short Description" v-model="item.terse" />
         <rich-text-editor title="Effects" v-model="item.effects" />

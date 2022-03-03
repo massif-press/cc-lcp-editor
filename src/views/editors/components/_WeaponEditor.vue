@@ -30,8 +30,7 @@
               hide-details
               outlined
               dense
-              v-model="license_level"
-            />
+              v-model="license_level" />
           </v-col>
           <v-col>
             <v-text-field label="SP Cost" type="number" hide-details outlined dense v-model="sp" />
@@ -43,8 +42,7 @@
               hide-details
               outlined
               dense
-              v-model="cost"
-            />
+              v-model="cost" />
           </v-col>
         </v-row>
         <v-row>
@@ -102,8 +100,7 @@
               dense
               hide-details
               label="Ignore Core Bonus Effects"
-              v-model="no_core_bonus"
-            />
+              v-model="no_core_bonus" />
           </v-col>
           <v-col cols="auto">
             <v-switch dense hide-details label="Ignore Bonus Effects" v-model="no_bonus" />
@@ -147,11 +144,62 @@
 </template>
 
 <script lang="ts">
-import { weaponType, weaponSize } from '@/assets/enums'
-
 import IProfileBuilder from '@/components/IProfileBuilder.vue'
+import Lancer, {
+  WeaponType,
+  WeaponSize,
+  IDamageData,
+  IRangeData,
+  IActionData,
+  IBonusData,
+  IDeployableData,
+  IWeaponProfileData,
+  ICounterData,
+  ISynergyData,
+  ITagData,
+  IMechWeaponData,
+} from '@tenebrae-press/lancer-types'
 
 import Vue from 'vue'
+
+type WeaponEditorData = {
+  dialog: boolean
+  weaponTypes: Array<WeaponType>
+  weaponSizes: Array<WeaponSize>
+  id: string
+  name: string
+  license: string
+  license_level: number
+  description: string
+  effect: string
+  on_attack: string
+  on_hit: string
+  on_crit: string
+  mount: WeaponSize
+  type: WeaponType
+  cost: number
+  barrage: boolean
+  skirmish: boolean
+  no_attack: boolean
+  no_mods: boolean
+  no_core_bonus: boolean
+  no_bonus: boolean
+  no_synergy: boolean
+  damage: Array<IDamageData>
+  range: Array<IRangeData>
+  sp: number
+  tags: Array<ITagData>
+  actions: Array<IActionData>
+  bonuses: Array<IBonusData>
+  synergies: Array<ISynergyData>
+  deployables: Array<IDeployableData>
+  counters: Array<ICounterData>
+  integrated: Array<string>
+  special_equipment: Array<string>
+  profiles: Array<IWeaponProfileData>
+  isEdit: boolean
+}
+
 export default Vue.extend({
   name: 'weapon-editor',
   props: {
@@ -161,10 +209,10 @@ export default Vue.extend({
   components: {
     IProfileBuilder,
   },
-  data: () => ({
+  data: (): WeaponEditorData => ({
     dialog: false,
-    weaponTypes: weaponType,
-    weaponSizes: weaponSize,
+    weaponTypes: Lancer.WEAPON_TYPES,
+    weaponSizes: Lancer.WEAPON_SIZES,
     id: '',
     name: '',
     license: '',
@@ -174,7 +222,7 @@ export default Vue.extend({
     on_attack: '',
     on_hit: '',
     on_crit: '',
-    mount: 'Aux',
+    mount: 'Auxiliary',
     type: 'Melee',
     cost: 1,
     barrage: true,
@@ -204,7 +252,7 @@ export default Vue.extend({
     },
     source(): string {
       if (this.manufacturer) return this.manufacturer.id
-      if (this.tags.some((x: any) => x.id === 'tg_exotic')) return 'EXOTIC'
+      if (this.tags.some(x => x.id === 'tg_exotic')) return 'EXOTIC'
       return ''
     },
   },
@@ -216,7 +264,7 @@ export default Vue.extend({
       this.dialog = false
     },
     submit(): void {
-      const e = {
+      const e: IMechWeaponData = {
         id: this.id,
         name: this.name,
         source: this.source,
@@ -224,9 +272,9 @@ export default Vue.extend({
         license_level: Number(this.license_level),
         description: this.description,
         effect: this.effect,
-        on_attack: this.on_attack,
-        on_hit: this.on_hit,
-        on_crit: this.on_crit,
+        on_attack: this.on_attack ?? '',
+        on_hit: this.on_hit ?? '',
+        on_crit: this.on_crit ?? '',
         mount: this.mount,
         type: this.type,
         cost: this.cost,
@@ -254,38 +302,38 @@ export default Vue.extend({
       this.reset()
       this.dialog = false
     },
-    edit(weapon: any): void {
+    edit(weapon: IMechWeaponData): void {
       this.id = weapon.id
       this.name = weapon.name
       this.license = weapon.license
       this.license_level = Number(weapon.license_level)
-      this.description = weapon.description
-      this.effect = weapon.effect
-      this.on_attack = weapon.on_attack
-      this.on_hit = weapon.on_hit
-      this.on_crit = weapon.on_crit
+      this.description = weapon.description ?? ''
+      this.effect = weapon.effect ?? ''
+      this.on_attack = weapon.on_attack ?? ''
+      this.on_hit = weapon.on_hit ?? ''
+      this.on_crit = weapon.on_crit ?? ''
       this.mount = weapon.mount
       this.type = weapon.type
-      this.cost = weapon.cost
-      this.barrage = weapon.barrage
-      this.skirmish = weapon.skirmish
-      this.no_attack = weapon.no_attack
-      this.no_mods = weapon.no_mods
-      this.no_core_bonus = weapon.no_core_bonus
-      this.no_bonus = weapon.no_bonus
-      this.no_synergy = weapon.no_synergy
-      this.damage = weapon.damage
-      this.range = weapon.range
-      this.sp = weapon.sp
-      this.tags = weapon.tags
-      this.actions = weapon.actions
-      this.bonuses = weapon.bonuses
-      this.synergies = weapon.synergies
-      this.deployables = weapon.deployables
-      this.counters = weapon.counters
-      this.integrated = weapon.integrated
-      this.special_equipment = weapon.special_equipment
-      this.profiles = weapon.profiles
+      this.cost = weapon.cost ?? 0
+      this.barrage = weapon.barrage ?? true
+      this.skirmish = weapon.skirmish ?? true
+      this.no_attack = false
+      this.no_mods = false
+      this.no_core_bonus = false
+      this.no_bonus = false
+      this.no_synergy = false
+      this.damage = weapon.damage ?? []
+      this.range = weapon.range ?? []
+      this.sp = weapon.sp ?? 0
+      this.tags = weapon.tags ?? []
+      this.actions = weapon.actions ?? []
+      this.bonuses = weapon.bonuses ?? []
+      this.synergies = weapon.synergies ?? []
+      this.deployables = weapon.deployables ?? []
+      this.counters = weapon.counters ?? []
+      this.integrated = weapon.integrated ?? []
+      this.special_equipment = []
+      this.profiles = weapon.profiles ?? []
       this.isEdit = true
       this.dialog = true
     },
@@ -303,7 +351,7 @@ export default Vue.extend({
       this.on_attack = ''
       this.on_hit = ''
       this.on_crit = ''
-      this.mount = 'Aux'
+      this.mount = 'Auxiliary'
       this.type = 'Melee'
       this.cost = 1
       this.barrage = true

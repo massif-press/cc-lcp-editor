@@ -2,11 +2,7 @@
   <v-card outlined>
     <div class="caption mb-n1 mt-n3">TALENT RANKS</div>
     <v-card flat>
-      <v-tooltip
-        v-for="(rank, i) in item.ranks"
-        :key="`rank_chip_${item.id || item.name}-${i}`"
-        top
-      >
+      <v-tooltip v-for="(rank, i) in item.ranks" :key="`rank_chip_${item.name}-${i}`" top>
         <template v-slot:activator="{ on }">
           <v-chip
             large
@@ -16,8 +12,7 @@
             class="ma-2"
             @click="edit(rank, i)"
             @click:close="remove(i)"
-            v-on="on"
-          >
+            v-on="on">
             RANK {{ 'I'.repeat(i + 1) }} // {{ rank.name }}
           </v-chip>
         </template>
@@ -86,20 +81,21 @@
 </template>
 
 <script lang="ts">
-import RichTextEditor from './RichTextEditor.vue'
-import ISynergyBuilder from './ISynergyBuilder.vue'
-import IActionBuilder from './IActionBuilder.vue'
-import IBonusBuilder from './IBonusBuilder.vue'
-import IDeployableBuilder from './IDeployableBuilder.vue'
-import ICounterBuilder from './ICounterBuilder.vue'
-import IntegratedSelector from './IntegratedSelector.vue'
-
+import { ITalentData, ITalentRankData } from '@tenebrae-press/lancer-types'
 import Vue from 'vue'
+
+type TalentRankBuilderData = ITalentRankData & {
+  isEdit: boolean
+  editIndex: number
+  dialog: boolean
+}
+
 export default Vue.extend({
   name: 'rank-builder',
-  props: { item: { type: Object, required: true } },
+  props: { item: { type: Object as () => ITalentData, required: true } },
 
-  data: () => ({
+  data: (): TalentRankBuilderData => ({
+    id: '',
     dialog: false,
     name: '',
     description: '',
@@ -124,7 +120,7 @@ export default Vue.extend({
       this.dialog = true
     },
     submit(): void {
-      const e = {
+      const e: ITalentRankData = {
         name: this.name,
         description: this.description,
         synergies: this.synergies,
@@ -144,7 +140,7 @@ export default Vue.extend({
       this.reset()
       this.dialog = false
     },
-    edit(rank: any, index: number): void {
+    edit(rank: ITalentRankData, index: number): void {
       this.reset()
       this.name = rank.name
       this.description = rank.description

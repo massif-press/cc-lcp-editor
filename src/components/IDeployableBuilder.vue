@@ -5,8 +5,7 @@
       <v-tooltip
         v-for="(deployable, i) in item.deployables"
         :key="`deployable_chip_${item.id}-${i}`"
-        top
-      >
+        top>
         <template v-slot:activator="{ on }">
           <v-chip
             small
@@ -16,8 +15,7 @@
             close-icon="mdi-close"
             @click="edit(deployable, i)"
             @click:close="remove(i)"
-            v-on="on"
-          >
+            v-on="on">
             {{ deployable.name }} ({{ deployable.type }})
           </v-chip>
         </template>
@@ -41,68 +39,57 @@
             outlined
             small
             class="mx-1"
-            v-html="`${deployable.armor ? `  Armor: ${deployable.armor}` : ''}`"
-          />
+            v-html="`${deployable.armor ? `  Armor: ${deployable.armor}` : ''}`" />
           <v-chip
             outlined
             small
             class="mx-1"
-            v-html="`${deployable.hp ? `  HP: ${deployable.hp}` : ''}`"
-          />
+            v-html="`${deployable.hp ? `  HP: ${deployable.hp}` : ''}`" />
           <v-chip
             outlined
             small
             class="mx-1"
-            v-html="`${deployable.evasion ? `  Evasion: ${deployable.evasion}` : ''}`"
-          />
+            v-html="`${deployable.evasion ? `  Evasion: ${deployable.evasion}` : ''}`" />
           <v-chip
             outlined
             small
             class="mx-1"
-            v-html="`${deployable.edef ? `  EDef: ${deployable.edef}` : ''}`"
-          />
+            v-html="`${deployable.edef ? `  EDef: ${deployable.edef}` : ''}`" />
           <v-chip
             outlined
             small
             class="mx-1"
-            v-html="`${deployable.heatcap ? `  Heatcap: ${deployable.heatcap}` : ''}`"
-          />
+            v-html="`${deployable.heatcap ? `  Heatcap: ${deployable.heatcap}` : ''}`" />
           <v-chip
             outlined
             small
             class="mx-1"
-            v-html="`${deployable.repcap ? `  Repcap: ${deployable.repcap}` : ''}`"
-          />
+            v-html="`${deployable.repcap ? `  Repcap: ${deployable.repcap}` : ''}`" />
           <v-chip
             outlined
             small
             class="mx-1"
-            v-html="`${deployable.sensor_range ? `  Sensors: ${deployable.sensor_range}` : ''}`"
-          />
+            v-html="`${deployable.sensor_range ? `  Sensors: ${deployable.sensor_range}` : ''}`" />
           <v-chip
             outlined
             small
             class="mx-1"
-            v-html="`${deployable.tech_attack ? `  Tech Atk: ${deployable.tech_attack}` : ''}`"
-          />
+            v-html="`${deployable.tech_attack ? `  Tech Atk: ${deployable.tech_attack}` : ''}`" />
           <v-chip
             outlined
             small
             class="mx-1"
-            v-html="`${deployable.save ? `  Save: ${deployable.save}` : ''}`"
-          />
+            v-html="`${deployable.save ? `  Save: ${deployable.save}` : ''}`" />
           <v-chip
             outlined
             small
             class="mx-1"
-            v-html="`${deployable.speed ? `  Speed: ${deployable.speed}` : ''}`"
-          />
+            v-html="`${deployable.speed ? `  Speed: ${deployable.speed}` : ''}`" />
           <v-chip
             outlined
             small
             class="mx-1"
-            v-html="`${deployable.size ? `  Size: ${deployable.size}` : ''}`"
-          />
+            v-html="`${deployable.size ? `  Size: ${deployable.size}` : ''}`" />
         </div>
         <div v-if="deployable.tags">
           <v-divider />
@@ -148,8 +135,7 @@
                   :item="this"
                   label="Deactivation"
                   field="deactivation"
-                  optional
-                />
+                  optional />
               </v-col>
               <v-col>
                 <activator-selector :item="this" label="Recall" field="recall" optional />
@@ -167,8 +153,7 @@
                   dense
                   clearable
                   outlined
-                  hide-details
-                />
+                  hide-details />
               </v-col>
               <v-col>
                 <v-text-field
@@ -178,8 +163,7 @@
                   dense
                   clearable
                   outlined
-                  hide-details
-                />
+                  hide-details />
               </v-col>
               <v-col v-show="!npc" class="mt-n4">
                 <v-switch v-model="pilot" label="Pilot" dense hide-details />
@@ -199,8 +183,7 @@
                   dense
                   clearable
                   outlined
-                  hide-details
-                />
+                  hide-details />
               </v-col>
             </v-row>
             <v-divider class="my-4" />
@@ -238,6 +221,39 @@ const stats = [
   'save',
   'speed',
 ]
+
+type DeployableBuilderData = {
+  stats: typeof stats
+  dialog: boolean
+  name: string
+  type: string
+  detail: string
+  size: number
+  activation: string
+  deactivation: string
+  recall: string
+  redeploy: string
+  instances: number
+  cost: number
+  armor: ''
+  hp: ''
+  evasion: ''
+  edef: ''
+  heatcap: ''
+  repcap: ''
+  sensor_range: ''
+  tech_attack: ''
+  save: ''
+  speed: ''
+  pilot: false
+  mech: false
+  actions: []
+  bonuses: []
+  synergies: []
+  counters: []
+  isEdit: false
+  editIndex: -1
+}
 
 export default Vue.extend({
   name: 'deployable-builder',
@@ -323,7 +339,7 @@ export default Vue.extend({
       this.reset()
       this.dialog = false
     },
-    edit(deployable: any, index: number): void {
+    edit(deployable: DeployableBuilderData, index: number): void {
       this.reset()
       this.name = deployable.name || ''
       this.type = deployable.type || ''

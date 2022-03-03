@@ -2,7 +2,7 @@
   <v-container>
     <div class="overline">Quick Navigation</div>
     <v-row no-gutters justify="space-around" align="center">
-      <v-col v-for="(item, i) in lcp[itemKey]" :key="`btn${i}`" cols="auto">
+      <v-col v-for="(item, i) in lcpContentKey(itemKey)" :key="`btn${String(i)}`" cols="auto">
         <v-btn text @click="$vuetify.goTo(`#item_${i}`)">
           {{ item.name }}
         </v-btn>
@@ -10,8 +10,8 @@
     </v-row>
     <v-divider class="my-3" />
     <v-row>
-      <v-col cols="12" v-for="(item, i) in lcp[itemKey]" :key="`item_${i}`">
-        <v-card :id="`item_${i}`">
+      <v-col cols="12" v-for="(item, i) in lcpContentKey(itemKey)" :key="`item_${String(i)}`">
+        <v-card :id="`item_${String(i)}`">
           <slot :item="item" />
           <v-card-actions>
             <v-spacer />
@@ -33,8 +33,7 @@
       :icon="errors.length ? 'mdi-alert' : 'mdi-check'"
       prominent
       :color="errors.length ? 'error darken-2' : 'success darken-2'"
-      class="text-center"
-    >
+      class="text-center">
       <code class="error-msg">
         <span v-html="errors.length ? errors.join('<br>') : 'No errors detected!'" />
       </code>
@@ -63,8 +62,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import { synergyLocations, activationTypes } from '@/assets/enums'
+import { ILCPContent, LCPContentKeys } from '@tenebrae-press/lancer-types'
 
-function getDuplicateProperties(arr: any[], prop: string) {
+function getDuplicateProperties(arr: Record<string, unknown>[], prop: string) {
   let sorted = arr.map(x => x[prop]).sort()
   let results = []
   for (let i = 0; i < sorted.length - 1; i++) {
@@ -75,13 +75,19 @@ function getDuplicateProperties(arr: any[], prop: string) {
   return results
 }
 
-function getEmptyProperties(arr: any[], prop: string) {
-  return arr.filter(x => !x[prop] || !x[prop].length)
+function getEmptyProperties(arr: Array<Record<string, unknown>>, prop: string) {
+  return arr.filter(x => !x[prop] || !(x[prop] as []).length)
 }
 
 export default Vue.extend({
   name: 'editor-base',
-  props: ['itemKey', 'checkDupes', 'checkEmpty'],
+  props: {
+    itemKey: {
+      type: String as () => LCPContentKeys,
+    },
+    checkDupes: { type: Array as () => Array<string> },
+    checkEmpty: { type: Array as () => Array<string> },
+  },
   data: () => ({
     synergyLocations: synergyLocations,
     activationTypes: activationTypes,
@@ -90,20 +96,22 @@ export default Vue.extend({
     loaded(): boolean {
       return this.$store.getters.loaded
     },
-    lcp(): any {
+    lcp(): ILCPContent {
       return this.$store.getters.lcp
     },
     errors(): string[] {
       const arr: string[] = []
-      if (!this.lcp[this.itemKey] || !this.lcp[this.itemKey].length) return arr
+      if (!this.lcp[this.itemKey] || !this.lcp[this.itemKey]?.length) return arr
+
+      let content: Array<Record<string, unknown>> = this.lcp[this.itemKey] ?? []
 
       this.checkDupes.forEach((prop: string) => {
-        getDuplicateProperties(this.lcp[this.itemKey], prop).forEach(p => {
+        getDuplicateProperties(content, prop).forEach(p => {
           arr.push(`Duplicate ${prop} detected:   ${p}`)
         })
       })
       this.checkEmpty.forEach((prop: string) => {
-        getEmptyProperties(this.lcp[this.itemKey], prop).forEach(p => {
+        getEmptyProperties(content, prop).forEach(p => {
           arr.push(`Item with missing ${prop} field (${p.id || p.name || '--'})`)
         })
       })
@@ -111,16 +119,24 @@ export default Vue.extend({
     },
   },
   methods: {
+    lcpContentKey(key: LCPContentKeys): Array<{ id?: string; name?: string }> {
+      return this.lcp[key] ?? []
+    },
     addNew() {
-      if (!this.lcp[this.itemKey]) this.$set(this.lcp, this.itemKey, [])
-      this.lcp[this.itemKey].push({})
+      if (!this.lcp[this.itemKey]) {
+        this.$set(this.lcp, this.itemKey, [])
+      }
+
+      ;(this.lcp[this.itemKey] as unknown as unknown[]).push({} as unknown)
     },
-    duplicateItem(item: any) {
-      this.lcp[this.itemKey].push(JSON.parse(JSON.stringify(item)))
+    duplicateItem(item: { id?: string }) {
+      ;(this.lcp[this.itemKey] as unknown as unknown[]).push(JSON.parse(JSON.stringify(item)))
     },
-    deleteItem(item: any) {
-      this.lcp[this.itemKey].splice(
-        this.lcp[this.itemKey].findIndex((x: any) => x.id === item.id),
+    deleteItem(item: { id?: string }) {
+      ;(this.lcp[this.itemKey] as unknown as Array<{ id: string }>).splice(
+        (this.lcp[this.itemKey] as unknown as Array<{ id: string }>).findIndex(
+          x => x.id === item.id
+        ),
         1
       )
     },
@@ -136,8 +152,9 @@ export default Vue.extend({
     importJson() {
       if (this.$refs.fileUpload) (this.$refs.fileUpload as HTMLElement).click()
     },
-    importFile(evt: any) {
-      const file = evt.target.files[0]
+    importFile(evt: Event) {
+      const file = (evt.target as HTMLInputElement).files?.item(0)
+      if (!file) return
       const reader = new FileReader()
 
       reader.onload = e =>

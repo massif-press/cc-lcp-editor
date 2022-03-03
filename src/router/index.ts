@@ -16,11 +16,6 @@ const routes: Array<RouteConfig> = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
   },
   {
-    path: '/util',
-    name: 'Utilities',
-    component: () => import(/* webpackChunkName: "util" */ '../views/utilities/index.vue'),
-  },
-  {
     path: '/editor/actions',
     name: 'Action Editor',
     component: () => import(/* webpackChunkName: "editors" */ '../views/editors/Actions.vue'),
@@ -89,11 +84,6 @@ const routes: Array<RouteConfig> = [
     path: '/editor/npc_templates',
     name: 'NPC Template Editor',
     component: () => import(/* webpackChunkName: "editors" */ '../views/editors/NPCTemplates.vue'),
-  },
-  {
-    path: '/editor/eidolon_shells',
-    name: 'Eidolon Shell Editor',
-    component: () => import(/* webpackChunkName: "editors" */ '../views/editors/EidolonShells.vue'),
   },
 ]
 

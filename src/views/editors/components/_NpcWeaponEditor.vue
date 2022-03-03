@@ -28,8 +28,7 @@
               hide-details
               outlined
               dense
-              clearable
-            />
+              clearable />
           </v-col>
           <v-col v-show="npcClass || npcTemplate" cols="auto">
             <v-switch
@@ -39,8 +38,7 @@
               mandatory
               dense
               hide-details
-              :label="`${npcClass ? 'Class' : 'Template'} Feature`"
-            />
+              :label="`${npcClass ? 'Class' : 'Template'} Feature`" />
           </v-col>
         </v-row>
         <v-row>
@@ -107,9 +105,53 @@
 </template>
 
 <script lang="ts">
-import { weaponType, weaponSize } from '@/assets/enums'
 import TieredStatInput from '@/components/TieredStatInput.vue'
+import Lancer, {
+  IActionData,
+  IBonusData,
+  IClockData,
+  ICounterData,
+  IDeployableData,
+  INpcDamageData,
+  INpcWeaponData,
+  IOriginData,
+  IRangeData,
+  ISynergyData,
+  ITagData,
+  WeaponSize,
+  WeaponType,
+} from '@tenebrae-press/lancer-types'
 import Vue from 'vue'
+
+type NpcWeaponEditorData = {
+  dialog: boolean
+  weaponTypes: Array<WeaponType>
+  weaponSizes: Array<WeaponSize>
+  id: string
+  name: string
+  recharge: number
+  optional: boolean
+  type: 'Weapon'
+  effect: string
+  on_attack: string
+  on_hit: string
+  on_crit: string
+  weapon_size: WeaponSize
+  weapon_type: WeaponType
+  damage: Array<INpcDamageData>
+  range: Array<IRangeData>
+  attack_bonus: Array<number>
+  accuracy: Array<number>
+  tags: Array<ITagData>
+  actions: Array<IActionData>
+  bonuses: Array<IBonusData>
+  synergies: Array<ISynergyData>
+  deployables: Array<IDeployableData>
+  counters: Array<ICounterData>
+  clocks: Array<IClockData>
+  isEdit: boolean
+  origin?: IOriginData
+}
 
 export default Vue.extend({
   components: { TieredStatInput },
@@ -118,10 +160,10 @@ export default Vue.extend({
     npcClass: { type: Object, required: false },
     npcTemplate: { type: Object, required: false },
   },
-  data: () => ({
+  data: (): NpcWeaponEditorData => ({
     dialog: false,
-    weaponTypes: weaponType,
-    weaponSizes: weaponSize,
+    weaponTypes: Lancer.WEAPON_TYPES,
+    weaponSizes: Lancer.WEAPON_SIZES,
     id: '',
     name: '',
     recharge: 0,
@@ -131,7 +173,7 @@ export default Vue.extend({
     on_attack: '',
     on_hit: '',
     on_crit: '',
-    weapon_size: 'Aux',
+    weapon_size: 'Auxiliary',
     weapon_type: 'Melee',
     damage: [],
     range: [],
@@ -150,17 +192,21 @@ export default Vue.extend({
     confirmOK(): boolean {
       return !!this.id && !!this.name
     },
-    origin(): any {
+    origin(): IOriginData {
       if (this.npcClass || this.npcTemplate)
         return {
           type: this.npcClass ? 'Class' : 'Template',
           name: this[this.npcClass ? 'npcClass' : 'npcTemplate'].name,
           optional: this.optional,
+          base: false,
           origin_id: this[this.npcClass ? 'npcClass' : 'npcTemplate'].id,
         }
       else
         return {
           type: 'Generic',
+          base: false,
+          name: '',
+          optional: false,
         }
     },
   },
@@ -172,14 +218,14 @@ export default Vue.extend({
       this.dialog = false
     },
     submit(): void {
-      const e = {
+      const e: INpcWeaponData = {
         id: this.id,
         name: this.name,
         origin: this.origin,
         effect: this.effect,
         recharge: this.recharge,
         optional: this.optional,
-        damage: this.damage,
+        damage: this.damage ?? [],
         range: this.range,
         on_attack: this.on_attack,
         on_hit: this.on_hit,
@@ -196,17 +242,19 @@ export default Vue.extend({
         deployables: this.deployables,
         counters: this.counters,
         clocks: this.clocks,
+        locked: false,
+        hide_active: false,
       }
       this.$emit('save', e)
       this.reset()
       this.dialog = false
     },
-    edit(weapon: any): void {
+    edit(weapon: NpcWeaponEditorData): void {
       this.id = weapon.id
       this.name = weapon.name
       this.effect = weapon.effect
       this.recharge = weapon.recharge
-      this.optional = weapon.origin.optional
+      this.optional = weapon.origin?.optional || false
       this.damage = weapon.damage
       this.range = weapon.range
       this.on_attack = weapon.on_attack
@@ -243,7 +291,7 @@ export default Vue.extend({
       this.on_attack = ''
       this.on_hit = ''
       this.on_crit = ''
-      this.weapon_size = 'Aux'
+      this.weapon_size = 'Auxiliary'
       this.weapon_type = 'Melee'
       this.attack_bonus = [0, 0, 0]
       this.accuracy = [0, 0, 0]

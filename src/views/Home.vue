@@ -12,8 +12,7 @@
           hide-details
           :loading="loading"
           @click:clear="clearLcp()"
-          @change="loadLcp($event)"
-        />
+          @change="loadLcp($event)" />
       </v-col>
       <v-col cols="5">
         <v-btn large block color="primary" @click="createNew">Create New LCP</v-btn>
@@ -24,7 +23,7 @@
       <v-card-text class="text--disabled text-center">No LCP loaded</v-card-text>
     </v-card>
 
-    <v-card v-else :key="loaded">
+    <v-card v-else>
       <v-toolbar dense color="pink darken-3" dark>
         <span class="text-h4">{{ lcp.lcp_manifest.name }}</span>
       </v-toolbar>
@@ -58,8 +57,7 @@
                     outlined
                     auto-grow
                     rows="3"
-                    label="Description"
-                  />
+                    label="Description" />
                 </v-col>
               </v-row>
             </v-col>
@@ -88,7 +86,12 @@
           <v-col v-for="(t, i) in categories" :key="`player_btn_${i}`" cols="2">
             <v-btn large block color="primary darken-3" :to="`editor/${t}`">
               {{ t.replace('_', ' ') }}
-              <span v-show="t !== 'tables'" class="item-count">({{ catLength(t) }})</span>
+              <span class="item-count">({{ catLength(t) }})</span>
+            </v-btn>
+          </v-col>
+          <v-col cols="2">
+            <v-btn :to="'editor/tables'" large block color="primary darken-3">
+              {{ 'Tables' }}
             </v-btn>
           </v-col>
         </v-row>
@@ -121,47 +124,56 @@ import _ from 'lodash'
 import PromisifyFileReader from 'promisify-file-reader'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
+import Lancer, {
+  ILCPContent,
+  IManifest,
+  LCPContentKeys,
+  LCPContentTypes,
+} from '@tenebrae-press/lancer-types'
+
+const skipCategories = [
+  'manufacturers',
+  'frames',
+  'weapons',
+  'systems',
+  'mods',
+  'core_bonuses',
+  'npc_features',
+]
+const gmCategories = ['npc_classes', 'npc_templates']
 
 export default Vue.extend({
   name: 'Home',
   data: () => ({
     lcpFile: null,
     loading: false,
-    categories: [
-      'actions',
-      'backgrounds',
-      'pilot_gear',
-      'reserves',
-      'skills',
-      'statuses',
-      'tables',
-      'tags',
-      'talents',
-      'sitreps',
-      'environments',
-    ],
-    gmCategories: ['npc_classes', 'npc_templates', 'eidolon_shells'],
+    categories: Lancer.LCP_CONTENT_KEYS.filter(
+      key => !gmCategories.includes(key) && !skipCategories.includes(key)
+    ),
+    gmCategories: Lancer.LCP_CONTENT_KEYS.filter(
+      key => gmCategories.includes(key) && !skipCategories.includes(key)
+    ),
   }),
   computed: {
     loaded(): boolean {
       return this.$store.getters.loaded
     },
-    lcp(): any {
+    lcp(): ILCPContent {
       return this.$store.getters.lcp
     },
     manuCount(): number {
       if (!this.lcp.manufacturers && !this.lcp.frames) return 0
       const m =
         this.lcp.manufacturers && this.lcp.manufacturers.length
-          ? this.lcp.manufacturers.map((x: any) => x.id)
+          ? this.lcp.manufacturers.map(x => x.id)
           : []
-      const f = this.lcp.frames ? _.uniq(this.lcp.frames.map((x: any) => x.source)) : []
+      const f = this.lcp.frames ? _.uniq(this.lcp.frames.map(x => x.source)) : []
       return _.uniq(m.concat(f)).length
     },
   },
   methods: {
-    catLength(type: string) {
-      if (this.lcp[type]) return this.lcp[type].length
+    catLength(type: LCPContentKeys) {
+      if (this.lcp[type]) return this.lcp[type]?.length
       return 0
     },
 
@@ -175,7 +187,7 @@ export default Vue.extend({
         this.$store.dispatch('loadLcp', fileData).then(() => {
           this.loading = false
         })
-      } catch (e: any) {
+      } catch (e: unknown) {
         console.error(e)
         this.loading = false
       }
@@ -192,14 +204,20 @@ export default Vue.extend({
         this.lcp.lcp_manifest.version
       }.lcp`
       const zip = new JSZip()
-      Object.keys(this.lcp).forEach(key => {
-        zip.file(`${key}.json`, this.prepareJSON(this.lcp[key]))
+      Lancer.LCP_CONTENT_KEYS.forEach((key: LCPContentKeys) => {
+        if (this.lcp[key] && this.lcp[key]?.length) {
+          zip.file(`${key}.json`, this.prepareJSON(this.lcp[key] ?? []))
+        }
       })
+      zip.file('lcp_manifest.json', this.prepareJSON(this.lcp.lcp_manifest))
+      if (this.lcp.tables) {
+        zip.file('tables.json', this.prepareJSON(this.lcp.tables))
+      }
       zip.generateAsync({ type: 'blob' }).then(function (blob) {
         saveAs(blob, filename)
       })
     },
-    prepareJSON(obj: any): string {
+    prepareJSON(obj: LCPContentTypes | IManifest | Record<string, unknown>): string {
       const d = JSON.stringify(obj)
       // tiptap's default <p> wrapping doesn't look good in C/C
       d.replaceAll('<p', '<div')

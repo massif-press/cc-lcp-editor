@@ -11,8 +11,7 @@
       v-model="val"
       :extensions="extensions"
       :card-props="{ flat: true, tile: true, elevation: 0 }"
-      :toolbar-attributes="{ color: 'darkgrey', dark: true }"
-    />
+      :toolbar-attributes="{ color: 'darkgrey', dark: true }" />
   </v-card>
 </template>
 
@@ -65,13 +64,11 @@ export default Vue.extend({
   }),
   computed: {
     val: {
-      get() {
-        const self = this as any
-        return self.value
+      get(): string {
+        return `${this.value ?? ''}`
       },
-      set(val) {
-        const self = this as any
-        self.$emit('input', val)
+      set(val: string) {
+        this.$emit('input', val)
       },
     },
   },

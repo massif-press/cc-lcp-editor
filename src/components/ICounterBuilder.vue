@@ -12,8 +12,7 @@
             close-icon="mdi-close"
             @click="edit(counter, i)"
             @click:close="remove(i)"
-            v-on="on"
-          >
+            v-on="on">
             {{ counter.name }}
           </v-chip>
         </template>
@@ -46,8 +45,7 @@
                   type="number"
                   label="Min"
                   hide-details
-                  outlined
-                />
+                  outlined />
               </v-col>
               <v-col>
                 <v-text-field
@@ -55,8 +53,7 @@
                   type="number"
                   label="Max"
                   hide-details
-                  outlined
-                />
+                  outlined />
               </v-col>
               <v-col>
                 <v-text-field
@@ -64,8 +61,7 @@
                   type="number"
                   label="Starting Value"
                   hide-details
-                  outlined
-                />
+                  outlined />
               </v-col>
             </v-row>
           </v-card-text>
@@ -76,8 +72,7 @@
             <v-btn
               color="success darken-2"
               :disabled="!counter.name || !counter.id"
-              @click="submit"
-            >
+              @click="submit">
               {{ isEdit ? 'save' : 'confirm' }}
             </v-btn>
           </v-card-actions>
@@ -89,12 +84,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { ICounterData } from '@tenebrae-press/lancer-types'
 export default Vue.extend({
   name: 'counter-builder',
   props: { item: { type: Object, required: true } },
   data: () => ({
     dialog: false,
-    counter: {},
+    counter: {} as ICounterData,
     isEdit: false,
     editIndex: -1,
   }),
@@ -112,8 +108,8 @@ export default Vue.extend({
       this.editIndex = -1
       this.dialog = false
     },
-    edit(counter: any, index: number) {
-      this.counter = JSON.parse(JSON.stringify(counter))
+    edit(counter: ICounterData, index: number) {
+      this.counter = counter
       this.isEdit = true
       this.editIndex = index
       this.dialog = true

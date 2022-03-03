@@ -18,16 +18,18 @@
 import Vue from 'vue'
 export default Vue.extend({
   name: 'color-selector',
-  props: ['value', 'title', 'disabled'],
+  props: {
+    title: { type: String },
+    disabled: { type: Boolean, default: false },
+    value: { type: String },
+  },
   computed: {
     val: {
       get(): string {
-        const self = this as any
-        return self.value
+        return `${this.value}`
       },
-      set(val) {
-        const self = this as any
-        self.$emit('input', val)
+      set(val: string) {
+        this.$emit('input', val)
       },
     },
     color(): string {
