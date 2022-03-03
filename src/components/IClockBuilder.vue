@@ -65,12 +65,19 @@ type ClockData = {
   max: number
 }
 
+type ClockBuilderData = {
+  dialog: boolean
+  clock: ClockData
+  isEdit: boolean
+  editIndex: number
+}
+
 export default Vue.extend({
   name: 'clock-builder',
   props: { item: { type: Object, required: true } },
-  data: () => ({
+  data: (): ClockBuilderData => ({
     dialog: false,
-    clock: {} as ClockData,
+    clock: { id: '', name: '', min: 0, max: 0 },
     isEdit: false,
     editIndex: -1,
   }),
@@ -89,7 +96,7 @@ export default Vue.extend({
       this.dialog = false
     },
     edit(clock: ClockData, index: number) {
-      this.clock = clock
+      this.clock = { ...clock }
       this.isEdit = true
       this.editIndex = index
       this.dialog = true

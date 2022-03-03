@@ -85,12 +85,20 @@
 <script lang="ts">
 import Vue from 'vue'
 import { ICounterData } from '@tenebrae-press/lancer-types'
+
+type CounterBuilderData = {
+  dialog: boolean
+  counter: ICounterData
+  isEdit: boolean
+  editIndex: number
+}
+
 export default Vue.extend({
   name: 'counter-builder',
   props: { item: { type: Object, required: true } },
-  data: () => ({
+  data: (): CounterBuilderData => ({
     dialog: false,
-    counter: {} as ICounterData,
+    counter: { id: '', name: '' },
     isEdit: false,
     editIndex: -1,
   }),
@@ -109,7 +117,7 @@ export default Vue.extend({
       this.dialog = false
     },
     edit(counter: ICounterData, index: number) {
-      this.counter = counter
+      this.counter = { ...counter }
       this.isEdit = true
       this.editIndex = index
       this.dialog = true

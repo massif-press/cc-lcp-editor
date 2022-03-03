@@ -89,6 +89,7 @@
 
 <script lang="ts">
 import {
+  Duration,
   IActionData,
   IBonusData,
   ICounterData,
@@ -101,7 +102,7 @@ import Vue from 'vue'
 type IFrameTraitBuilderData = {
   dialog: boolean
   name: string
-  use: string
+  use?: Duration
   description: string
   actions: Array<IActionData>
   bonuses: Array<IBonusData>
@@ -121,7 +122,7 @@ export default Vue.extend({
   data: (): IFrameTraitBuilderData => ({
     dialog: false,
     name: '',
-    use: '',
+    use: undefined,
     description: '',
     actions: [],
     bonuses: [],
@@ -144,7 +145,7 @@ export default Vue.extend({
       this.dialog = true
     },
     submit(): void {
-      const e = {
+      const e: IFrameTraitData = {
         name: this.name,
         use: this.use,
         description: this.description,
@@ -155,7 +156,7 @@ export default Vue.extend({
         synergies: this.synergies,
         integrated: this.integrated,
         special_equipment: this.special_equipment,
-      } as IFrameTraitData
+      }
       if (this.isEdit) {
         this.$set(this.item.traits, this.editIndex, e)
       } else {
@@ -165,18 +166,18 @@ export default Vue.extend({
       this.reset()
       this.dialog = false
     },
-    edit(trait: IFrameTraitBuilderData, index: number): void {
+    edit(trait: IFrameTraitData, index: number): void {
       this.reset()
       this.name = trait.name
       this.use = trait.use
       this.description = trait.description
-      this.actions = trait.actions
-      this.bonuses = trait.bonuses
-      this.counters = trait.counters
-      this.deployables = trait.deployables
-      this.synergies = trait.synergies
-      this.integrated = trait.integrated
-      this.special_equipment = trait.special_equipment
+      this.actions = trait.actions ?? []
+      this.bonuses = trait.bonuses ?? []
+      this.counters = trait.counters ?? []
+      this.deployables = trait.deployables ?? []
+      this.synergies = trait.synergies ?? []
+      this.integrated = trait.integrated ?? []
+      this.special_equipment = []
       this.isEdit = true
       this.editIndex = index
       this.dialog = true
@@ -186,7 +187,7 @@ export default Vue.extend({
     },
     reset(): void {
       this.name = ''
-      this.use = ''
+      this.use = undefined
       this.description = ''
       this.actions = []
       this.bonuses = []
