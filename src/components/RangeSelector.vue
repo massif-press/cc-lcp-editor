@@ -78,10 +78,10 @@ export default Vue.extend({
     submit() {
       if (!this.range) return
       if (this.isEdit) {
-        this.$set(this.item.range, this.editIndex, this.range)
+        this.$set(this.item.range, this.editIndex, { ...this.range, val: Number(this.range.val) })
       } else {
         if (!this.item.range) this.$set(this.item, 'range', [])
-        this.item.range.push(this.range)
+        this.item.range.push({ ...this.range, val: Number(this.range.val) })
       }
       this.reset()
     },

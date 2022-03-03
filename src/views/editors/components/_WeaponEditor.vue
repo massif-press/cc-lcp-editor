@@ -320,8 +320,8 @@ export default Vue.extend({
       this.no_attack = false
       this.no_mods = false
       this.no_core_bonus = false
-      this.no_bonus = weapon.bonuses?.length == 0
-      this.no_synergy = weapon.synergies?.length == 0
+      this.no_bonus = false
+      this.no_synergy = false
       this.damage = weapon.damage ?? []
       this.range = weapon.range ?? []
       this.sp = weapon.sp ?? 0
