@@ -186,7 +186,7 @@ export default Vue.extend({
       this.license_level = Number(system.license_level)
       this.effect = system.effect ?? ''
       this.type = system.type ?? 'System'
-      this.sp = system.sp ?? 0
+      this.sp = Number(system.sp) ?? 0
       this.description = system.description ?? ''
       this.tags = system.tags ?? []
       this.actions = system.actions ?? []
