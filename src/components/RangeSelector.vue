@@ -69,7 +69,7 @@ export default Vue.extend({
   props: { item: { type: Object, required: true }, npc: { type: Boolean } },
   data: (): RangeSelectorData => ({
     menu: false,
-    range: {} as IRangeData,
+    range: { type: '' as RangeType, val: 0 },
     isEdit: false,
     editIndex: -1,
     rangeTypes: Lancer.RANGE_TYPES,

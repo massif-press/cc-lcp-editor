@@ -130,13 +130,13 @@ import SynergySelector from './SynergyLocationSelector.vue'
 import RangeSelector from './RangeSelector.vue'
 
 import Vue from 'vue'
-import {
+import Lancer, {
   ActivationType,
-  ACTIVATION_TYPES,
   IActionData,
   IDamageData,
   IRangeData,
 } from '@tenebrae-press/lancer-types'
+import { activationTypes } from '@/assets/enums'
 
 type ActionBuilderDataType = {
   dialog: boolean
@@ -188,6 +188,12 @@ export default Vue.extend({
     },
   },
   methods: {
+    sanitizeActivation(desc: string): ActivationType {
+      return (
+        (activationTypes.find(type => type.desc === desc)?.value as ActivationType) ??
+        Lancer.ACTIVATION_TYPES[0]
+      )
+    },
     newItem(): void {
       this.reset()
       this.dialog = true
@@ -196,7 +202,7 @@ export default Vue.extend({
       const e: IActionData = {
         id: this.id,
         name: this.name,
-        activation: this.activation || ACTIVATION_TYPES[0],
+        activation: this.sanitizeActivation(this.activation),
         detail: this.detail,
         cost: this.cost ?? 0,
         pilot: this.pilot,
@@ -227,10 +233,10 @@ export default Vue.extend({
       this.pilot = action.pilot ?? false
       this.damage = action.damage ?? []
       this.range = action.range ?? []
-      this.synergy_locations = action.synergy_locations
-      this.tech_attack = action.tech_attack
-      this.frequency = action.frequency
-      this.init = action.init
+      this.synergy_locations = action.synergy_locations ?? []
+      this.tech_attack = action.tech_attack ?? []
+      this.frequency = action.frequency ?? []
+      this.init = action.init ?? []
       this.trigger = action.trigger
       this.isEdit = true
       this.editIndex = index

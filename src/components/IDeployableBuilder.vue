@@ -208,6 +208,15 @@
 </template>
 
 <script lang="ts">
+import { activationTypes } from '@/assets/enums'
+import Lancer, {
+  ActivationType,
+  IActionData,
+  IBonusData,
+  ICounterData,
+  IDeployableData,
+  ISynergyData,
+} from '@tenebrae-press/lancer-types'
 import Vue from 'vue'
 const stats = [
   'armor',
@@ -235,31 +244,31 @@ type DeployableBuilderData = {
   redeploy: string
   instances: number
   cost: number
-  armor: ''
-  hp: ''
-  evasion: ''
-  edef: ''
-  heatcap: ''
-  repcap: ''
-  sensor_range: ''
-  tech_attack: ''
-  save: ''
-  speed: ''
-  pilot: false
-  mech: false
-  actions: []
-  bonuses: []
-  synergies: []
-  counters: []
-  isEdit: false
-  editIndex: -1
+  armor?: number
+  hp?: number
+  evasion?: number
+  edef?: number
+  heatcap?: number
+  repcap?: number
+  sensor_range?: number
+  tech_attack?: number
+  save?: number
+  speed?: number
+  pilot: boolean
+  mech: boolean
+  actions: Array<IActionData>
+  bonuses: Array<IBonusData>
+  synergies: Array<ISynergyData>
+  counters: Array<ICounterData>
+  isEdit: boolean
+  editIndex: number
 }
 
 export default Vue.extend({
   name: 'deployable-builder',
   props: { item: { type: Object, required: true }, npc: { type: Boolean } },
 
-  data: () => ({
+  data: (): DeployableBuilderData => ({
     stats: stats,
     dialog: false,
     name: '',
@@ -272,16 +281,6 @@ export default Vue.extend({
     redeploy: '',
     instances: 1,
     cost: 1,
-    armor: '',
-    hp: '',
-    evasion: '',
-    edef: '',
-    heatcap: '',
-    repcap: '',
-    sensor_range: '',
-    tech_attack: '',
-    save: '',
-    speed: '',
     pilot: false,
     mech: false,
     actions: [],
@@ -297,20 +296,26 @@ export default Vue.extend({
     },
   },
   methods: {
+    sanitizeActivation(desc: string): ActivationType {
+      return (
+        (activationTypes.find(type => type.desc === desc)?.value as ActivationType) ??
+        Lancer.ACTIVATION_TYPES[0]
+      )
+    },
     newItem(): void {
       this.reset()
       this.dialog = true
     },
     submit(): void {
-      const e = {
+      const e: IDeployableData = {
         name: this.name,
         type: this.type,
         detail: this.detail,
         size: this.size,
-        activation: this.activation,
-        deactivation: this.deactivation,
-        recall: this.recall,
-        redeploy: this.redeploy,
+        activation: this.sanitizeActivation(this.activation),
+        deactivation: this.sanitizeActivation(this.deactivation),
+        recall: this.sanitizeActivation(this.recall),
+        redeploy: this.sanitizeActivation(this.redeploy),
         instances: this.instances,
         cost: this.cost,
         armor: this.armor,
@@ -351,16 +356,16 @@ export default Vue.extend({
       this.redeploy = deployable.redeploy || ''
       this.instances = deployable.instances || 1
       this.cost = deployable.cost || 1
-      this.armor = deployable.armor || ''
-      this.hp = deployable.hp || ''
-      this.evasion = deployable.evasion || ''
-      this.edef = deployable.edef || ''
-      this.heatcap = deployable.heatcap || ''
-      this.repcap = deployable.repcap || ''
-      this.sensor_range = deployable.sensor_range || ''
-      this.tech_attack = deployable.tech_attack || ''
-      this.save = deployable.save || ''
-      this.speed = deployable.speed || ''
+      this.armor = deployable.armor || 0
+      this.hp = deployable.hp
+      this.evasion = deployable.evasion
+      this.edef = deployable.edef
+      this.heatcap = deployable.heatcap
+      this.repcap = deployable.repcap
+      this.sensor_range = deployable.sensor_range
+      this.tech_attack = deployable.tech_attack
+      this.save = deployable.save
+      this.speed = deployable.speed
       this.pilot = deployable.pilot || false
       this.mech = deployable.mech || false
       this.actions = deployable.actions || []
@@ -385,16 +390,16 @@ export default Vue.extend({
       this.redeploy = ''
       this.instances = 1
       this.cost = 1
-      this.armor = ''
-      this.hp = ''
-      this.evasion = ''
-      this.edef = ''
-      this.heatcap = ''
-      this.repcap = ''
-      this.sensor_range = ''
-      this.tech_attack = ''
-      this.save = ''
-      this.speed = ''
+      this.armor = undefined
+      this.hp = undefined
+      this.evasion = undefined
+      this.edef = undefined
+      this.heatcap = undefined
+      this.repcap = undefined
+      this.sensor_range = undefined
+      this.tech_attack = undefined
+      this.save = undefined
+      this.speed = undefined
       this.pilot = false
       this.mech = false
       this.actions = []

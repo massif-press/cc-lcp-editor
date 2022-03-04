@@ -63,13 +63,20 @@ import { tags } from 'lancer-data'
 import TieredStatInput from './TieredStatInput.vue'
 import { ITagData } from '@tenebrae-press/lancer-types'
 
+type TagSelectorData = {
+  menu: boolean
+  tag: ITagData
+  isEdit: boolean
+  editIndex: number
+}
+
 export default Vue.extend({
   name: 'tag-selector',
   props: { item: { type: Object, required: true }, npc: { type: Boolean } },
   components: { TieredStatInput },
-  data: () => ({
+  data: (): TagSelectorData => ({
     menu: false,
-    tag: {} as ITagData,
+    tag: { id: '', name: '', description: '' },
     isEdit: false,
     editIndex: -1,
   }),
@@ -94,7 +101,7 @@ export default Vue.extend({
       this.menu = false
     },
     edit(tag: ITagData, index: number) {
-      this.tag = JSON.parse(JSON.stringify(tag))
+      this.tag = { ...tag }
       this.isEdit = true
       this.editIndex = index
       this.menu = true
