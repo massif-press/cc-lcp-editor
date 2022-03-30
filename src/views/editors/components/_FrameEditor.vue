@@ -408,7 +408,7 @@ export default Vue.extend({
       repcap: 6,
       sensor_range: 10,
       tech_attack: 0,
-      save: 20,
+      save: 10,
       speed: 4,
       sp: 6,
     },
@@ -431,7 +431,6 @@ export default Vue.extend({
       passive_synergies: [],
       deployables: [],
       counters: [],
-      integrated: [],
       special_equipment: [],
       tags: [],
     },
@@ -457,7 +456,7 @@ export default Vue.extend({
       const e: IFrameData = {
         id: this.id,
         source: this.manufacturer.id,
-        license_level: this.license_level,
+        license_level: Number(this.license_level),
         name: this.name,
         mechtype: this.mechtype,
         description: this.description,
@@ -479,21 +478,21 @@ export default Vue.extend({
       this.mechtype = frame.mechtype ?? 'Balanced'
       this.description = frame.description ?? ''
       this.mounts = frame.mounts ?? []
-      this.stats = frame.stats ?? {
-        size: 1,
-        structure: 4,
-        stress: 4,
-        armor: 0,
-        hp: 10,
-        evasion: 6,
-        edef: 6,
-        heatcap: 6,
-        repcap: 6,
-        sensor_range: 10,
-        tech_attack: 0,
-        save: 20,
-        speed: 4,
-        sp: 6,
+      this.stats = {
+        size: frame.stats.size ? Number(frame.stats.size) : 1,
+        structure: frame.stats.structure ? Number(frame.stats.structure) : 4,
+        stress: frame.stats.stress ? Number(frame.stats.stress) : 4,
+        armor: frame.stats.armor ? Number(frame.stats.armor) : 0,
+        hp: frame.stats.hp ? Number(frame.stats.hp) : 10,
+        evasion: frame.stats.evasion ? Number(frame.stats.evasion) : 6,
+        edef: frame.stats.edef ? Number(frame.stats.edef) : 6,
+        heatcap: frame.stats.heatcap ? Number(frame.stats.heatcap) : 6,
+        repcap: frame.stats.repcap ? Number(frame.stats.repcap) : 6,
+        sensor_range: frame.stats.sensor_range ? Number(frame.stats.sensor_range) : 10,
+        tech_attack: frame.stats.tech_attack ? Number(frame.stats.tech_attack) : 0,
+        save: frame.stats.save ? Number(frame.stats.save) : 10,
+        speed: frame.stats.speed ? Number(frame.stats.speed) : 4,
+        sp: frame.stats.sp ? Number(frame.stats.sp) : 6,
       }
       this.traits = frame.traits ?? []
       this.core_system = {
@@ -510,7 +509,6 @@ export default Vue.extend({
         passive_synergies: [],
         deployables: [],
         counters: [],
-        integrated: [],
         special_equipment: [],
         tags: [],
         ...frame.core_system,
@@ -553,7 +551,7 @@ export default Vue.extend({
         repcap: 6,
         sensor_range: 10,
         tech_attack: 0,
-        save: 20,
+        save: 10,
         speed: 4,
         sp: 6,
       }
@@ -576,7 +574,6 @@ export default Vue.extend({
         passive_synergies: [],
         deployables: [],
         counters: [],
-        integrated: [],
         special_equipment: [],
         tags: [],
       }
