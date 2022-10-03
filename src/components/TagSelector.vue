@@ -64,14 +64,17 @@
 import Vue from 'vue'
 import { tags } from 'lancer-data'
 import TieredStatInput from './TieredStatInput.vue'
-
+export interface tag {
+  id: string
+  val: number
+}
 export default Vue.extend({
   name: 'tag-selector',
   props: { item: { type: Object, required: true }, npc: { type: Boolean } },
   components: { TieredStatInput },
   data: () => ({
     menu: false,
-    tag: {},
+    tag: {} as tag,
     isEdit: false,
     editIndex: -1,
   }),
@@ -85,17 +88,23 @@ export default Vue.extend({
     submit() {
       if (!this.tag) return
       if (this.isEdit) {
-        this.$set(this.item.tags, this.editIndex, this.tag)
+        this.$set(this.item.tags, this.editIndex, {
+          id: this.tag.id,
+          val: +this.tag.val
+        })
       } else {
         if (!this.item.tags) this.$set(this.item, 'tags', [])
-        this.item.tags.push(this.tag)
+        this.item.tags.push({
+          id: this.tag.id,
+          val: +this.tag.val
+        })
       }
       this.$set(this, 'tag', {})
       this.isEdit = false
       this.editIndex = -1
       this.menu = false
     },
-    edit(tag: any, index: number) {
+    edit(tag: tag, index: number) {
       this.tag = JSON.parse(JSON.stringify(tag))
       this.isEdit = true
       this.editIndex = index

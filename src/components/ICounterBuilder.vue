@@ -89,12 +89,20 @@
 
 <script lang="ts">
 import Vue from 'vue'
+
+export interface counter {
+  id: string
+  name: string
+  default_value: number
+  min: number
+  max: number
+}
 export default Vue.extend({
   name: 'counter-builder',
   props: { item: { type: Object, required: true } },
   data: () => ({
     dialog: false,
-    counter: {},
+    counter: {} as counter,
     isEdit: false,
     editIndex: -1,
   }),
@@ -102,17 +110,29 @@ export default Vue.extend({
     submit() {
       if (!this.counter) return
       if (this.isEdit) {
-        this.$set(this.item.counters, this.editIndex, this.counter)
+        this.$set(this.item.counters, this.editIndex, {
+          id: this.counter.id as string,
+          name: this.counter.name as string,
+          default_value: +this.counter.default_value,
+          min: +this.counter.min,
+          max: +this.counter.max
+        })
       } else {
-        if (!this.item.counters) this.$set(this.item, 'counters', [])
-        this.item.counters.push(this.counter)
+        if (!this.item.counters) this.$set(this.item, 'counters', [] as counter[])
+        this.item.counters.push({
+          id: this.counter.id,
+          name: this.counter.name,
+          default_value: +this.counter.default_value,
+          min: +this.counter.min,
+          max: +this.counter.max
+        })
       }
       this.$set(this, 'counter', {})
       this.isEdit = false
       this.editIndex = -1
       this.dialog = false
     },
-    edit(counter: any, index: number) {
+    edit(counter: counter, index: number) {
       this.counter = JSON.parse(JSON.stringify(counter))
       this.isEdit = true
       this.editIndex = index
