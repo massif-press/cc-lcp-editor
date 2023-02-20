@@ -11,7 +11,7 @@
           <v-chip
             large
             label
-            close
+            closeable
             color="secondary"
             class="ma-2"
             @click="edit(rank, i)"

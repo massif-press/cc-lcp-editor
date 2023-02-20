@@ -10,7 +10,7 @@
         <template v-slot:activator="{ props }">
           <v-chip
             small
-            close
+            closeable
             outlined
             class="mx-1"
             close-icon="mdi-close"

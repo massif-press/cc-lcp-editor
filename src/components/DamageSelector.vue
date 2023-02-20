@@ -6,7 +6,7 @@
         v-for="(damage, i) in item.damage"
         :key="`damage_chip_${item.id}-${i}`"
         small
-        close
+        closeable
         class="mx-1"
         close-icon="mdi-close"
         :color="getColor(damage.type)"
