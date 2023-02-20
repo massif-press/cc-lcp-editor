@@ -1,9 +1,13 @@
 <template>
   <v-dialog v-model="dialog" fullscreen>
     <v-card>
-      <v-toolbar dense color="deep-purple darken-4" class="text-h6">
-        {{ manufacturer ? manufacturer.id : '' }} Weapon Mod Editor
-        <v-spacer />
+      <v-toolbar
+        density="compact"
+        color="blue"
+        :title="`${
+          manufacturer ? manufacturer.id : isExotic ? 'Exotic' : ''
+        } Mod Editor`"
+      >
         <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
       </v-toolbar>
       <v-card-text>
@@ -14,21 +18,31 @@
           <v-col>
             <v-text-field label="Name" hide-details v-model="name" />
           </v-col>
-          <v-col>
-            <v-combobox v-model="license" label="License" dense hide-details :items="licenses" />
+          <v-col v-if="!sourceless">
+            <v-combobox
+              v-model="license"
+              label="License"
+              hide-details
+              :items="licenses"
+            />
           </v-col>
-          <v-col>
+          <v-col v-if="!sourceless">
             <v-text-field
               label="License Level"
               type="number"
               hide-details
               outlined
-              dense
               v-model="license_level"
             />
           </v-col>
           <v-col>
-            <v-text-field label="SP Cost" type="number" hide-details outlined dense v-model="sp" />
+            <v-text-field
+              label="SP Cost"
+              type="number"
+              hide-details
+              outlined
+              v-model="sp"
+            />
           </v-col>
         </v-row>
         <v-row>
@@ -57,16 +71,17 @@
             <tag-selector :item="this" />
           </v-col>
         </v-row>
-
         <v-divider class="my-3" />
-        <div class="text-h6">ALLOWED:</div>
-        <div class="overline mt-n3 font-weight-light">Leave empty to allow all values</div>
+        <div class="text-h6">
+          ALLOWED
+          <i class="text-caption">(Leave empty to allow all values)</i>
+        </div>
         <v-row align="center">
           <v-col>
             <v-select
               v-model="allowed_types"
               :items="weaponType"
-              dense
+              density="compact"
               outlined
               multiple
               hide-details
@@ -77,7 +92,7 @@
             <v-select
               v-model="allowed_sizes"
               :items="weaponSize"
-              dense
+              density="compact"
               outlined
               multiple
               hide-details
@@ -85,14 +100,16 @@
             />
           </v-col>
         </v-row>
-        <div class="text-h6">RESTRICTED:</div>
-        <div class="overline mt-n3 font-weight-light">RESTRICTED takes precedence over ALLOWED</div>
+        <div class="text-h6 mt-3">
+          RESTRICTED
+          <i class="text-caption">(RESTRICTED takes precedence over ALLOWED)</i>
+        </div>
         <v-row align="center">
           <v-col>
             <v-select
               v-model="restricted_types"
               :items="weaponType"
-              dense
+              density="compact"
               outlined
               multiple
               hide-details
@@ -103,7 +120,7 @@
             <v-select
               v-model="restricted_sizes"
               :items="weaponSize"
-              dense
+              density="compact"
               outlined
               multiple
               hide-details
@@ -113,17 +130,17 @@
         </v-row>
         <v-row>
           <v-col>
-            <div class="caption mb-2">ADDED DAMAGE</div>
+            <div class="text-caption mb-2">ADDED DAMAGE</div>
             <damage-selector :item="added" />
           </v-col>
           <v-col>
-            <div class="caption mb-2">ADDED RANGE</div>
+            <div class="text-caption mb-2">ADDED RANGE</div>
             <range-selector :item="added" />
           </v-col>
         </v-row>
         <v-row>
           <v-col>
-            <div class="caption mb-2">ADDED TAGS</div>
+            <div class="text-caption mb-2">ADDED TAGS</div>
             <tag-selector :item="added" />
           </v-col>
         </v-row>
@@ -132,7 +149,9 @@
       <v-card-actions>
         <v-btn text color="error" @click="dialog = false">cancel</v-btn>
         <v-spacer />
-        <v-btn v-if="isEdit" color="error darken-2" @click="remove">Delete</v-btn>
+        <v-btn v-if="isEdit" color="error darken-2" @click="remove"
+          >Delete</v-btn
+        >
         <v-btn color="success darken-2" :disabled="!confirmOK" @click="submit">
           {{ isEdit ? 'save' : 'confirm' }}
         </v-btn>
@@ -142,13 +161,14 @@
 </template>
 
 <script lang="ts">
-import { weaponType, weaponSize } from '@/assets/enums'
+import { getLicenseID } from '../../utilities/cleanup';
+import { weaponType, weaponSize } from '../../../assets/enums';
 
-import Vue from 'vue'
-export default Vue.extend({
+export default {
   name: 'mod-editor',
   props: {
     manufacturer: { type: Object, required: false },
+    isExotic: Boolean,
     licenses: { type: Array, required: false, default: () => [] },
   },
 
@@ -184,20 +204,24 @@ export default Vue.extend({
   }),
   computed: {
     confirmOK(): boolean {
-      return !!this.id && !!this.name
+      return !!this.id && !!this.name;
     },
     source(): string {
-      if (this.manufacturer) return this.manufacturer.id
-      if (this.tags.some((x: any) => x.id === 'tg_exotic')) return 'EXOTIC'
-      return ''
+      if (this.manufacturer) return this.manufacturer.id;
+      if (this.tags.some((x: any) => x.id === 'tg_exotic') || this.isExotic)
+        return 'EXOTIC';
+      return '';
+    },
+    sourceless(): boolean {
+      return !this.source || this.source === 'EXOTIC';
     },
   },
   methods: {
     open() {
-      this.dialog = true
+      this.dialog = true;
     },
     close() {
-      this.dialog = false
+      this.dialog = false;
     },
     submit(): void {
       const e = {
@@ -205,6 +229,10 @@ export default Vue.extend({
         name: this.name,
         source: this.source,
         license: this.license,
+        license_id: getLicenseID(
+          this.license,
+          this.$store.getters.lcp.frames || []
+        ),
         license_level: Number(this.license_level),
         effect: this.effect,
         sp: this.sp,
@@ -224,70 +252,70 @@ export default Vue.extend({
         counters: this.counters,
         integrated: this.integrated,
         special_equipment: this.special_equipment,
-      }
-      this.$emit('save', e)
-      this.reset()
-      this.dialog = false
+      };
+      this.$emit('save', e);
+      this.reset();
+      this.dialog = false;
     },
     edit(mod: any): void {
-      this.id = mod.id
-      this.name = mod.name
-      this.license = mod.license
-      this.license_level = Number(mod.license_level)
-      this.effect = mod.effect
-      this.sp = mod.sp
-      this.description = mod.description
-      this.allowed_types = mod.allowed_types
-      this.allowed_sizes = mod.allowed_sizes
-      this.restricted_types = mod.restricted_types
-      this.restricted_sizes = mod.restricted_sizes
+      this.id = mod.id;
+      this.name = mod.name;
+      this.license = mod.license;
+      this.license_level = Number(mod.license_level);
+      this.effect = mod.effect;
+      this.sp = mod.sp;
+      this.description = mod.description;
+      this.allowed_types = mod.allowed_types;
+      this.allowed_sizes = mod.allowed_sizes;
+      this.restricted_types = mod.restricted_types;
+      this.restricted_sizes = mod.restricted_sizes;
       this.added = {
         damage: mod.added_damage,
         range: mod.added_range,
         tags: mod.added_tags,
-      }
-      this.tags = mod.tags
-      this.actions = mod.actions
-      this.bonuses = mod.bonuses
-      this.synergies = mod.synergies
-      this.deployables = mod.deployables
-      this.counters = mod.counters
-      this.integrated = mod.integrated
-      this.special_equipment = mod.special_equipment
-      this.isEdit = true
-      this.dialog = true
+      };
+      this.tags = mod.tags;
+      this.actions = mod.actions;
+      this.bonuses = mod.bonuses;
+      this.synergies = mod.synergies;
+      this.deployables = mod.deployables;
+      this.counters = mod.counters;
+      this.integrated = mod.integrated;
+      this.special_equipment = mod.special_equipment;
+      this.isEdit = true;
+      this.dialog = true;
     },
     remove(): void {
-      this.$emit('remove', this.id)
-      this.dialog = false
+      this.$emit('remove', this.id);
+      this.dialog = false;
     },
     reset(): void {
-      this.id = ''
-      this.name = ''
-      this.license = ''
-      this.license_level = 1
-      this.effect = ''
-      this.sp = ''
-      this.description = ''
-      this.allowed_types = []
-      this.allowed_sizes = []
-      this.restricted_types = []
-      this.restricted_sizes = []
+      this.id = '';
+      this.name = '';
+      this.license = '';
+      this.license_level = 1;
+      this.effect = '';
+      this.sp = '';
+      this.description = '';
+      this.allowed_types = [];
+      this.allowed_sizes = [];
+      this.restricted_types = [];
+      this.restricted_sizes = [];
       this.added = {
         damage: [],
         range: [],
         tags: [],
-      }
-      this.tags = []
-      this.actions = []
-      this.bonuses = []
-      this.synergies = []
-      this.deployables = []
-      this.counters = []
-      this.integrated = []
-      this.special_equipment = []
-      this.isEdit = false
+      };
+      this.tags = [];
+      this.actions = [];
+      this.bonuses = [];
+      this.synergies = [];
+      this.deployables = [];
+      this.counters = [];
+      this.integrated = [];
+      this.special_equipment = [];
+      this.isEdit = false;
     },
   },
-})
+};
 </script>

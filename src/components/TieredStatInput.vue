@@ -10,7 +10,7 @@
             type="number"
             @change="setTier($event, 0)"
             outlined
-            dense
+            density="compact"
             hide-details
           />
         </v-col>
@@ -21,7 +21,7 @@
             type="number"
             @change="setTier($event, 1)"
             outlined
-            dense
+            density="compact"
             hide-details
           />
         </v-col>
@@ -32,7 +32,7 @@
             type="number"
             @change="setTier($event, 2)"
             outlined
-            dense
+            density="compact"
             hide-details
           />
         </v-col>
@@ -42,31 +42,30 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-export default Vue.extend({
+export default {
   name: 'tiered-stat-input',
   props: ['value', 'title'],
   computed: {
     val: {
       get() {
-        const self = this as any
-        return self.value
+        const self = this as any;
+        return self.value;
       },
-      set(val) {
-        const self = this as any
-        self.$emit('input', val)
+      set(val: any) {
+        const self = this as any;
+        self.$emit('input', val);
       },
     },
   },
   created() {
-    if (!Array.isArray(this.val)) this.$set(this, 'val', [0, 0, 0])
+    if (!Array.isArray(this.val)) this.val = [0, 0, 0];
   },
   methods: {
     setTier(evt: string, tier: number) {
-      const n = Number(evt)
-      if (!Array.isArray(this.val)) this.$set(this, 'val', [n, n, n])
-      this.$set(this.val, tier, n)
+      const n = Number(evt);
+      if (!Array.isArray(this.val)) this.val = [n, n, n];
+      this.val[tier] = n;
     },
   },
-})
+};
 </script>

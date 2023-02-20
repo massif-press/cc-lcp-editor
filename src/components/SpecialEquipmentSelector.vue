@@ -2,10 +2,9 @@
   <v-select
     label="Special Equipment"
     :items="equipment"
-    item-text="name"
+    item-title="name"
     item-value="id"
     outlined
-    dense
     hide-details
     multiple
     v-model="item.special_equipment"
@@ -13,9 +12,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-
-export default Vue.extend({
+export default {
   name: 'special-equipment-selector',
   props: {
     item: {
@@ -25,22 +22,22 @@ export default Vue.extend({
   },
   computed: {
     equipment(): any[] {
-      const lcp = this.$store.getters.lcp
-      let out: any[] = []
+      const lcp = this.$store.getters.lcp;
+      let out: any[] = [];
       out = out
         .concat(lcp.pilot_gear)
         .concat(lcp.frames)
         .concat(lcp.weapons)
         .concat(lcp.systems)
-        .concat(lcp.mods)
+        .concat(lcp.mods);
       out = out
-        .filter(x => x && !!x.id)
-        .map(x => ({
+        .filter((x) => x && !!x.id)
+        .map((x) => ({
           id: x.id,
           name: x.name || x.id,
-        }))
-      return out
+        }));
+      return out;
     },
   },
-})
+};
 </script>

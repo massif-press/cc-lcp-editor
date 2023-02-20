@@ -1,8 +1,11 @@
 <template>
   <v-dialog v-model="dialog" fullscreen>
     <v-card>
-      <v-toolbar dense color="deep-purple darken-4" class="text-h6">
-        {{ manufacturer.id }} Frame Editor
+      <v-toolbar
+        density="compact"
+        color="deep-purple darken-4"
+        :title="`${manufacturer.id} Frame Editor`"
+      >
         <v-spacer />
         <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
       </v-toolbar>
@@ -10,7 +13,7 @@
         <v-row>
           <v-col v-show="!!image_url" cols="auto">
             Image Preview
-            <v-img :src="image_url" max-width="300" contain />
+            <v-img :src="image_url" width="200" contain />
           </v-col>
           <v-col>
             <v-row justify="space-around" align="end">
@@ -25,8 +28,6 @@
                   label="License Level"
                   type="number"
                   hide-details
-                  outlined
-                  dense
                   v-model="license_level"
                 />
               </v-col>
@@ -34,15 +35,26 @@
                 <v-combobox
                   v-model="mechtype"
                   label="Mech Type"
-                  dense
                   hide-details
                   multiple
                   clearable
                   :items="mechTypes"
                 />
               </v-col>
-              <v-col cols="7">
-                <v-text-field label="Image URL" hide-details v-model="image_url" />
+              <v-col cols="3">
+                <v-combobox
+                  :items="availableVariants"
+                  label="Variant"
+                  hide-details
+                  v-model="variant"
+                />
+              </v-col>
+              <v-col cols="3">
+                <v-text-field
+                  label="Image URL"
+                  hide-details
+                  v-model="image_url"
+                />
               </v-col>
               <v-col cols="2">
                 <v-text-field
@@ -50,18 +62,24 @@
                   type="number"
                   hide-details
                   outlined
-                  dense
                   v-model="y_pos"
                 />
               </v-col>
-              <v-col v-show="!!image_url" cols="8" class="ml-auto mt-n2">
+              <v-col v-show="!!image_url" class="ml-auto mt-n2">
                 Banner Preview
-                <div style="height: 72px; border-radius: 2px" class="grey darken-4">
-                  <div style="display: flex; min-height: 100%; position: relative; min-width: 100%">
+                <div style="height: 72px" class="bg-blue-grey-darken-4 rounded">
+                  <div
+                    style="
+                      display: flex;
+                      min-height: 100%;
+                      position: relative;
+                      min-width: 100%;
+                    "
+                  >
                     <v-img
                       :src="image_url"
-                      max-height="100%"
-                      :position="'top ' + y_pos + '% left 0px'"
+                      height="100%"
+                      :position="`top ${y_pos}% left 0px`"
                       style="position: absolute; top: 0; right: 0; z-index: 9"
                     />
                   </div>
@@ -73,12 +91,12 @@
         <v-row>
           <v-col>
             <v-card outlined>
-              <div class="caption mb-n1 mt-n3">MOUNTS</div>
+              <div class="text-caption">MOUNTS</div>
               <v-card flat>
                 <v-chip
                   v-for="(m, i) in mounts"
                   :key="`mount-${i}`"
-                  close
+                  closable
                   class="mx-1"
                   close-icon="mdi-close"
                   @click:close="mounts.splice(i, 1)"
@@ -86,11 +104,17 @@
                   {{ m }}
                 </v-chip>
                 <v-menu>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn icon v-bind="attrs" v-on="on"><v-icon>mdi-plus</v-icon></v-btn>
+                  <template v-slot:activator="{ props }">
+                    <v-btn icon variant="flat" small v-bind="props"
+                      ><v-icon>mdi-plus</v-icon></v-btn
+                    >
                   </template>
                   <v-card>
-                    <v-toolbar dense color="pink darken-4" class="text-h6">Add Mount</v-toolbar>
+                    <v-toolbar
+                      density="compact"
+                      color="pink darken-4"
+                      title="Add Mount"
+                    />
                     <v-card-text>
                       <v-row justify="space-around" align="center">
                         <v-col v-for="mt in mountTypes" :key="mt">
@@ -119,7 +143,7 @@
               v-model="stats.structure"
               type="number"
               label="Structure"
-              dense
+              density="compact"
               outlined
               hide-details
             />
@@ -129,7 +153,7 @@
               v-model="stats.stress"
               type="number"
               label="Stress"
-              dense
+              density="compact"
               outlined
               hide-details
             />
@@ -139,20 +163,27 @@
               v-model="stats.armor"
               type="number"
               label="Armor"
-              dense
+              density="compact"
               outlined
               hide-details
             />
           </v-col>
           <v-col cols="2">
-            <v-text-field v-model="stats.hp" type="number" label="HP" dense outlined hide-details />
+            <v-text-field
+              v-model="stats.hp"
+              type="number"
+              label="HP"
+              density="compact"
+              outlined
+              hide-details
+            />
           </v-col>
           <v-col cols="2">
             <v-text-field
               v-model="stats.evasion"
               type="number"
               label="Evasion"
-              dense
+              density="compact"
               outlined
               hide-details
             />
@@ -162,7 +193,7 @@
               v-model="stats.edef"
               type="number"
               label="E-Defense"
-              dense
+              density="compact"
               outlined
               hide-details
             />
@@ -172,7 +203,7 @@
               v-model="stats.heatcap"
               type="number"
               label="Heat Capacity"
-              dense
+              density="compact"
               outlined
               hide-details
             />
@@ -182,7 +213,7 @@
               v-model="stats.repcap"
               type="number"
               label="Repair Capacity"
-              dense
+              density="compact"
               outlined
               hide-details
             />
@@ -192,7 +223,7 @@
               v-model="stats.sensor_range"
               type="number"
               label="Sensor Range"
-              dense
+              density="compact"
               outlined
               hide-details
             />
@@ -202,7 +233,7 @@
               v-model="stats.tech_attack"
               type="number"
               label="Tech Attack"
-              dense
+              density="compact"
               outlined
               hide-details
             />
@@ -212,7 +243,7 @@
               v-model="stats.save"
               type="number"
               label="Save"
-              dense
+              density="compact"
               outlined
               hide-details
             />
@@ -222,20 +253,27 @@
               v-model="stats.speed"
               type="number"
               label="Speed"
-              dense
+              density="compact"
               outlined
               hide-details
             />
           </v-col>
           <v-col cols="2">
-            <v-text-field v-model="stats.sp" type="number" label="SP" dense outlined hide-details />
+            <v-text-field
+              v-model="stats.sp"
+              type="number"
+              label="SP"
+              density="compact"
+              outlined
+              hide-details
+            />
           </v-col>
           <v-col cols="2" class="ml-auto">
             <v-select
               v-model="stats.size"
               :items="[0.5, 1, 2, 3, 4]"
               label="Size"
-              dense
+              density="compact"
               outlined
               hide-details
             />
@@ -247,14 +285,21 @@
         </v-row>
         <v-divider class="my-4" />
         <v-card class="pa-2" outlined>
-          <v-toolbar class="text-h5">CORE SYSTEM</v-toolbar>
+          <v-toolbar class="text-h5" title="CORE SYSTEM" />
           <v-card-text>
             <v-row>
               <v-col>
-                <v-text-field label="Name" hide-details v-model="core_system.name" />
+                <v-text-field
+                  label="Name"
+                  hide-details
+                  v-model="core_system.name"
+                />
               </v-col>
               <v-col cols="12">
-                <rich-text-editor title="Description" v-model="core_system.description" />
+                <rich-text-editor
+                  title="Description"
+                  v-model="core_system.description"
+                />
               </v-col>
             </v-row>
             <v-row align="center">
@@ -268,7 +313,7 @@
             </v-row>
             <v-divider class="my-5" />
             <v-card outlined class="ma-2">
-              <v-toolbar dense class="text-h6" color="black">ACTIVE</v-toolbar>
+              <v-toolbar density="compact" title="ACTIVE" color="black" />
               <v-card-text>
                 <v-row align="end">
                   <v-col>
@@ -291,7 +336,7 @@
                         'Mission',
                       ]"
                       label="Use"
-                      dense
+                      density="compact"
                       outlined
                       hide-details
                       clearable
@@ -309,10 +354,13 @@
                     />
                   </v-col>
                   <v-col cols="12">
-                    <rich-text-editor title="Active Effect" v-model="core_system.active_effect" />
+                    <rich-text-editor
+                      title="Active Effect"
+                      v-model="core_system.active_effect"
+                    />
                   </v-col>
                 </v-row>
-                <v-row dense align="center" class="mt-4">
+                <v-row density="compact" align="center" class="mt-4">
                   <v-col><i-action-builder :item="active" /></v-col>
                   <v-col><i-bonus-builder :item="active" /></v-col>
                   <v-col><i-synergy-builder :item="active" /></v-col>
@@ -320,9 +368,8 @@
               </v-card-text>
             </v-card>
             <v-card outlined class="ma-2">
-              <v-toolbar dense class="text-h6" color="black">
-                PASSIVE
-                <span class="caption pl-2">(Optional)</span>
+              <v-toolbar density="compact" title="PASSIVE" color="black">
+                <span class="text-caption px-2">(Optional)</span>
               </v-toolbar>
               <v-card-text>
                 <v-row align="end">
@@ -334,10 +381,13 @@
                     />
                   </v-col>
                   <v-col cols="12">
-                    <rich-text-editor title="Passive Effect" v-model="core_system.passive_effect" />
+                    <rich-text-editor
+                      title="Passive Effect"
+                      v-model="core_system.passive_effect"
+                    />
                   </v-col>
                 </v-row>
-                <v-row dense align="center" class="mt-4">
+                <v-row density="compact" align="center" class="mt-4">
                   <v-col><i-action-builder :item="passive" /></v-col>
                   <v-col><i-bonus-builder :item="passive" /></v-col>
                   <v-col><i-synergy-builder :item="passive" /></v-col>
@@ -351,7 +401,9 @@
       <v-card-actions>
         <v-btn text color="error" @click="dialog = false">cancel</v-btn>
         <v-spacer />
-        <v-btn v-if="isEdit" color="error darken-2" @click="remove">Delete</v-btn>
+        <v-btn v-if="isEdit" color="error darken-2" @click="remove"
+          >Delete</v-btn
+        >
         <v-btn color="success darken-2" :disabled="!confirmOK" @click="submit">
           {{ isEdit ? 'save' : 'confirm' }}
         </v-btn>
@@ -361,10 +413,11 @@
 </template>
 
 <script lang="ts">
-import { mechType, mountType } from '@/assets/enums'
+import { useStore } from 'vuex';
+import { frames } from 'lancer-data';
+import { mechType, mountType } from '../../../assets/enums';
 
-import Vue from 'vue'
-export default Vue.extend({
+export default {
   name: 'frame-editor',
   props: { manufacturer: { type: Object, required: true } },
 
@@ -378,6 +431,7 @@ export default Vue.extend({
     mechtype: [],
     description: '',
     mounts: [],
+    variant: '',
     stats: {
       size: 1,
       structure: 4,
@@ -425,30 +479,39 @@ export default Vue.extend({
   }),
   computed: {
     confirmOK(): boolean {
-      return !!this.id && !!this.name
+      return !!this.id && !!this.name;
+    },
+    availableVariants(): string[] {
+      let userFrames = [];
+      const store = useStore();
+      if (store.getters.lcp.frames && store.getters.lcp.frames.length)
+        userFrames = store.getters.lcp.frames.map((x: any) => x.name);
+      return ['', ...userFrames, ...frames.map((x: any) => x.name)];
     },
   },
   methods: {
     open() {
-      this.dialog = true
+      this.dialog = true;
     },
     close() {
-      this.dialog = false
+      this.dialog = false;
     },
     submit(): void {
-      const cs = JSON.parse(JSON.stringify(this.core_system))
-      cs.active_actions = this.active.actions
-      cs.active_bonuses = this.active.bonuses
-      cs.active_synergies = this.active.synergies
-      cs.passive_actions = this.passive.actions
-      cs.passive_bonuses = this.passive.bonuses
-      cs.passive_synergies = this.passive.synergies
+      const cs = JSON.parse(JSON.stringify(this.core_system));
+      cs.active_actions = this.active.actions;
+      cs.active_bonuses = this.active.bonuses;
+      cs.active_synergies = this.active.synergies;
+      cs.passive_actions = this.passive.actions;
+      cs.passive_bonuses = this.passive.bonuses;
+      cs.passive_synergies = this.passive.synergies;
       const e = {
         id: this.id,
+        license_id: this.id,
         source: this.manufacturer.id,
         license_level: Number(this.license_level),
         name: this.name,
         mechtype: this.mechtype,
+        vartiant: this.variant,
         description: this.description,
         mounts: this.mounts,
         stats: this.stats,
@@ -456,47 +519,48 @@ export default Vue.extend({
         core_system: cs,
         image_url: this.image_url,
         y_pos: this.y_pos,
-      }
-      this.$emit('save', e)
-      this.reset()
-      this.dialog = false
+      };
+      this.$emit('save', e);
+      this.reset();
+      this.dialog = false;
     },
     edit(frame: any): void {
-      this.id = frame.id
-      this.license_level = Number(frame.license_level)
-      this.name = frame.name
-      this.mechtype = frame.mechtype
-      this.description = frame.description
-      this.mounts = frame.mounts
-      this.stats = frame.stats
-      this.traits = frame.traits
-      this.core_system = frame.core_system
+      this.id = frame.id;
+      this.license_level = Number(frame.license_level);
+      this.name = frame.name;
+      this.mechtype = frame.mechtype;
+      this.variant = frame.variant;
+      this.description = frame.description;
+      this.mounts = frame.mounts;
+      this.stats = frame.stats;
+      this.traits = frame.traits;
+      this.core_system = frame.core_system;
       this.active = {
         actions: frame.core_system.active_actions,
         bonuses: frame.core_system.active_bonuses,
         synergies: frame.core_system.active_synergies,
-      }
+      };
       this.passive = {
         actions: frame.core_system.passive_actions,
         bonuses: frame.core_system.passive_bonuses,
         synergies: frame.core_system.passive_synergies,
-      }
-      this.image_url = frame.image_url
-      this.y_pos = frame.y_pos
-      this.isEdit = true
-      this.dialog = true
+      };
+      this.image_url = frame.image_url;
+      this.y_pos = frame.y_pos;
+      this.isEdit = true;
+      this.dialog = true;
     },
     remove(): void {
-      this.$emit('remove', this.id)
-      this.dialog = false
+      this.$emit('remove', this.id);
+      this.dialog = false;
     },
     reset(): void {
-      this.id = ''
-      this.license_level = 1
-      this.name = ''
-      this.mechtype = []
-      this.description = ''
-      this.mounts = []
+      this.id = '';
+      this.license_level = 1;
+      this.name = '';
+      this.mechtype = [];
+      this.description = '';
+      (this.variant = ''), (this.mounts = []);
       this.stats = {
         size: 1,
         structure: 4,
@@ -512,8 +576,8 @@ export default Vue.extend({
         save: 20,
         speed: 4,
         sp: 6,
-      }
-      this.traits = []
+      };
+      this.traits = [];
       this.core_system = {
         name: '',
         active_name: '',
@@ -535,13 +599,13 @@ export default Vue.extend({
         integrated: [],
         special_equipment: [],
         tags: [],
-      }
-      this.active = { actions: [], bonuses: [], synergies: [] }
-      this.passive = { actions: [], bonuses: [], synergies: [] }
-      this.image_url = ''
-      this.y_pos = 0
-      this.isEdit = false
+      };
+      this.active = { actions: [], bonuses: [], synergies: [] };
+      this.passive = { actions: [], bonuses: [], synergies: [] };
+      this.image_url = '';
+      this.y_pos = 0;
+      this.isEdit = false;
     },
   },
-})
+};
 </script>

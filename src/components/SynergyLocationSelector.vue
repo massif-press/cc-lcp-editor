@@ -2,22 +2,20 @@
   <v-select
     label="Synergy Locations"
     multiple
-    dense
     clearable
     small-chips
     outlined
     deletable-chips
     hide-details
-    :items="synergyLocations.map(x => x.value)"
+    :items="synergyLocations"
     v-model="item.synergy_locations"
   />
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { synergyLocations } from '@/assets/enums'
+import { synergyLocations } from '../assets/enums';
 
-export default Vue.extend({
+export default {
   name: 'synergy-selector',
   props: {
     item: {
@@ -29,5 +27,5 @@ export default Vue.extend({
   data: () => ({
     synergyLocations: synergyLocations,
   }),
-})
+};
 </script>

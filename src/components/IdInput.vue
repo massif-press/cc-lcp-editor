@@ -2,35 +2,33 @@
   <v-text-field
     label="ID"
     hide-details
-    v-model="val"
+    v-model="value"
     prepend-icon="mdi-dice-6"
     @click:prepend="uuid"
   />
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid';
 
-export default Vue.extend({
+export default {
   name: 'id-entry',
-  props: ['value'],
+  props: ['modelValue'],
+  emits: ['update:modelValue'],
   computed: {
-    val: {
+    value: {
       get() {
-        const self = this as any
-        return self.value
+        return this.modelValue;
       },
-      set(val) {
-        const self = this as any
-        self.$emit('input', val)
+      set(value: string) {
+        this.$emit('update:modelValue', value);
       },
     },
   },
   methods: {
     uuid(): void {
-      this.$set(this, 'val', uuid())
+      this.$emit('update:modelValue', uuid());
     },
   },
-})
+};
 </script>

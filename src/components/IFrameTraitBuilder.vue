@@ -1,14 +1,14 @@
 <template>
   <v-card outlined>
-    <div class="caption mb-n1 mt-n3">FRAME TRAITS</div>
+    <div class="text-caption">FRAME TRAITS</div>
     <v-card flat>
       <v-tooltip
         v-for="(trait, i) in item.traits"
         :key="`trait_chip_${item.id || item.name}-${i}`"
         top
-        max-width="50vw"
+        width="30em"
       >
-        <template v-slot:activator="{ on }">
+        <template v-slot:activator="{ props }">
           <v-chip
             small
             close
@@ -17,7 +17,7 @@
             close-icon="mdi-close"
             @click="edit(trait, i)"
             @click:close="remove(i)"
-            v-on="on"
+            v-bind="props"
           >
             {{ trait.name }}
           </v-chip>
@@ -28,10 +28,16 @@
 
       <v-dialog v-model="dialog">
         <template v-slot:activator="{ attrs }">
-          <v-btn icon v-bind="attrs" @click="newItem()"><v-icon>mdi-plus</v-icon></v-btn>
+          <v-btn icon variant="flat" small v-bind="attrs" @click="newItem()"
+            ><v-icon>mdi-plus</v-icon></v-btn
+          >
         </template>
         <v-card>
-          <v-toolbar dense color="pink darken-4" class="text-h6">Edit Trait</v-toolbar>
+          <v-toolbar
+            density="compact"
+            color="pink darken-4"
+            title="Edit Trait"
+          />
           <v-card-text>
             <v-row justify="space-around" align="center" class="mt-2">
               <v-col>
@@ -50,7 +56,6 @@
                     'Mission',
                   ]"
                   label="Use"
-                  dense
                   outlined
                   hide-details
                   clearable
@@ -64,13 +69,13 @@
             </v-row>
 
             <v-divider class="my-2" />
-            <v-row dense align="center">
+            <v-row density="compact" align="center">
               <v-col><i-action-builder :item="this" /></v-col>
               <v-col><i-bonus-builder :item="this" /></v-col>
               <v-col><i-counter-builder :item="this" /></v-col>
               <v-col><i-deployable-builder :item="this" /></v-col>
             </v-row>
-            <v-row dense align="center">
+            <v-row density="compact" align="center">
               <v-col><i-synergy-builder :item="this" /></v-col>
               <v-col><integrated-selector :item="this" /></v-col>
               <v-col><special-equipment-selector :item="this" /></v-col>
@@ -80,7 +85,11 @@
           <v-card-actions>
             <v-btn text color="error" @click="dialog = false">cancel</v-btn>
             <v-spacer />
-            <v-btn color="success darken-2" :disabled="!confirmOK" @click="submit">
+            <v-btn
+              color="success darken-2"
+              :disabled="!confirmOK"
+              @click="submit"
+            >
               {{ isEdit ? 'save' : 'confirm' }}
             </v-btn>
           </v-card-actions>
@@ -91,17 +100,16 @@
 </template>
 
 <script lang="ts">
-import RichTextEditor from './RichTextEditor.vue'
-import IActionBuilder from './IActionBuilder.vue'
-import IBonusBuilder from './IBonusBuilder.vue'
-import ISynergyBuilder from './ISynergyBuilder.vue'
-import IDeployableBuilder from './IDeployableBuilder.vue'
-import ICounterBuilder from './ICounterBuilder.vue'
-import IntegratedSelector from './IntegratedSelector.vue'
-import SpecialEquipmentSelector from './SpecialEquipmentSelector.vue'
+import RichTextEditor from './RichTextEditor.vue';
+import IActionBuilder from './IActionBuilder.vue';
+import IBonusBuilder from './IBonusBuilder.vue';
+import ISynergyBuilder from './ISynergyBuilder.vue';
+import IDeployableBuilder from './IDeployableBuilder.vue';
+import ICounterBuilder from './ICounterBuilder.vue';
+import IntegratedSelector from './IntegratedSelector.vue';
+import SpecialEquipmentSelector from './SpecialEquipmentSelector.vue';
 
-import Vue from 'vue'
-export default Vue.extend({
+export default {
   name: 'trait-builder',
   props: { item: { type: Object, required: true } },
 
@@ -122,13 +130,13 @@ export default Vue.extend({
   }),
   computed: {
     confirmOK(): boolean {
-      return !!this.name && !!this.description
+      return !!this.name && !!this.description;
     },
   },
   methods: {
     newItem(): void {
-      this.reset()
-      this.dialog = true
+      this.reset();
+      this.dialog = true;
     },
     submit(): void {
       const e = {
@@ -142,49 +150,49 @@ export default Vue.extend({
         synergies: this.synergies,
         integrated: this.integrated,
         special_equipment: this.special_equipment,
-      }
+      };
       if (this.isEdit) {
-        this.$set(this.item.traits, this.editIndex, e)
+        this.item.traits[this.editIndex] = e;
       } else {
-        if (!this.item.traits) this.$set(this.item, 'traits', [])
-        this.item.traits.push(e)
+        if (!this.item.traits) this.item['traits'] = [];
+        this.item.traits.push(e);
       }
-      this.reset()
-      this.dialog = false
+      this.reset();
+      this.dialog = false;
     },
     edit(trait: any, index: number): void {
-      this.reset()
-      this.name = trait.name
-      this.use = trait.use
-      this.description = trait.description
-      this.actions = trait.actions
-      this.bonuses = trait.bonuses
-      this.counters = trait.counters
-      this.deployables = trait.deployables
-      this.synergies = trait.synergies
-      this.integrated = trait.integrated
-      this.special_equipment = trait.special_equipment
-      this.isEdit = true
-      this.editIndex = index
-      this.dialog = true
+      this.reset();
+      this.name = trait.name;
+      this.use = trait.use;
+      this.description = trait.description;
+      this.actions = trait.actions;
+      this.bonuses = trait.bonuses;
+      this.counters = trait.counters;
+      this.deployables = trait.deployables;
+      this.synergies = trait.synergies;
+      this.integrated = trait.integrated;
+      this.special_equipment = trait.special_equipment;
+      this.isEdit = true;
+      this.editIndex = index;
+      this.dialog = true;
     },
     remove(index: number): void {
-      this.item.traits.splice(index, 1)
+      this.item.traits.splice(index, 1);
     },
     reset(): void {
-      this.name = ''
-      this.use = ''
-      this.description = ''
-      this.actions = []
-      this.bonuses = []
-      this.counters = []
-      this.deployables = []
-      this.synergies = []
-      this.integrated = []
-      this.special_equipment = []
-      this.isEdit = false
-      this.editIndex = -1
+      this.name = '';
+      this.use = '';
+      this.description = '';
+      this.actions = [];
+      this.bonuses = [];
+      this.counters = [];
+      this.deployables = [];
+      this.synergies = [];
+      this.integrated = [];
+      this.special_equipment = [];
+      this.isEdit = false;
+      this.editIndex = -1;
     },
   },
-})
+};
 </script>

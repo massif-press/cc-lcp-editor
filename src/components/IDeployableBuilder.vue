@@ -1,13 +1,13 @@
 <template>
-  <v-card outlined>
-    <div class="caption mb-n1 mt-n3">DEPLOYABLES</div>
+  <v-card>
+    <v-toolbar density="compact" color="primary" title="Deployables" />
     <v-card flat>
       <v-tooltip
         v-for="(deployable, i) in item.deployables"
         :key="`deployable_chip_${item.id}-${i}`"
         top
       >
-        <template v-slot:activator="{ on }">
+        <template v-slot:activator="{ props }">
           <v-chip
             small
             close
@@ -16,15 +16,16 @@
             close-icon="mdi-close"
             @click="edit(deployable, i)"
             @click:close="remove(i)"
-            v-on="on"
+            v-bind="props"
           >
             {{ deployable.name }} ({{ deployable.type }})
           </v-chip>
         </template>
         <div>
           Activation: {{ deployable.activation }} // Deactivation:
-          {{ deployable.deactivation || '--' }} // Recall: {{ deployable.recall || '--' }} //
-          Redeploy: {{ deployable.redeploy || '--' }}
+          {{ deployable.deactivation || '--' }} // Recall:
+          {{ deployable.recall || '--' }} // Redeploy:
+          {{ deployable.redeploy || '--' }}
         </div>
         <div v-html="deployable.detail" />
         <v-divider />
@@ -53,7 +54,9 @@
             outlined
             small
             class="mx-1"
-            v-html="`${deployable.evasion ? `  Evasion: ${deployable.evasion}` : ''}`"
+            v-html="
+              `${deployable.evasion ? `  Evasion: ${deployable.evasion}` : ''}`
+            "
           />
           <v-chip
             outlined
@@ -65,25 +68,41 @@
             outlined
             small
             class="mx-1"
-            v-html="`${deployable.heatcap ? `  Heatcap: ${deployable.heatcap}` : ''}`"
+            v-html="
+              `${deployable.heatcap ? `  Heatcap: ${deployable.heatcap}` : ''}`
+            "
           />
           <v-chip
             outlined
             small
             class="mx-1"
-            v-html="`${deployable.repcap ? `  Repcap: ${deployable.repcap}` : ''}`"
+            v-html="
+              `${deployable.repcap ? `  Repcap: ${deployable.repcap}` : ''}`
+            "
           />
           <v-chip
             outlined
             small
             class="mx-1"
-            v-html="`${deployable.sensor_range ? `  Sensors: ${deployable.sensor_range}` : ''}`"
+            v-html="
+              `${
+                deployable.sensor_range
+                  ? `  Sensors: ${deployable.sensor_range}`
+                  : ''
+              }`
+            "
           />
           <v-chip
             outlined
             small
             class="mx-1"
-            v-html="`${deployable.tech_attack ? `  Tech Atk: ${deployable.tech_attack}` : ''}`"
+            v-html="
+              `${
+                deployable.tech_attack
+                  ? `  Tech Atk: ${deployable.tech_attack}`
+                  : ''
+              }`
+            "
           />
           <v-chip
             outlined
@@ -106,26 +125,48 @@
         </div>
         <div v-if="deployable.tags">
           <v-divider />
-          <v-chip small v-for="t in deployable.tags" :key="t.id">{{ t }}</v-chip>
+          <v-chip small v-for="t in deployable.tags" :key="t.id">{{
+            t
+          }}</v-chip>
         </div>
       </v-tooltip>
 
       <v-dialog v-model="dialog">
         <template v-slot:activator="{ attrs }">
-          <v-btn icon v-bind="attrs" @click="newItem()"><v-icon>mdi-plus</v-icon></v-btn>
+          <v-btn
+            size="small"
+            icon
+            variant="flat"
+            v-bind="attrs"
+            @click="newItem()"
+            ><v-icon>mdi-plus</v-icon></v-btn
+          >
         </template>
         <v-card>
-          <v-toolbar dense color="pink darken-4" class="text-h6">Add Deployable</v-toolbar>
+          <v-toolbar
+            density="compact"
+            color="pink darken-4"
+            title="Add Deployable"
+          />
           <v-card-text>
             <v-row justify="space-around" align="center" class="mt-2">
               <v-col>
                 <v-text-field label="Name" hide-details v-model="name" />
               </v-col>
               <v-col>
-                <v-text-field label="Deployable Type" hide-details v-model="type" />
+                <v-text-field
+                  label="Deployable Type"
+                  hide-details
+                  v-model="type"
+                />
               </v-col>
               <v-col>
-                <v-select label="Size" :items="[0.5, 1, 2, 3, 4]" hide-details v-model="size" />
+                <v-select
+                  label="Size"
+                  :items="[0.5, 1, 2, 3, 4]"
+                  hide-details
+                  v-model="size"
+                />
               </v-col>
               <v-col v-if="!npc">
                 <i-synergy-builder :item="this" />
@@ -139,7 +180,7 @@
             <v-row align="center">
               <v-col><tag-selector :item="item" /></v-col>
             </v-row>
-            <v-row dense>
+            <v-row density="compact">
               <v-col>
                 <activator-selector :item="this" label="Activation" />
               </v-col>
@@ -152,19 +193,34 @@
                 />
               </v-col>
               <v-col>
-                <activator-selector :item="this" label="Recall" field="recall" optional />
+                <activator-selector
+                  :item="this"
+                  label="Recall"
+                  field="recall"
+                  optional
+                />
               </v-col>
               <v-col>
-                <activator-selector :item="this" label="Redeploy" field="redeploy" optional />
+                <activator-selector
+                  :item="this"
+                  label="Redeploy"
+                  field="redeploy"
+                  optional
+                />
               </v-col>
             </v-row>
-            <v-row dense align="center" justify="space-around" class="my-4">
+            <v-row
+              density="compact"
+              align="center"
+              justify="space-around"
+              class="my-4"
+            >
               <v-col>
                 <v-text-field
                   v-model="instances"
                   type="number"
                   label="Instances"
-                  dense
+                  density="compact"
                   clearable
                   outlined
                   hide-details
@@ -175,28 +231,49 @@
                   v-model="cost"
                   type="number"
                   label="Use Cost"
-                  dense
+                  density="compact"
                   clearable
                   outlined
                   hide-details
                 />
               </v-col>
               <v-col v-show="!npc" class="mt-n4">
-                <v-switch v-model="pilot" label="Pilot" dense hide-details />
+                <v-switch
+                  color="secondary"
+                  v-model="pilot"
+                  label="Pilot"
+                  density="compact"
+                  hide-details
+                />
               </v-col>
               <v-col v-show="!npc" class="mt-n4">
-                <v-switch v-model="mech" label="Mech" dense hide-details />
+                <v-switch
+                  color="secondary"
+                  v-model="mech"
+                  label="Mech"
+                  density="compact"
+                  hide-details
+                />
               </v-col>
             </v-row>
-            <v-row dense align="center" justify="space-around" class="my-2">
+            <v-row
+              density="compact"
+              align="center"
+              justify="space-around"
+              class="my-2"
+            >
               <v-col v-for="k in stats" :key="`dep_stat_${k}`" cols="2">
-                <tiered-stat-input v-if="npc" v-model="$data[k]" :title="k.replaceAll('_', ' ')" />
+                <tiered-stat-input
+                  v-if="npc"
+                  v-model="$data[k]"
+                  :title="k.replaceAll('_', ' ')"
+                />
                 <v-text-field
                   v-else
                   v-model="$data[k]"
                   type="number"
                   :label="k.replaceAll('_', ' ')"
-                  dense
+                  density="compact"
                   clearable
                   outlined
                   hide-details
@@ -204,7 +281,7 @@
               </v-col>
             </v-row>
             <v-divider class="my-4" />
-            <v-row dense align="center">
+            <v-row density="compact" align="center">
               <v-col><i-action-builder :item="this" npc /></v-col>
               <v-col><i-bonus-builder :item="this" npc /></v-col>
               <v-col><i-counter-builder :item="this" /></v-col>
@@ -214,7 +291,11 @@
           <v-card-actions>
             <v-btn text color="error" @click="dialog = false">cancel</v-btn>
             <v-spacer />
-            <v-btn color="success darken-2" :disabled="!confirmOK" @click="submit">
+            <v-btn
+              color="success darken-2"
+              :disabled="!confirmOK"
+              @click="submit"
+            >
               {{ isEdit ? 'save' : 'confirm' }}
             </v-btn>
           </v-card-actions>
@@ -225,7 +306,6 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
 const stats = [
   'armor',
   'hp',
@@ -237,9 +317,9 @@ const stats = [
   'tech_attack',
   'save',
   'speed',
-]
+];
 
-export default Vue.extend({
+export default {
   name: 'deployable-builder',
   props: { item: { type: Object, required: true }, npc: { type: Boolean } },
 
@@ -277,13 +357,13 @@ export default Vue.extend({
   }),
   computed: {
     confirmOK(): boolean {
-      return !!this.name && !!this.type && !!this.detail && !!this.size
+      return !!this.name && !!this.type && !!this.detail && !!this.size;
     },
   },
   methods: {
     newItem(): void {
-      this.reset()
-      this.dialog = true
+      this.reset();
+      this.dialog = true;
     },
     submit(): void {
       const e = {
@@ -313,79 +393,79 @@ export default Vue.extend({
         bonuses: this.bonuses,
         synergies: this.synergies,
         counters: this.counters,
-      }
+      };
       if (this.isEdit) {
-        this.$set(this.item.deployables, this.editIndex, e)
+        this.item.deployables[this.editIndex] = e;
       } else {
-        if (!this.item.deployables) this.$set(this.item, 'deployables', [])
-        this.item.deployables.push(e)
+        if (!this.item.deployables) this.item['deployables'] = [];
+        this.item.deployables.push(e);
       }
-      this.reset()
-      this.dialog = false
+      this.reset();
+      this.dialog = false;
     },
     edit(deployable: any, index: number): void {
-      this.reset()
-      this.name = deployable.name || ''
-      this.type = deployable.type || ''
-      this.detail = deployable.detail || ''
-      this.size = deployable.size || 1
-      this.activation = deployable.activation || ''
-      this.deactivation = deployable.deactivation || ''
-      this.recall = deployable.recall || ''
-      this.redeploy = deployable.redeploy || ''
-      this.instances = deployable.instances || 1
-      this.cost = deployable.cost || 1
-      this.armor = deployable.armor || ''
-      this.hp = deployable.hp || ''
-      this.evasion = deployable.evasion || ''
-      this.edef = deployable.edef || ''
-      this.heatcap = deployable.heatcap || ''
-      this.repcap = deployable.repcap || ''
-      this.sensor_range = deployable.sensor_range || ''
-      this.tech_attack = deployable.tech_attack || ''
-      this.save = deployable.save || ''
-      this.speed = deployable.speed || ''
-      this.pilot = deployable.pilot || false
-      this.mech = deployable.mech || false
-      this.actions = deployable.actions || []
-      this.bonuses = deployable.bonuses || []
-      this.synergies = deployable.synergies || []
-      this.counters = deployable.counters || []
-      this.isEdit = true
-      this.editIndex = index
-      this.dialog = true
+      this.reset();
+      this.name = deployable.name || '';
+      this.type = deployable.type || '';
+      this.detail = deployable.detail || '';
+      this.size = deployable.size || 1;
+      this.activation = deployable.activation || '';
+      this.deactivation = deployable.deactivation || '';
+      this.recall = deployable.recall || '';
+      this.redeploy = deployable.redeploy || '';
+      this.instances = deployable.instances || 1;
+      this.cost = deployable.cost || 1;
+      this.armor = deployable.armor || '';
+      this.hp = deployable.hp || '';
+      this.evasion = deployable.evasion || '';
+      this.edef = deployable.edef || '';
+      this.heatcap = deployable.heatcap || '';
+      this.repcap = deployable.repcap || '';
+      this.sensor_range = deployable.sensor_range || '';
+      this.tech_attack = deployable.tech_attack || '';
+      this.save = deployable.save || '';
+      this.speed = deployable.speed || '';
+      this.pilot = deployable.pilot || false;
+      this.mech = deployable.mech || false;
+      this.actions = deployable.actions || [];
+      this.bonuses = deployable.bonuses || [];
+      this.synergies = deployable.synergies || [];
+      this.counters = deployable.counters || [];
+      this.isEdit = true;
+      this.editIndex = index;
+      this.dialog = true;
     },
     remove(index: number): void {
-      this.item.deployables.splice(index, 1)
+      this.item.deployables.splice(index, 1);
     },
     reset(): void {
-      this.name = ''
-      this.type = ''
-      this.detail = ''
-      this.size = 1
-      this.activation = ''
-      this.deactivation = ''
-      this.recall = ''
-      this.redeploy = ''
-      this.instances = 1
-      this.cost = 1
-      this.armor = ''
-      this.hp = ''
-      this.evasion = ''
-      this.edef = ''
-      this.heatcap = ''
-      this.repcap = ''
-      this.sensor_range = ''
-      this.tech_attack = ''
-      this.save = ''
-      this.speed = ''
-      this.pilot = false
-      this.mech = false
-      this.actions = []
-      this.bonuses = []
-      this.synergies = []
-      this.counters = []
+      this.name = '';
+      this.type = '';
+      this.detail = '';
+      this.size = 1;
+      this.activation = '';
+      this.deactivation = '';
+      this.recall = '';
+      this.redeploy = '';
+      this.instances = 1;
+      this.cost = 1;
+      this.armor = '';
+      this.hp = '';
+      this.evasion = '';
+      this.edef = '';
+      this.heatcap = '';
+      this.repcap = '';
+      this.sensor_range = '';
+      this.tech_attack = '';
+      this.save = '';
+      this.speed = '';
+      this.pilot = false;
+      this.mech = false;
+      this.actions = [];
+      this.bonuses = [];
+      this.synergies = [];
+      this.counters = [];
     },
   },
-})
+};
 </script>

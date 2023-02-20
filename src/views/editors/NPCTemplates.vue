@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row>
       <v-col cols="2">
-        <v-list nav dense>
+        <v-list nav density="compact">
           <v-list-item
             v-for="(c, i) in templates"
             :key="`${c.id || 'new'}_${i}`"
@@ -38,25 +38,39 @@
         </v-btn>
       </v-col>
       <v-col>
-        <v-container v-if="selected && selected === 'generic'">todo</v-container>
+        <v-container v-if="selected && selected === 'generic'"
+          >todo</v-container
+        >
 
         <v-container v-else-if="selected">
           <v-card outlined>
-            <v-toolbar dense color="primary" class="white--text text-h6">
+            <v-toolbar
+              density="compact"
+              color="primary"
+              class="white--text text-h6"
+            >
               {{ selected.name }}
             </v-toolbar>
             <v-card-text>
-              <v-row dense justify="space-around" align="end">
+              <v-row density="compact" justify="space-around" align="end">
                 <v-col cols="3">
                   <id-input v-model="selected.id" />
                 </v-col>
                 <v-col>
-                  <v-text-field v-model="selected.name" hide-details label="Name" dense />
+                  <v-text-field
+                    v-model="selected.name"
+                    hide-details
+                    label="Name"
+                    density="compact"
+                  />
                 </v-col>
               </v-row>
-              <v-row dense justify="space-around" align="center">
+              <v-row density="compact" justify="space-around" align="center">
                 <v-col cols="12">
-                  <rich-text-editor title="Description" v-model="selected.description" />
+                  <rich-text-editor
+                    title="Description"
+                    v-model="selected.description"
+                  />
                 </v-col>
                 <v-col cols="12">
                   <rich-text-editor title="Detail" v-model="selected.detail" />
@@ -69,7 +83,7 @@
                     <v-col cols="auto">
                       <v-simple-checkbox
                         v-model="selected.allowOptional"
-                        dense
+                        density="compact"
                         hide-details
                         :ripple="false"
                       />
@@ -89,7 +103,7 @@
                     <v-col cols="auto">
                       <v-simple-checkbox
                         v-model="selected.forceClassOptional"
-                        dense
+                        density="compact"
                         hide-details
                         :ripple="false"
                       />
@@ -105,7 +119,7 @@
                         v-model="selected.optionalClassMin"
                         type="number"
                         outlined
-                        dense
+                        density="compact"
                         hide-details
                       />
                     </v-col>
@@ -116,20 +130,25 @@
                         v-model="selected.optionalClassMax"
                         type="number"
                         outlined
-                        dense
+                        density="compact"
                         hide-details
                       />
                     </v-col>
-                    <v-col cols="auto">option(s) from the NPC's Class Features list</v-col>
+                    <v-col cols="auto"
+                      >option(s) from the NPC's Class Features list</v-col
+                    >
                     <v-col cols="3" class="mx-2 mt-n2">
                       <v-select
                         :value="selected.optionalClassPerTier"
                         v-model="selected.optionalClassPerTier"
                         :items="[
-                          { text: 'when choosing optional systems.', value: false },
+                          {
+                            text: 'when choosing optional systems.',
+                            value: false,
+                          },
                           { text: 'per Tier.', value: true },
                         ]"
-                        dense
+                        density="compact"
                         hide-details
                       />
                     </v-col>
@@ -139,7 +158,7 @@
                     <v-col cols="auto">
                       <v-simple-checkbox
                         v-model="selected.forceOptional"
-                        dense
+                        density="compact"
                         hide-details
                         :ripple="false"
                       />
@@ -155,7 +174,7 @@
                         v-model="selected.optionalMin"
                         type="number"
                         outlined
-                        dense
+                        density="compact"
                         hide-details
                       />
                     </v-col>
@@ -166,20 +185,26 @@
                         v-model="selected.optionalMax"
                         type="number"
                         outlined
-                        dense
+                        density="compact"
                         hide-details
                       />
                     </v-col>
-                    <v-col cols="auto">option(s) from the {{ selected.name }} Features list</v-col>
+                    <v-col cols="auto"
+                      >option(s) from the {{ selected.name }} Features
+                      list</v-col
+                    >
                     <v-col cols="3" class="mx-2 mt-n2">
                       <v-select
                         :value="selected.optionalPerTier"
                         v-model="selected.optionalPerTier"
                         :items="[
-                          { text: 'when choosing optional systems.', value: false },
+                          {
+                            text: 'when choosing optional systems.',
+                            value: false,
+                          },
                           { text: 'per Tier.', value: true },
                         ]"
-                        dense
+                        density="compact"
                         hide-details
                       />
                     </v-col>
@@ -192,7 +217,7 @@
                 >
                   <v-textarea
                     v-model="selected.caveat"
-                    dense
+                    density="compact"
                     hide-details
                     rows="1"
                     outlined
@@ -204,14 +229,20 @@
               <v-row>
                 <v-col>
                   <v-card outlined>
-                    <v-toolbar dense color="grey darken-3"><b>BASE FEATURES</b></v-toolbar>
+                    <v-toolbar density="compact" color="grey darken-3"
+                      ><b>BASE FEATURES</b></v-toolbar
+                    >
                     <v-card-text>
                       <v-row>
                         <v-col
                           v-for="(item, i) in getFeatures(selected)"
                           :key="`base_feature_${i}`"
                         >
-                          <v-btn block :color="colorByType(item)" @click="openByType(item)">
+                          <v-btn
+                            block
+                            :color="colorByType(item)"
+                            @click="openByType(item)"
+                          >
                             {{ item.name }}
                           </v-btn>
                         </v-col>
@@ -221,7 +252,7 @@
                 </v-col>
                 <v-col>
                   <v-card outlined>
-                    <v-toolbar dense color="grey darken-3">
+                    <v-toolbar density="compact" color="grey darken-3">
                       <b>{{ selected.name }} FEATURES</b>
                     </v-toolbar>
                     <v-card-text>
@@ -230,7 +261,11 @@
                           v-for="(item, i) in getFeatures(selected, true)"
                           :key="`optional_feature_${i}`"
                         >
-                          <v-btn block :color="colorByType(item)" @click="openByType(item)">
+                          <v-btn
+                            block
+                            :color="colorByType(item)"
+                            @click="openByType(item)"
+                          >
                             {{ item.name }}
                           </v-btn>
                         </v-col>
@@ -241,31 +276,56 @@
               </v-row>
               <v-row>
                 <v-col>
-                  <v-btn block large color="pink darken-4" @click="newFeature('traits')">
+                  <v-btn
+                    block
+                    large
+                    color="pink darken-4"
+                    @click="newFeature('traits')"
+                  >
                     <v-icon left>mdi-plus</v-icon>
                     add new trait
                   </v-btn>
                 </v-col>
                 <v-col>
-                  <v-btn block large color="deep-orange darken-4" @click="newFeature('weapons')">
+                  <v-btn
+                    block
+                    large
+                    color="deep-orange darken-4"
+                    @click="newFeature('weapons')"
+                  >
                     <v-icon left>mdi-plus</v-icon>
                     add new weapon
                   </v-btn>
                 </v-col>
                 <v-col>
-                  <v-btn block large color="green darken-2" @click="newFeature('systems')">
+                  <v-btn
+                    block
+                    large
+                    color="green darken-2"
+                    @click="newFeature('systems')"
+                  >
                     <v-icon left>mdi-plus</v-icon>
                     add new system
                   </v-btn>
                 </v-col>
                 <v-col>
-                  <v-btn block large color="teal darken-4" @click="newFeature('reactions')">
+                  <v-btn
+                    block
+                    large
+                    color="teal darken-4"
+                    @click="newFeature('reactions')"
+                  >
                     <v-icon left>mdi-plus</v-icon>
                     add new reaction
                   </v-btn>
                 </v-col>
                 <v-col>
-                  <v-btn block large color="amber darken-4" @click="newFeature('protocols')">
+                  <v-btn
+                    block
+                    large
+                    color="amber darken-4"
+                    @click="newFeature('protocols')"
+                  >
                     <v-icon left>mdi-plus</v-icon>
                     add new protocol
                   </v-btn>
@@ -278,20 +338,32 @@
         </v-container>
         <div v-else>
           <v-row style="height: 50vh" justify="center" align="center">
-            <v-col cols="auto" class="text-h2 text--disabled">Select a Class</v-col>
+            <v-col cols="auto" class="text-h2 text--disabled"
+              >Select a Class</v-col
+            >
           </v-row>
         </div>
       </v-col>
     </v-row>
-    <v-footer fixed>
+    <v-footer app>
       <v-btn text to="/">
         <v-icon>mdi-chevron-left</v-icon>
         back
       </v-btn>
       <v-spacer />
-      <input ref="fileUpload" type="file" accept=".json" hidden @change="importFile" />
-      <v-btn outlined small class="mx-1" @click="exportJSON()">Export JSON File</v-btn>
-      <v-btn outlined small class="mx-1" @click="importJSON()">Import JSON File</v-btn>
+      <input
+        ref="fileUpload"
+        type="file"
+        accept=".json"
+        hidden
+        @change="importFile"
+      />
+      <v-btn outlined small class="mx-1" @click="exportJSON()"
+        >Export JSON File</v-btn
+      >
+      <v-btn outlined small class="mx-1" @click="importJSON()"
+        >Import JSON File</v-btn
+      >
     </v-footer>
     <div style="height: 50px" />
     <npc-system-editor
@@ -328,15 +400,14 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { npcRole } from '@/assets/enums'
-import NpcSystemEditor from './components/_NpcSystemEditor.vue'
-import NpcTraitEditor from './components/_NpcTraitEditor.vue'
-import NpcWeaponEditor from './components/_NpcWeaponEditor.vue'
-import NpcReactionEditor from './components/_NpcReactionEditor.vue'
-import NpcProtocolEditor from './components/_NpcProtocolEditor.vue'
+import { npcRole } from '../assets/enums';
+import NpcSystemEditor from './components/_NpcSystemEditor.vue';
+import NpcTraitEditor from './components/_NpcTraitEditor.vue';
+import NpcWeaponEditor from './components/_NpcWeaponEditor.vue';
+import NpcReactionEditor from './components/_NpcReactionEditor.vue';
+import NpcProtocolEditor from './components/_NpcProtocolEditor.vue';
 
-export default Vue.extend({
+export default {
   name: 'npc-class-editor',
   components: {
     NpcSystemEditor,
@@ -347,12 +418,12 @@ export default Vue.extend({
   },
   computed: {
     lcp(): any {
-      return this.$store.getters.lcp
+      return this.$store.getters.lcp;
     },
     templates() {
       if (!this.$store.getters.lcp.npc_templates)
-        this.$set(this.$store.getters.lcp, 'npc_templates', [])
-      return this.$store.getters.lcp.npc_templates
+        this.$store.getters.lcp['npc_templates'] = [];
+      return this.$store.getters.lcp.npc_templates;
     },
   },
   data: () => ({
@@ -361,36 +432,38 @@ export default Vue.extend({
   }),
   methods: {
     colorByType(item: any) {
-      if (item.type === 'Weapon') return 'deep-orange darken-4'
-      if (item.type === 'Trait') return 'pink darken-4'
-      if (item.type === 'System') return 'green darken-3'
-      if (item.type === 'Protocol') return 'amber darken-4'
-      return 'teal darken-4'
+      if (item.type === 'Weapon') return 'deep-orange darken-4';
+      if (item.type === 'Trait') return 'pink darken-4';
+      if (item.type === 'System') return 'green darken-3';
+      if (item.type === 'Protocol') return 'amber darken-4';
+      return 'teal darken-4';
     },
     openByType(item: any) {
-      const type = item.type.toLowerCase() + 's'
+      const type = item.type.toLowerCase() + 's';
       if (this.$refs && this.$refs[type]) {
-        const r = this.$refs[type] as any
-        r.edit(item)
+        const r = this.$refs[type] as any;
+        r.edit(item);
       }
     },
     getFeatures(c: any, isOptional?: boolean) {
-      if (!this.lcp.npc_features) return []
+      if (!this.lcp.npc_features) return [];
       if (c === 'generic') {
-        return this.lcp.npc_features.filter((x: any) => x.origin.type === 'Generic')
+        return this.lcp.npc_features.filter(
+          (x: any) => x.origin.type === 'Generic'
+        );
       }
 
       const fArr = this.lcp.npc_features.filter(
         (x: any) => x.origin.type === 'Template' && x.origin.origin_id === c.id
-      )
+      );
 
       return isOptional
         ? fArr.filter((x: any) => x.origin.optional)
-        : fArr.filter((x: any) => !x.origin.optional)
+        : fArr.filter((x: any) => !x.origin.optional);
     },
     addNew() {
       if (!this.lcp.npc_templates) {
-        this.$set(this.lcp, 'npc_templates', [])
+        this.lcp['npc_templates'] = [];
       }
       this.lcp.npc_templates.push({
         id: 'new',
@@ -409,49 +482,53 @@ export default Vue.extend({
         caveat: '',
         tables: [],
         clocks: [],
-      })
+      });
     },
     newFeature(type: string) {
       if (this.$refs && this.$refs[type]) {
-        const r = this.$refs[type] as any
-        r.reset()
-        r.open()
+        const r = this.$refs[type] as any;
+        r.reset();
+        r.open();
       }
     },
     saveItem(item: any) {
-      if (!this.lcp.npc_features) this.$set(this.lcp, 'npc_features', [])
-      const idx = this.lcp.npc_features.findIndex((x: any) => x.id === item.id)
+      if (!this.lcp.npc_features) this.lcp['npc_features'] = [];
+      const idx = this.lcp.npc_features.findIndex((x: any) => x.id === item.id);
       if (idx < 0) {
-        this.lcp.npc_features.push(item)
-      } else this.$set(this.lcp.npc_features, idx, item)
+        this.lcp.npc_features.push(item);
+      } else this.lcp.npc_features[idx] = item;
     },
     removeItem(id: string) {
-      const idx = this.lcp.npc_features.findIndex((x: any) => x.id === id)
-      if (idx > -1) this.lcp.npc_features.splice(idx, 1)
+      const idx = this.lcp.npc_features.findIndex((x: any) => x.id === id);
+      if (idx > -1) this.lcp.npc_features.splice(idx, 1);
     },
     _exportJSON(type: string) {
-      const blob = new Blob([JSON.stringify(this.lcp[type])])
-      const elem = window.document.createElement('a')
-      elem.href = window.URL.createObjectURL(blob)
-      elem.download = `${type}.json`
-      document.body.appendChild(elem)
-      elem.click()
-      document.body.removeChild(elem)
+      const blob = new Blob([JSON.stringify(this.lcp[type])]);
+      const elem = window.document.createElement('a');
+      elem.href = window.URL.createObjectURL(blob);
+      elem.download = `${type}.json`;
+      document.body.appendChild(elem);
+      elem.click();
+      document.body.removeChild(elem);
     },
     exportJSON() {
-      this._exportJSON('npc_templates')
-      this._exportJSON('npc_features')
+      this._exportJSON('npc_templates');
+      this._exportJSON('npc_features');
     },
     importJSON() {
-      if (this.$refs.fileUpload) (this.$refs.fileUpload as HTMLElement).click()
+      if (this.$refs.fileUpload) (this.$refs.fileUpload as HTMLElement).click();
     },
     importFile(evt: any) {
-      const file = evt.target.files[0]
-      const reader = new FileReader()
+      const file = evt.target.files[0];
+      const reader = new FileReader();
 
-      reader.onload = e =>
-        this.$set(this.lcp, 'npc_templates', JSON.parse(e?.target?.result?.toString() || ''))
-      reader.readAsText(file)
+      reader.onload = (e) =>
+        this.$set(
+          this.lcp,
+          'npc_templates',
+          JSON.parse(e?.target?.result?.toString() || '')
+        );
+      reader.readAsText(file);
     },
     generateStatObject() {
       return {
@@ -469,8 +546,8 @@ export default Vue.extend({
         engineering: [0, 0, 0],
         size: [[1], [1], [1]],
         activations: [0, 0, 0],
-      }
+      };
     },
   },
-})
+};
 </script>

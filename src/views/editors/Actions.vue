@@ -5,7 +5,7 @@
     :checkEmpty="['id', 'name', 'activation', 'detail']"
   >
     <template v-slot="{ item }">
-      <v-toolbar dense color="primary" class="white--text text-h6">{{ item.name }}</v-toolbar>
+      <v-toolbar density="compact" color="primary" :title="item.name" />
       <v-card-text>
         <v-row>
           <v-col><id-input v-model="item.id" /></v-col>
@@ -17,17 +17,47 @@
         <v-text-field label="Short Description" v-model="item.terse" />
         <rich-text-editor title="Long Description" v-model="item.detail" />
 
-        <v-row v-if="item.activation !== 'Downtime'" class="px-4 mb-2" dense>
-          <v-col><v-switch dense hide-details label="Pilot Action" v-model="item.pilot" /></v-col>
-          <v-col><v-switch dense hide-details label="Mech Action" v-model="item.mech" /></v-col>
+        <v-row
+          v-if="item.activation !== 'Downtime'"
+          class="px-4 mb-2"
+          density="compact"
+        >
+          <v-col
+            ><v-switch
+              color="secondary"
+              density="compact"
+              hide-details
+              label="Pilot Action"
+              v-model="item.pilot"
+          /></v-col>
+          <v-col
+            ><v-switch
+              color="secondary"
+              density="compact"
+              hide-details
+              label="Mech Action"
+              v-model="item.mech"
+          /></v-col>
           <v-col>
-            <v-switch dense hide-details label="Ignore 'Used' State" v-model="item.ignore_used" />
+            <v-switch
+              color="secondary"
+              density="compact"
+              hide-details
+              label="Ignore 'Used' State"
+              v-model="item.ignore_used"
+            />
           </v-col>
           <v-col>
-            <v-switch dense hide-details label="Incur Heat Cost" v-model="item.heat_cost" />
+            <v-switch
+              color="secondary"
+              density="compact"
+              hide-details
+              label="Incur Heat Cost"
+              v-model="item.heat_cost"
+            />
           </v-col>
         </v-row>
-        <v-row dense>
+        <v-row density="compact">
           <v-col>
             <synergy-location-selector :item="item" />
           </v-col>
@@ -38,11 +68,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import EditorBase from './EditorBase.vue'
+import EditorBase from './EditorBase.vue';
 
-export default Vue.extend({
+export default {
   name: 'action-editor',
   components: { EditorBase },
-})
+};
 </script>

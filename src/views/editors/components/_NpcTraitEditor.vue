@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" fullscreen>
     <v-card>
-      <v-toolbar dense color="pink darken-4" class="text-h6">
+      <v-toolbar density="compact" color="pink darken-4" class="text-h6">
         NPC Trait Editor
         <v-spacer />
         <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
@@ -21,20 +21,27 @@
               type="number"
               hide-details
               outlined
-              dense
+              density="compact"
               clearable
             />
           </v-col>
           <v-col cols="auto">
-            <v-switch v-model="hide_active" dense hide-details label="Hide in Active Mode" />
+            <v-switch
+              color="secondary"
+              v-model="hide_active"
+              density="compact"
+              hide-details
+              label="Hide in Active Mode"
+            />
           </v-col>
           <v-col v-show="npcClass || npcTemplate" cols="auto">
             <v-switch
+              color="secondary"
               inset
               v-model="optional"
               :value="optional"
               mandatory
-              dense
+              density="compact"
               hide-details
               :label="`${npcClass ? 'Class' : 'Template'} Feature`"
             />
@@ -63,7 +70,9 @@
       <v-card-actions>
         <v-btn text color="error" @click="dialog = false">cancel</v-btn>
         <v-spacer />
-        <v-btn v-if="isEdit" color="error darken-2" @click="remove">Delete</v-btn>
+        <v-btn v-if="isEdit" color="error darken-2" @click="remove"
+          >Delete</v-btn
+        >
         <v-btn color="success darken-2" :disabled="!confirmOK" @click="submit">
           {{ isEdit ? 'save' : 'confirm' }}
         </v-btn>
@@ -73,8 +82,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-export default Vue.extend({
+export default {
   name: 'npc-trait-editor',
   props: {
     npcClass: { type: Object, required: false },
@@ -106,22 +114,22 @@ export default Vue.extend({
           name: this[this.npcClass ? 'npcClass' : 'npcTemplate'].name,
           optional: this.optional,
           origin_id: this[this.npcClass ? 'npcClass' : 'npcTemplate'].id,
-        }
+        };
       else
         return {
           type: 'Generic',
-        }
+        };
     },
     confirmOK(): boolean {
-      return !!this.id && !!this.name
+      return !!this.id && !!this.name;
     },
   },
   methods: {
     open() {
-      this.dialog = true
+      this.dialog = true;
     },
     close() {
-      this.dialog = false
+      this.dialog = false;
     },
     submit(): void {
       const e = {
@@ -140,50 +148,50 @@ export default Vue.extend({
         deployables: this.deployables,
         counters: this.counters,
         clocks: this.clocks,
-      }
-      this.$emit('save', e)
-      this.reset()
-      this.dialog = false
+      };
+      this.$emit('save', e);
+      this.reset();
+      this.dialog = false;
     },
     edit(trait: any): void {
-      this.id = trait.id
-      this.name = trait.name
-      this.effect = trait.effect
-      this.type = trait.type
-      this.recharge = trait.recharge
-      this.optional = trait.origin.optional
-      this.hide_active = trait.hide_active
-      this.tags = trait.tags
-      this.actions = trait.actions
-      this.bonuses = trait.bonuses
-      this.synergies = trait.synergies
-      this.deployables = trait.deployables
-      this.counters = trait.counters
-      this.clocks = trait.clocks
-      this.isEdit = true
-      this.dialog = true
+      this.id = trait.id;
+      this.name = trait.name;
+      this.effect = trait.effect;
+      this.type = trait.type;
+      this.recharge = trait.recharge;
+      this.optional = trait.origin.optional;
+      this.hide_active = trait.hide_active;
+      this.tags = trait.tags;
+      this.actions = trait.actions;
+      this.bonuses = trait.bonuses;
+      this.synergies = trait.synergies;
+      this.deployables = trait.deployables;
+      this.counters = trait.counters;
+      this.clocks = trait.clocks;
+      this.isEdit = true;
+      this.dialog = true;
     },
     remove(): void {
-      this.$emit('remove', this.id)
-      this.dialog = false
+      this.$emit('remove', this.id);
+      this.dialog = false;
     },
     reset(): void {
-      this.id = ''
-      this.name = ''
-      this.effect = ''
-      this.type = 'Trait'
-      this.recharge = 0
-      this.optional = false
-      this.hide_active = false
-      this.tags = []
-      this.actions = []
-      this.bonuses = []
-      this.synergies = []
-      this.deployables = []
-      this.counters = []
-      this.clocks = []
-      this.isEdit = false
+      this.id = '';
+      this.name = '';
+      this.effect = '';
+      this.type = 'Trait';
+      this.recharge = 0;
+      this.optional = false;
+      this.hide_active = false;
+      this.tags = [];
+      this.actions = [];
+      this.bonuses = [];
+      this.synergies = [];
+      this.deployables = [];
+      this.counters = [];
+      this.clocks = [];
+      this.isEdit = false;
     },
   },
-})
+};
 </script>

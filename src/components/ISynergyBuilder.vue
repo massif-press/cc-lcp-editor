@@ -1,9 +1,13 @@
 <template>
-  <v-card outlined>
-    <div class="caption mb-n1 mt-n3">SYNERGIES</div>
+  <v-card>
+    <v-toolbar density="compact" color="primary" title="Synergies" />
     <v-card flat>
-      <v-tooltip v-for="(synergy, i) in item.synergies" :key="`synergy_chip_${item.id}-${i}`" top>
-        <template v-slot:activator="{ on }">
+      <v-tooltip
+        v-for="(synergy, i) in item.synergies"
+        :key="`synergy_chip_${item.id}-${i}`"
+        top
+      >
+        <template v-slot:activator="{ props }">
           <v-chip
             small
             close
@@ -12,7 +16,7 @@
             close-icon="mdi-close"
             @click="edit(synergy, i)"
             @click:close="remove(i)"
-            v-on="on"
+            v-bind="props"
           >
             {{ synergy.locations.join(', ') }}
           </v-chip>
@@ -21,10 +25,19 @@
       </v-tooltip>
       <v-dialog v-model="dialog">
         <template v-slot:activator="{ attrs }">
-          <v-btn icon v-bind="attrs" @click="newItem()"><v-icon>mdi-plus</v-icon></v-btn>
+          <v-btn
+            size="small"
+            icon
+            variant="flat"
+            v-bind="attrs"
+            @click="newItem()"
+            ><v-icon>mdi-plus</v-icon></v-btn
+          >
         </template>
         <v-card>
-          <v-toolbar dense color="pink darken-4" class="text-h6">Add Synergy</v-toolbar>
+          <v-toolbar density="compact" color="pink darken-4" class="text-h6"
+            >Add Synergy</v-toolbar
+          >
           <v-card-text>
             <v-row justify="space-around" align="center" class="mt-2">
               <v-col cols="12">
@@ -45,13 +58,13 @@
             </v-row>
             <div v-show="!npc">
               <v-divider class="mb-2 mt-3" />
-              <div class="caption">Restrict to:</div>
-              <v-row dense align="center">
+              <div class="text-caption">Restrict to:</div>
+              <v-row density="compact" align="center">
                 <v-col cols="4">
                   <v-select
                     v-model="wt"
                     :items="weaponType"
-                    dense
+                    density="compact"
                     outlined
                     multiple
                     hide-details
@@ -62,7 +75,7 @@
                   <v-select
                     v-model="ws"
                     :items="weaponSize"
-                    dense
+                    density="compact"
                     outlined
                     multiple
                     hide-details
@@ -73,7 +86,7 @@
                   <v-select
                     v-model="st"
                     :items="systemType"
-                    dense
+                    density="compact"
                     outlined
                     multiple
                     hide-details
@@ -108,11 +121,10 @@ import {
   weaponType,
   weaponSize,
   systemType,
-} from '@/assets/enums'
-import RichTextEditor from './RichTextEditor.vue'
+} from '../assets/enums';
+import RichTextEditor from './RichTextEditor.vue';
 
-import Vue from 'vue'
-export default Vue.extend({
+export default {
   name: 'synergy-builder',
   components: { RichTextEditor },
   props: { item: { type: Object, required: true }, npc: { type: Boolean } },
@@ -133,8 +145,8 @@ export default Vue.extend({
   }),
   methods: {
     newItem(): void {
-      this.reset()
-      this.dialog = true
+      this.reset();
+      this.dialog = true;
     },
     submit() {
       const e = {
@@ -143,40 +155,40 @@ export default Vue.extend({
         weapon_types: this.wt,
         weapon_sizes: this.ws,
         system_types: this.st,
-      }
+      };
       if (this.isEdit) {
-        this.$set(this.item.synergies, this.editIndex, e)
+        this.item.synergies[this.editIndex] = e;
       } else {
-        if (!this.item.synergies) this.$set(this.item, 'synergies', [])
-        this.item.synergies.push(e)
+        if (!this.item.synergies) this.item['synergies'] = [];
+        this.item.synergies.push(e);
       }
-      this.reset()
-      this.dialog = false
+      this.reset();
+      this.dialog = false;
     },
     edit(synergy: any, index: number): void {
-      this.reset()
-      this.locations = synergy.locations
-      this.detail = synergy.detail
-      this.wt = synergy.wt
-      this.ws = synergy.ws
-      this.st = synergy.st
-      this.isEdit = true
-      this.editIndex = index
-      this.dialog = true
+      this.reset();
+      this.locations = synergy.locations;
+      this.detail = synergy.detail;
+      this.wt = synergy.wt;
+      this.ws = synergy.ws;
+      this.st = synergy.st;
+      this.isEdit = true;
+      this.editIndex = index;
+      this.dialog = true;
     },
     remove(index: number) {
-      this.item.synergies.splice(index, 1)
+      this.item.synergies.splice(index, 1);
     },
     descById(id: string) {
-      return this.synergies.find(x => x.value === id)?.desc || 'err'
+      return this.synergies.find((x) => x.value === id)?.desc || 'err';
     },
     reset() {
-      this.locations = []
-      this.detail = ''
-      this.wt = []
-      this.ws = []
-      this.st = []
+      this.locations = [];
+      this.detail = '';
+      this.wt = [];
+      this.ws = [];
+      this.st = [];
     },
   },
-})
+};
 </script>

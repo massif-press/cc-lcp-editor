@@ -5,11 +5,13 @@
     :checkEmpty="['id', 'name', 'type']"
   >
     <template v-slot="{ item }">
-      <v-toolbar dense color="primary" class="white--text text-h6">{{ item.name }}</v-toolbar>
+      <v-toolbar density="compact" color="primary" :title="item.name" />
       <v-card-text>
         <v-row>
           <v-col><id-input v-model="item.id" /></v-col>
-          <v-col><v-text-field hide-details label="Name" v-model="item.name" /></v-col>
+          <v-col
+            ><v-text-field hide-details label="Name" v-model="item.name"
+          /></v-col>
           <v-col>
             <v-select
               hide-details
@@ -20,9 +22,14 @@
             />
           </v-col>
         </v-row>
-        <v-row dense>
+        <v-row density="compact">
           <v-col>
             <rich-text-editor title="Description" v-model="item.description" />
+          </v-col>
+        </v-row>
+        <v-row density="compact">
+          <v-col>
+            <rich-text-editor title="Effect" v-model="item.effect" />
           </v-col>
         </v-row>
         <v-row align="center">
@@ -48,17 +55,16 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import EditorBase from './EditorBase.vue'
+import EditorBase from './EditorBase.vue';
 
-import SynergySelector from '@/components/SynergyLocationSelector.vue'
+import SynergySelector from '../../components/SynergyLocationSelector.vue';
 
-export default Vue.extend({
+export default {
   name: 'tags-editor',
   components: {
     EditorBase,
 
     SynergySelector,
   },
-})
+};
 </script>

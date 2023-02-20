@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" fullscreen>
     <v-card>
-      <v-toolbar dense color="green darken-3" class="text-h6">
+      <v-toolbar density="compact" color="green darken-3" class="text-h6">
         NPC System Editor
         <v-spacer />
         <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
@@ -21,17 +21,18 @@
               type="number"
               hide-details
               outlined
-              dense
+              density="compact"
               clearable
             />
           </v-col>
           <v-col v-show="npcClass || npcTemplate" cols="auto">
             <v-switch
+              color="secondary"
               inset
               v-model="optional"
               :value="optional"
               mandatory
-              dense
+              density="compact"
               hide-details
               :label="`${npcClass ? 'Class' : 'Template'} Feature`"
             />
@@ -60,7 +61,9 @@
       <v-card-actions>
         <v-btn text color="error" @click="dialog = false">cancel</v-btn>
         <v-spacer />
-        <v-btn v-if="isEdit" color="error darken-2" @click="remove">Delete</v-btn>
+        <v-btn v-if="isEdit" color="error darken-2" @click="remove"
+          >Delete</v-btn
+        >
         <v-btn color="success darken-2" :disabled="!confirmOK" @click="submit">
           {{ isEdit ? 'save' : 'confirm' }}
         </v-btn>
@@ -70,8 +73,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-export default Vue.extend({
+export default {
   name: 'npc-system-editor',
   props: {
     npcClass: { type: Object, required: false },
@@ -96,7 +98,7 @@ export default Vue.extend({
   }),
   computed: {
     confirmOK(): boolean {
-      return !!this.id && !!this.name
+      return !!this.id && !!this.name;
     },
     origin(): any {
       if (this.npcClass || this.npcTemplate)
@@ -105,19 +107,19 @@ export default Vue.extend({
           name: this[this.npcClass ? 'npcClass' : 'npcTemplate'].name,
           optional: this.optional,
           origin_id: this[this.npcClass ? 'npcClass' : 'npcTemplate'].id,
-        }
+        };
       else
         return {
           type: 'Generic',
-        }
+        };
     },
   },
   methods: {
     open() {
-      this.dialog = true
+      this.dialog = true;
     },
     close() {
-      this.dialog = false
+      this.dialog = false;
     },
     submit(): void {
       const e = {
@@ -135,48 +137,48 @@ export default Vue.extend({
         deployables: this.deployables,
         counters: this.counters,
         clocks: this.clocks,
-      }
-      this.$emit('save', e)
-      this.reset()
-      this.dialog = false
+      };
+      this.$emit('save', e);
+      this.reset();
+      this.dialog = false;
     },
     edit(system: any): void {
-      this.id = system.id
-      this.name = system.name
-      this.effect = system.effect
-      this.recharge = system.recharge
-      this.optional = system.origin.optional
-      this.type = system.type
-      this.tags = system.tags
-      this.actions = system.actions
-      this.bonuses = system.bonuses
-      this.synergies = system.synergies
-      this.deployables = system.deployables
-      this.counters = system.counters
-      this.clocks = system.clocks
-      this.isEdit = true
-      this.dialog = true
+      this.id = system.id;
+      this.name = system.name;
+      this.effect = system.effect;
+      this.recharge = system.recharge;
+      this.optional = system.origin.optional;
+      this.type = system.type;
+      this.tags = system.tags;
+      this.actions = system.actions;
+      this.bonuses = system.bonuses;
+      this.synergies = system.synergies;
+      this.deployables = system.deployables;
+      this.counters = system.counters;
+      this.clocks = system.clocks;
+      this.isEdit = true;
+      this.dialog = true;
     },
     remove(): void {
-      this.$emit('remove', this.id)
-      this.dialog = false
+      this.$emit('remove', this.id);
+      this.dialog = false;
     },
     reset(): void {
-      this.id = ''
-      this.name = ''
-      this.effect = ''
-      this.type = 'System'
-      this.recharge = 0
-      this.optional = false
-      this.tags = []
-      this.actions = []
-      this.bonuses = []
-      this.synergies = []
-      this.deployables = []
-      this.counters = []
-      this.clocks = []
-      this.isEdit = false
+      this.id = '';
+      this.name = '';
+      this.effect = '';
+      this.type = 'System';
+      this.recharge = 0;
+      this.optional = false;
+      this.tags = [];
+      this.actions = [];
+      this.bonuses = [];
+      this.synergies = [];
+      this.deployables = [];
+      this.counters = [];
+      this.clocks = [];
+      this.isEdit = false;
     },
   },
-})
+};
 </script>

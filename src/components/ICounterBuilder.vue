@@ -1,9 +1,13 @@
 <template>
-  <v-card outlined>
-    <div class="caption mb-n1 mt-n3">COUNTERS</div>
+  <v-card>
+    <v-toolbar density="compact" color="primary" title="Counters" />
     <v-card flat>
-      <v-tooltip v-for="(counter, i) in item.counters" :key="`counter_chip_${item.id}-${i}`" top>
-        <template v-slot:activator="{ on }">
+      <v-tooltip
+        v-for="(counter, i) in item.counters"
+        :key="`counter_chip_${item.id}-${i}`"
+        top
+      >
+        <template v-slot:activator="{ props }">
           <v-chip
             small
             close
@@ -12,7 +16,7 @@
             close-icon="mdi-close"
             @click="edit(counter, i)"
             @click:close="remove(i)"
-            v-on="on"
+            v-bind="props"
           >
             {{ counter.name }}
           </v-chip>
@@ -21,21 +25,33 @@
         <v-divider />
         <div v-if="counter.min">Min: {{ counter.min }}</div>
         <div v-if="counter.max">Max: {{ counter.max }}</div>
-        <div v-if="counter.default_value">Starts At: {{ counter.default_value }}</div>
+        <div v-if="counter.default_value">
+          Starts At: {{ counter.default_value }}
+        </div>
       </v-tooltip>
       <v-dialog v-model="dialog">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on"><v-icon>mdi-plus</v-icon></v-btn>
+        <template v-slot:activator="{ props }">
+          <v-btn size="small" icon variant="flat" v-bind="props"
+            ><v-icon>mdi-plus</v-icon></v-btn
+          >
         </template>
         <v-card>
-          <v-toolbar dense color="pink darken-4" class="text-h6">Add Counter</v-toolbar>
+          <v-toolbar
+            density="compact"
+            color="pink darken-4"
+            title="Add Counter"
+          />
           <v-card-text>
             <v-row justify="space-around" align="center" class="mt-2">
               <v-col>
                 <id-input v-model="counter.id" />
               </v-col>
               <v-col>
-                <v-text-field v-model="counter.name" label="Name" hide-details />
+                <v-text-field
+                  v-model="counter.name"
+                  label="Name"
+                  hide-details
+                />
               </v-col>
             </v-row>
             <v-divider />
@@ -88,39 +104,38 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-export default Vue.extend({
+export default {
   name: 'counter-builder',
   props: { item: { type: Object, required: true } },
   data: () => ({
     dialog: false,
-    counter: {},
+    counter: {} as any,
     isEdit: false,
     editIndex: -1,
   }),
   methods: {
     submit() {
-      if (!this.counter) return
+      if (!this.counter) return;
       if (this.isEdit) {
-        this.$set(this.item.counters, this.editIndex, this.counter)
+        this.item.counters[this.editIndex] = this.counter;
       } else {
-        if (!this.item.counters) this.$set(this.item, 'counters', [])
-        this.item.counters.push(this.counter)
+        if (!this.item.counters) this.item.counters = [];
+        this.item.counters.push(this.counter);
       }
-      this.$set(this, 'counter', {})
-      this.isEdit = false
-      this.editIndex = -1
-      this.dialog = false
+      this.counter = {};
+      this.isEdit = false;
+      this.editIndex = -1;
+      this.dialog = false;
     },
     edit(counter: any, index: number) {
-      this.counter = JSON.parse(JSON.stringify(counter))
-      this.isEdit = true
-      this.editIndex = index
-      this.dialog = true
+      this.counter = JSON.parse(JSON.stringify(counter));
+      this.isEdit = true;
+      this.editIndex = index;
+      this.dialog = true;
     },
     remove(index: number) {
-      this.item.counters.splice(index, 1)
+      this.item.counters.splice(index, 1);
     },
   },
-})
+};
 </script>

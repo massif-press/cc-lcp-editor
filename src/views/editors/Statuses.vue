@@ -2,25 +2,38 @@
   <editor-base
     itemKey="statuses"
     :checkDupes="['name']"
-    :checkEmpty="['name', 'effects', 'type', 'scope']"
+    :checkEmpty="['name', 'effects', 'type', 'exclusive']"
   >
     <template v-slot="{ item }">
-      <v-toolbar dense color="primary" class="white--text text-h6">{{ item.name }}</v-toolbar>
+      <v-toolbar
+        density="compact"
+        color="primary"
+        class="white--text text-h6"
+        >{{ item.name }}</v-toolbar
+      >
       <v-card-text>
-        <v-row align="center">
-          <v-col cols="3"><v-text-field label="Name" v-model="item.name" /></v-col>
-          <v-col cols="3"><v-text-field label="Icon URL" v-model="item.icon_url" /></v-col>
+        <v-row align="center" class="mb-1">
+          <v-col cols="3"
+            ><v-text-field label="Name" v-model="item.name"
+          /></v-col>
+          <v-col cols="3"
+            ><v-text-field label="SVG Icon URL" v-model="item.icon_url"
+          /></v-col>
           <v-col cols="2">
-            <v-select label="Type" :items="['Status', 'Condition']" v-model="item.type" />
+            <v-select
+              label="Type"
+              :items="['Status', 'Condition']"
+              v-model="item.type"
+            />
           </v-col>
           <v-select
             label="Scope"
-            item-text="name"
-            item-value="value"
+            hint="(Exclusivity)"
+            persistent-hint
             :items="[
-              { name: 'Mech', value: 'Mech' },
-              { name: 'Pilot', value: 'Pilot' },
-              { name: 'Both', value: '' },
+              { title: 'Mech', value: 'Mech' },
+              { title: 'Pilot', value: 'Pilot' },
+              { title: 'Both', value: '' },
             ]"
             v-model="item.exclusive"
           />
@@ -33,11 +46,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import EditorBase from './EditorBase.vue'
+import EditorBase from './EditorBase.vue';
 
-export default Vue.extend({
+export default {
   name: 'status-editor',
   components: { EditorBase },
-})
+};
 </script>

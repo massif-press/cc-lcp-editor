@@ -1,6 +1,6 @@
 <template>
   <v-card outlined>
-    <div class="caption mb-n1 mt-n3">DAMAGE</div>
+    <div class="text-caption">DAMAGE</div>
     <v-card flat>
       <v-chip
         v-for="(damage, i) in item.damage"
@@ -15,12 +15,23 @@
       >
         {{ damage.val }} {{ damage.type }}
       </v-chip>
-      <v-menu v-model="menu" :close-on-click="false" :close-on-content-click="false">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on"><v-icon>mdi-plus</v-icon></v-btn>
+      <v-menu
+        v-model="menu"
+        width="20em"
+        :close-on-click="false"
+        :close-on-content-click="false"
+      >
+        <template v-slot:activator="{ props }">
+          <v-btn icon size="small" flat v-bind="props"
+            ><v-icon>mdi-plus</v-icon></v-btn
+          >
         </template>
         <v-card>
-          <v-toolbar dense color="pink darken-4" class="text-h6">Add Damage</v-toolbar>
+          <v-toolbar
+            density="compact"
+            color="pink darken-4"
+            title="Add Damage"
+          />
           <v-card-text>
             <v-row justify="space-around" align="center">
               <v-col cols="7">
@@ -34,8 +45,18 @@
                 />
               </v-col>
               <v-col>
-                <tiered-stat-input v-if="npc" v-model="damage.val" title="Value" />
-                <v-text-field v-else v-model="damage.val" label="Value" hide-details outlined />
+                <tiered-stat-input
+                  v-if="npc"
+                  v-model="damage.val"
+                  title="Value"
+                />
+                <v-text-field
+                  v-else
+                  v-model="damage.val"
+                  label="Value"
+                  hide-details
+                  outlined
+                />
               </v-col>
             </v-row>
           </v-card-text>
@@ -54,15 +75,14 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { damageType } from '@/assets/enums'
+import { damageType } from '../assets/enums';
 
-export default Vue.extend({
+export default {
   name: 'damage-selector',
   props: { item: { type: Object, required: true }, npc: { type: Boolean } },
   data: () => ({
     menu: false,
-    damage: {},
+    damage: {} as any,
     isEdit: false,
     editIndex: -1,
     damageTypes: damageType,
@@ -71,42 +91,48 @@ export default Vue.extend({
     getColor(type: string) {
       switch (type) {
         case 'Energy':
-          return 'blue darken-2'
+          return 'blue darken-2';
         case 'Explosive':
-          return 'yellow darken-4'
+          return 'yellow';
         case 'Heat':
-          return 'red darken-2'
+          return 'red';
         case 'Burn':
-          return 'pink darken-4'
+          return 'pink';
         case 'Variable':
-          return 'purple darken-3'
+          return 'purple-accent-1';
         case 'Kinetic':
         default:
-          return ''
+          return '';
       }
     },
     submit() {
-      if (!this.damage) return
-      if (this.isEdit) {
-        this.$set(this.item.damage, this.editIndex, this.damage)
-      } else {
-        if (!this.item.damage) this.$set(this.item, 'damage', [])
-        this.item.damage.push(this.damage)
+      if (!this.damage) return;
+      if (!isNaN(this.damage.val)) {
+        this.damage.val = Number(this.damage.val);
       }
-      this.$set(this, 'damage', {})
-      this.isEdit = false
-      this.editIndex = -1
-      this.menu = false
+      if (this.isEdit) {
+        this.item.damage[this.editIndex] = this.damage;
+      } else {
+        if (!this.item.damage) this.item['damage'] = [];
+        this.item.damage.push(this.damage);
+      }
+      this['damage'] = {};
+      this.isEdit = false;
+      this.editIndex = -1;
+      this.menu = false;
     },
     edit(damage: any, index: number) {
-      this.damage = JSON.parse(JSON.stringify(damage))
-      this.isEdit = true
-      this.editIndex = index
-      this.menu = true
+      if (!isNaN(this.damage.val)) {
+        this.damage.val = Number(this.damage.val);
+      }
+      this.damage = JSON.parse(JSON.stringify(damage));
+      this.isEdit = true;
+      this.editIndex = index;
+      this.menu = true;
     },
     remove(index: number) {
-      this.item.damage.splice(index, 1)
+      this.item.damage.splice(index, 1);
     },
   },
-})
+};
 </script>

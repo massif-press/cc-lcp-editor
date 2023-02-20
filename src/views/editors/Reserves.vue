@@ -5,7 +5,7 @@
     :checkEmpty="['id', 'name', 'label', 'type']"
   >
     <template v-slot="{ item }">
-      <v-toolbar dense color="primary" class="white--text text-h6">{{ item.name }}</v-toolbar>
+      <v-toolbar density="compact" color="primary" :title="item.name" />
       <v-card-text>
         <v-row>
           <v-col><id-input v-model="item.id" /></v-col>
@@ -19,10 +19,14 @@
             />
           </v-col>
           <v-col cols="auto">
-            <v-switch label="Consumable" v-model="item.consumable" />
+            <v-switch
+              color="secondary"
+              label="Consumable"
+              v-model="item.consumable"
+            />
           </v-col>
         </v-row>
-        <v-row dense>
+        <v-row density="compact">
           <v-col>
             <rich-text-editor title="Description" v-model="item.description" />
           </v-col>
@@ -62,16 +66,15 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import EditorBase from './EditorBase.vue'
+import EditorBase from './EditorBase.vue';
 
-import SynergySelector from '@/components/SynergyLocationSelector.vue'
+import SynergySelector from '../../components/SynergyLocationSelector.vue';
 
-export default Vue.extend({
+export default {
   name: 'reserves-editor',
   components: {
     EditorBase,
     SynergySelector,
   },
-})
+};
 </script>

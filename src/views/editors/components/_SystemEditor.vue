@@ -1,9 +1,13 @@
 <template>
   <v-dialog v-model="dialog" fullscreen>
     <v-card>
-      <v-toolbar dense color="deep-purple darken-4" class="text-h6">
-        {{ manufacturer ? manufacturer.id : '' }} System Editor
-        <v-spacer />
+      <v-toolbar
+        density="compact"
+        color="teal-darken-2"
+        :title="`${
+          manufacturer ? manufacturer.id : isExotic ? 'Exotic' : ''
+        } Weapon Editor`"
+      >
         <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
       </v-toolbar>
       <v-card-text>
@@ -15,23 +19,38 @@
             <v-text-field label="Name" hide-details v-model="name" />
           </v-col>
           <v-col>
-            <v-select label="Type" :items="systemTypes" hide-details v-model="type" />
+            <v-select
+              label="Type"
+              :items="systemTypes"
+              hide-details
+              v-model="type"
+            />
           </v-col>
-          <v-col>
-            <v-combobox v-model="license" label="License" dense hide-details :items="licenses" />
+          <v-col v-if="!sourceless">
+            <v-combobox
+              v-model="license"
+              label="License"
+              hide-details
+              :items="licenses"
+            />
           </v-col>
-          <v-col>
+          <v-col v-if="!sourceless">
             <v-text-field
               label="License Level"
               type="number"
               hide-details
               outlined
-              dense
               v-model="license_level"
             />
           </v-col>
           <v-col>
-            <v-text-field label="SP Cost" type="number" hide-details outlined dense v-model="sp" />
+            <v-text-field
+              label="SP Cost"
+              type="number"
+              hide-details
+              outlined
+              v-model="sp"
+            />
           </v-col>
         </v-row>
         <v-row>
@@ -66,7 +85,9 @@
       <v-card-actions>
         <v-btn text color="error" @click="dialog = false">cancel</v-btn>
         <v-spacer />
-        <v-btn v-if="isEdit" color="error darken-2" @click="remove">Delete</v-btn>
+        <v-btn v-if="isEdit" color="error darken-2" @click="remove"
+          >Delete</v-btn
+        >
         <v-btn color="success darken-2" :disabled="!confirmOK" @click="submit">
           {{ isEdit ? 'save' : 'confirm' }}
         </v-btn>
@@ -76,13 +97,15 @@
 </template>
 
 <script lang="ts">
-import { systemType } from '@/assets/enums'
+import { getLicenseID } from '../../utilities/cleanup';
 
-import Vue from 'vue'
-export default Vue.extend({
+import { systemType } from '../../../assets/enums';
+
+export default {
   name: 'system-editor',
   props: {
     manufacturer: { type: Object, required: false },
+    isExotic: Boolean,
     licenses: { type: Array, required: false, default: () => [] },
   },
 
@@ -109,20 +132,24 @@ export default Vue.extend({
   }),
   computed: {
     confirmOK(): boolean {
-      return !!this.id && !!this.name
+      return !!this.id && !!this.name;
     },
     source(): string {
-      if (this.manufacturer) return this.manufacturer.id
-      if (this.tags.some((x: any) => x.id === 'tg_exotic')) return 'EXOTIC'
-      return ''
+      if (this.manufacturer) return this.manufacturer.id;
+      if (this.tags.some((x: any) => x.id === 'tg_exotic') || this.isExotic)
+        return 'EXOTIC';
+      return '';
+    },
+    sourceless(): boolean {
+      return !this.source || this.source === 'EXOTIC';
     },
   },
   methods: {
     open() {
-      this.dialog = true
+      this.dialog = true;
     },
     close() {
-      this.dialog = false
+      this.dialog = false;
     },
     submit(): void {
       const e = {
@@ -130,6 +157,10 @@ export default Vue.extend({
         name: this.name,
         source: this.source,
         license: this.license,
+        license_id: getLicenseID(
+          this.license,
+          this.$store.getters.lcp.frames || []
+        ),
         license_level: Number(this.license_level),
         effect: this.effect,
         type: this.type,
@@ -143,54 +174,54 @@ export default Vue.extend({
         counters: this.counters,
         integrated: this.integrated,
         special_equipment: this.special_equipment,
-      }
-      this.$emit('save', e)
-      this.reset()
-      this.dialog = false
+      };
+      this.$emit('save', e);
+      this.reset();
+      this.dialog = false;
     },
     edit(system: any): void {
-      this.id = system.id
-      this.name = system.name
-      this.license = system.license
-      this.license_level = Number(system.license_level)
-      this.effect = system.effect
-      this.type = system.type
-      this.sp = system.sp
-      this.description = system.description
-      this.tags = system.tags
-      this.actions = system.actions
-      this.bonuses = system.bonuses
-      this.synergies = system.synergies
-      this.deployables = system.deployables
-      this.counters = system.counters
-      this.integrated = system.integrated
-      this.special_equipment = system.special_equipment
-      this.isEdit = true
-      this.dialog = true
+      this.id = system.id;
+      this.name = system.name;
+      this.license = system.license;
+      this.license_level = Number(system.license_level);
+      this.effect = system.effect;
+      this.type = system.type;
+      this.sp = system.sp;
+      this.description = system.description;
+      this.tags = system.tags;
+      this.actions = system.actions;
+      this.bonuses = system.bonuses;
+      this.synergies = system.synergies;
+      this.deployables = system.deployables;
+      this.counters = system.counters;
+      this.integrated = system.integrated;
+      this.special_equipment = system.special_equipment;
+      this.isEdit = true;
+      this.dialog = true;
     },
     remove(): void {
-      this.$emit('remove', this.id)
-      this.dialog = false
+      this.$emit('remove', this.id);
+      this.dialog = false;
     },
     reset(): void {
-      this.id = ''
-      this.name = ''
-      this.license = ''
-      this.license_level = 1
-      this.effect = ''
-      this.type = 'System'
-      this.sp = ''
-      this.description = ''
-      this.tags = []
-      this.actions = []
-      this.bonuses = []
-      this.synergies = []
-      this.deployables = []
-      this.counters = []
-      this.integrated = []
-      this.special_equipment = []
-      this.isEdit = false
+      this.id = '';
+      this.name = '';
+      this.license = '';
+      this.license_level = 1;
+      this.effect = '';
+      this.type = 'System';
+      this.sp = '';
+      this.description = '';
+      this.tags = [];
+      this.actions = [];
+      this.bonuses = [];
+      this.synergies = [];
+      this.deployables = [];
+      this.counters = [];
+      this.integrated = [];
+      this.special_equipment = [];
+      this.isEdit = false;
     },
   },
-})
+};
 </script>

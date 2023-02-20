@@ -1,32 +1,37 @@
 <template>
   <v-card outlined>
-    <div class="caption mb-n1 mt-n3">TAGS</div>
+    <div class="text-caption px-2">TAGS</div>
     <v-card flat>
       <v-chip
         v-for="(tag, i) in item.tags"
         :key="`tag_chip_${item.id}-${i}`"
         small
-        close
+        closable
         outlined
         class="mx-1"
         close-icon="mdi-close"
-        @click="edit(tag, i)"
         @click:close="remove(i)"
       >
         {{ tag.id }}, {{ tag.val }}
       </v-chip>
-      <v-menu v-model="menu" :close-on-click="false" :close-on-content-click="false">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on"><v-icon>mdi-plus</v-icon></v-btn>
+      <v-menu
+        v-model="menu"
+        :close-on-click="false"
+        :close-on-content-click="false"
+      >
+        <template v-slot:activator="{ props }">
+          <v-btn size="small" icon flat v-bind="props"
+            ><v-icon size="large">mdi-plus</v-icon></v-btn
+          >
         </template>
         <v-card>
-          <v-toolbar dense color="pink darken-4" class="text-h6">Add tag</v-toolbar>
+          <v-toolbar density="compact" color="pink darken-4" title="Add Tag" />
           <v-card-text>
             <v-row justify="space-around" align="center">
               <v-col cols="7">
-                <v-select
-                  v-model="tag.id"
-                  item-text="name"
+                <v-combobox
+                  v-model="tag"
+                  item-title="name"
                   item-value="id"
                   label="Tag"
                   :items="tags"
@@ -61,49 +66,52 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { tags } from 'lancer-data'
-import TieredStatInput from './TieredStatInput.vue'
+import { tags } from 'lancer-data';
+import TieredStatInput from './TieredStatInput.vue';
+import { useStore } from 'vuex';
 
-export default Vue.extend({
+export default {
   name: 'tag-selector',
   props: { item: { type: Object, required: true }, npc: { type: Boolean } },
   components: { TieredStatInput },
   data: () => ({
     menu: false,
-    tag: {},
+    tag: {} as any,
     isEdit: false,
     editIndex: -1,
   }),
   computed: {
     tags() {
-      const localTags = this.$store.getters.lcp.tags || []
-      return tags.concat(localTags)
+      const localTags = useStore().getters.lcp.tags || [];
+      return tags.concat(localTags);
     },
   },
   methods: {
     submit() {
-      if (!this.tag) return
-      if (this.isEdit) {
-        this.$set(this.item.tags, this.editIndex, this.tag)
-      } else {
-        if (!this.item.tags) this.$set(this.item, 'tags', [])
-        this.item.tags.push(this.tag)
+      if (!this.tag) return;
+      if (!isNaN(this.tag.val)) {
+        this.tag.val = Number(this.tag.val);
       }
-      this.$set(this, 'tag', {})
-      this.isEdit = false
-      this.editIndex = -1
-      this.menu = false
+      if (this.isEdit) {
+        this.item.tags[this.editIndex] = this.tag;
+      } else {
+        if (!this.item.tags) this.item['tags'] = [];
+        this.item.tags.push(this.tag);
+      }
+      this['tag'] = {};
+      this.isEdit = false;
+      this.editIndex = -1;
+      this.menu = false;
     },
     edit(tag: any, index: number) {
-      this.tag = JSON.parse(JSON.stringify(tag))
-      this.isEdit = true
-      this.editIndex = index
-      this.menu = true
+      this.tag = JSON.parse(JSON.stringify(tag));
+      this.isEdit = true;
+      this.editIndex = index;
+      this.menu = true;
     },
     remove(index: number) {
-      this.item.tags.splice(index, 1)
+      this.item.tags.splice(index, 1);
     },
   },
-})
+};
 </script>

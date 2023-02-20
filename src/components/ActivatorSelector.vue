@@ -1,19 +1,19 @@
 <template>
-  <v-select
-    :label="`${label}${optional ? ' (Optional)' : ''}`"
-    :items="activationTypes"
-    item-text="desc"
-    hide-details
-    :clearable="optional"
-    v-model="item[field]"
-  />
+  <div>
+    <v-select
+      :label="`${label}${optional ? ' (Optional)' : ''}`"
+      :items="activationTypes"
+      hide-details
+      :clearable="optional"
+      v-model="item[field]"
+    />
+  </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { activationTypes } from '@/assets/enums'
+import { activationTypes } from '../assets/enums';
 
-export default Vue.extend({
+export default {
   name: 'activator-selector',
   props: {
     item: {
@@ -37,5 +37,5 @@ export default Vue.extend({
   data: () => ({
     activationTypes: activationTypes,
   }),
-})
+};
 </script>

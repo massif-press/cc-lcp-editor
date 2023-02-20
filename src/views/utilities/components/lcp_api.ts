@@ -1,8 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import axios from 'axios'
+import axios from 'axios';
 
-const lcp_meta_key = process.env.VUE_APP_LCP_META_KEY
+const lcp_meta_key = import.meta.env.VUE_APP_LCP_META_KEY || '';
 
 const headers = {
   headers: {
@@ -16,25 +16,21 @@ const headers = {
 
 const api = axios.create({
   baseURL: 'https://ujgatmvzlg.execute-api.us-east-1.amazonaws.com/prod',
-  ...headers
-})
+  ...headers,
+});
 
 const getPack = (passcode: string) => {
   return api.get('/community-pack', {
-    params: { passcode }
-  })
-}
+    params: { passcode },
+  });
+};
 
 const putPack = (payload: any) => {
-  return api.put('/community-pack', { payload: payload })
-}
+  return api.put('/community-pack', { payload: payload });
+};
 
 const scan = () => {
-  return api.get('/scan')
-}
+  return api.get('/scan');
+};
 
-export {
-  getPack,
-  putPack,
-  scan,
-}
+export { getPack, putPack, scan };

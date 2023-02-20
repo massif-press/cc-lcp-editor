@@ -5,7 +5,12 @@
     :checkEmpty="['id', 'name', 'description']"
   >
     <template v-slot="{ item }">
-      <v-toolbar dense color="primary" class="white--text text-h6">{{ item.name }}</v-toolbar>
+      <v-toolbar
+        density="compact"
+        color="primary"
+        class="white--text text-h6"
+        >{{ item.name }}</v-toolbar
+      >
       <v-card-text>
         <v-row>
           <v-col><id-input v-model="item.id" /></v-col>
@@ -18,7 +23,10 @@
             <rich-text-editor title="PC Victory" v-model="item.pcVictory" />
           </v-col>
           <v-col>
-            <rich-text-editor title="Enemy Victory" v-model="item.enemyVictory" />
+            <rich-text-editor
+              title="Enemy Victory"
+              v-model="item.enemyVictory"
+            />
           </v-col>
         </v-row>
         <v-row>
@@ -43,11 +51,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import EditorBase from './EditorBase.vue'
+import EditorBase from './EditorBase.vue';
 
-export default Vue.extend({
+export default {
   name: 'sitreps-editor',
   components: { EditorBase },
-})
+};
 </script>

@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" fullscreen>
     <v-card>
-      <v-toolbar dense color="teal darken-4" class="text-h6">
+      <v-toolbar density="compact" color="teal darken-4" class="text-h6">
         NPC System Editor
         <v-spacer />
         <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
@@ -15,10 +15,20 @@
             <v-text-field label="Name" hide-details v-model="name" />
           </v-col>
           <v-col>
-            <v-select label="Size" :items="weaponSizes" hide-details v-model="weapon_size" />
+            <v-select
+              label="Size"
+              :items="weaponSizes"
+              hide-details
+              v-model="weapon_size"
+            />
           </v-col>
           <v-col>
-            <v-select label="Type" :items="weaponTypes" hide-details v-model="weapon_type" />
+            <v-select
+              label="Type"
+              :items="weaponTypes"
+              hide-details
+              v-model="weapon_type"
+            />
           </v-col>
           <v-col>
             <v-text-field
@@ -27,17 +37,18 @@
               type="number"
               hide-details
               outlined
-              dense
+              density="compact"
               clearable
             />
           </v-col>
           <v-col v-show="npcClass || npcTemplate" cols="auto">
             <v-switch
+              color="secondary"
               inset
               v-model="optional"
               :value="optional"
               mandatory
-              dense
+              density="compact"
               hide-details
               :label="`${npcClass ? 'Class' : 'Template'} Feature`"
             />
@@ -97,7 +108,9 @@
       <v-card-actions>
         <v-btn text color="error" @click="dialog = false">cancel</v-btn>
         <v-spacer />
-        <v-btn v-if="isEdit" color="error darken-2" @click="remove">Delete</v-btn>
+        <v-btn v-if="isEdit" color="error darken-2" @click="remove"
+          >Delete</v-btn
+        >
         <v-btn color="success darken-2" :disabled="!confirmOK" @click="submit">
           {{ isEdit ? 'save' : 'confirm' }}
         </v-btn>
@@ -107,11 +120,10 @@
 </template>
 
 <script lang="ts">
-import { weaponType, weaponSize } from '@/assets/enums'
-import TieredStatInput from '@/components/TieredStatInput.vue'
-import Vue from 'vue'
+import { weaponType, weaponSize } from '../../../assets/enums';
+import TieredStatInput from '../../../components/TieredStatInput.vue';
 
-export default Vue.extend({
+export default {
   components: { TieredStatInput },
   name: 'npc-weapon-editor',
   props: {
@@ -148,7 +160,7 @@ export default Vue.extend({
   }),
   computed: {
     confirmOK(): boolean {
-      return !!this.id && !!this.name
+      return !!this.id && !!this.name;
     },
     origin(): any {
       if (this.npcClass || this.npcTemplate)
@@ -157,19 +169,19 @@ export default Vue.extend({
           name: this[this.npcClass ? 'npcClass' : 'npcTemplate'].name,
           optional: this.optional,
           origin_id: this[this.npcClass ? 'npcClass' : 'npcTemplate'].id,
-        }
+        };
       else
         return {
           type: 'Generic',
-        }
+        };
     },
   },
   methods: {
     open() {
-      this.dialog = true
+      this.dialog = true;
     },
     close() {
-      this.dialog = false
+      this.dialog = false;
     },
     submit(): void {
       const e = {
@@ -196,68 +208,68 @@ export default Vue.extend({
         deployables: this.deployables,
         counters: this.counters,
         clocks: this.clocks,
-      }
-      this.$emit('save', e)
-      this.reset()
-      this.dialog = false
+      };
+      this.$emit('save', e);
+      this.reset();
+      this.dialog = false;
     },
     edit(weapon: any): void {
-      this.id = weapon.id
-      this.name = weapon.name
-      this.effect = weapon.effect
-      this.recharge = weapon.recharge
-      this.optional = weapon.origin.optional
-      this.damage = weapon.damage
-      this.range = weapon.range
-      this.on_attack = weapon.on_attack
-      this.on_hit = weapon.on_hit
-      this.on_crit = weapon.on_crit
-      this.weapon_size = weapon.weapon_size
-      this.weapon_type = weapon.weapon_type
-      this.attack_bonus = weapon.attack_bonus
+      this.id = weapon.id;
+      this.name = weapon.name;
+      this.effect = weapon.effect;
+      this.recharge = weapon.recharge;
+      this.optional = weapon.origin.optional;
+      this.damage = weapon.damage;
+      this.range = weapon.range;
+      this.on_attack = weapon.on_attack;
+      this.on_hit = weapon.on_hit;
+      this.on_crit = weapon.on_crit;
+      this.weapon_size = weapon.weapon_size;
+      this.weapon_type = weapon.weapon_type;
+      this.attack_bonus = weapon.attack_bonus;
       this.accuracy = Array.isArray(weapon.accuracy)
         ? weapon.accuracy
-        : Array(3).fill(weapon.accuracy)
-      this.type = weapon.type
-      this.tags = weapon.tags
-      this.actions = weapon.actions
-      this.bonuses = weapon.bonuses
-      this.synergies = weapon.synergies
-      this.deployables = weapon.deployables
-      this.counters = weapon.counters
-      this.clocks = weapon.clocks
-      this.isEdit = true
-      this.dialog = true
+        : Array(3).fill(weapon.accuracy);
+      this.type = weapon.type;
+      this.tags = weapon.tags;
+      this.actions = weapon.actions;
+      this.bonuses = weapon.bonuses;
+      this.synergies = weapon.synergies;
+      this.deployables = weapon.deployables;
+      this.counters = weapon.counters;
+      this.clocks = weapon.clocks;
+      this.isEdit = true;
+      this.dialog = true;
     },
     remove(): void {
-      this.$emit('remove', this.id)
-      this.dialog = false
+      this.$emit('remove', this.id);
+      this.dialog = false;
     },
     reset(): void {
-      this.id = ''
-      this.name = ''
-      this.type = 'Weapon'
-      this.effect = ''
-      this.damage = []
-      this.range = []
-      this.on_attack = ''
-      this.on_hit = ''
-      this.on_crit = ''
-      this.weapon_size = 'Aux'
-      this.weapon_type = 'Melee'
-      this.attack_bonus = [0, 0, 0]
-      this.accuracy = [0, 0, 0]
-      this.recharge = 0
-      this.optional = false
-      this.tags = []
-      this.actions = []
-      this.bonuses = []
-      this.synergies = []
-      this.deployables = []
-      this.counters = []
-      this.clocks = []
-      this.isEdit = false
+      this.id = '';
+      this.name = '';
+      this.type = 'Weapon';
+      this.effect = '';
+      this.damage = [];
+      this.range = [];
+      this.on_attack = '';
+      this.on_hit = '';
+      this.on_crit = '';
+      this.weapon_size = 'Aux';
+      this.weapon_type = 'Melee';
+      this.attack_bonus = [0, 0, 0];
+      this.accuracy = [0, 0, 0];
+      this.recharge = 0;
+      this.optional = false;
+      this.tags = [];
+      this.actions = [];
+      this.bonuses = [];
+      this.synergies = [];
+      this.deployables = [];
+      this.counters = [];
+      this.clocks = [];
+      this.isEdit = false;
     },
   },
-})
+};
 </script>

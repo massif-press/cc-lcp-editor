@@ -1,6 +1,6 @@
 <template>
   <v-card outlined>
-    <div class="caption mb-n1 mt-n3">RANGE</div>
+    <div class="text-caption">RANGE</div>
     <v-card flat>
       <v-chip
         v-for="(range, i) in item.range"
@@ -14,12 +14,23 @@
       >
         {{ range.val }} {{ range.type }}
       </v-chip>
-      <v-menu v-model="menu" :close-on-click="false" :close-on-content-click="false">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" v-on="on"><v-icon>mdi-plus</v-icon></v-btn>
+      <v-menu
+        v-model="menu"
+        width="20em"
+        :close-on-click="false"
+        :close-on-content-click="false"
+      >
+        <template v-slot:activator="{ props }">
+          <v-btn icon size="small" flat v-bind="props"
+            ><v-icon>mdi-plus</v-icon></v-btn
+          >
         </template>
         <v-card>
-          <v-toolbar dense color="pink darken-4" class="text-h6">Add Range</v-toolbar>
+          <v-toolbar
+            density="compact"
+            color="pink darken-4"
+            title="Add Range"
+          />
           <v-card-text>
             <v-row justify="space-around" align="center">
               <v-col cols="7">
@@ -33,8 +44,18 @@
                 />
               </v-col>
               <v-col>
-                <tiered-stat-input v-if="npc" v-model="range.val" title="Value" />
-                <v-text-field v-else v-model="range.val" label="Value" hide-details outlined />
+                <tiered-stat-input
+                  v-if="npc"
+                  v-model="range.val"
+                  title="Value"
+                />
+                <v-text-field
+                  v-else
+                  v-model="range.val"
+                  label="Value"
+                  hide-details
+                  outlined
+                />
               </v-col>
             </v-row>
           </v-card-text>
@@ -42,7 +63,11 @@
           <v-card-actions>
             <v-btn text color="error" @click="menu = false">cancel</v-btn>
             <v-spacer />
-            <v-btn color="success darken-2" :disabled="!range.type || !range.type" @click="submit">
+            <v-btn
+              color="success darken-2"
+              :disabled="!range.type || !range.type"
+              @click="submit"
+            >
               {{ isEdit ? 'save' : 'confirm' }}
             </v-btn>
           </v-card-actions>
@@ -53,44 +78,49 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { rangeType } from '@/assets/enums'
-import TieredStatInput from './TieredStatInput.vue'
+import { rangeType } from '../assets/enums';
+import TieredStatInput from './TieredStatInput.vue';
 
-export default Vue.extend({
+export default {
   components: { TieredStatInput },
   name: 'range-selector',
   props: { item: { type: Object, required: true }, npc: { type: Boolean } },
   data: () => ({
     menu: false,
-    range: {},
+    range: {} as any,
     isEdit: false,
     editIndex: -1,
     rangeTypes: rangeType,
   }),
   methods: {
     submit() {
-      if (!this.range) return
-      if (this.isEdit) {
-        this.$set(this.item.range, this.editIndex, this.range)
-      } else {
-        if (!this.item.range) this.$set(this.item, 'range', [])
-        this.item.range.push(this.range)
+      if (!this.range) return;
+      if (!isNaN(this.range.val)) {
+        this.range.val = Number(this.range.val);
       }
-      this.$set(this, 'range', {})
-      this.isEdit = false
-      this.editIndex = -1
-      this.menu = false
+      if (this.isEdit) {
+        this.item.range[this.editIndex] = this.range;
+      } else {
+        if (!this.item.range) this.item['range'] = [];
+        this.item.range.push(this.range);
+      }
+      this['range'] = {};
+      this.isEdit = false;
+      this.editIndex = -1;
+      this.menu = false;
     },
     edit(range: any, index: number) {
-      this.range = JSON.parse(JSON.stringify(range))
-      this.isEdit = true
-      this.editIndex = index
-      this.menu = true
+      if (!isNaN(this.range.val)) {
+        this.range.val = Number(this.range.val);
+      }
+      this.range = JSON.parse(JSON.stringify(range));
+      this.isEdit = true;
+      this.editIndex = index;
+      this.menu = true;
     },
     remove(index: number) {
-      this.item.range.splice(index, 1)
+      this.item.range.splice(index, 1);
     },
   },
-})
+};
 </script>

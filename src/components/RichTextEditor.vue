@@ -1,85 +1,81 @@
 <template>
-  <v-card outlined>
-    <div class="caption px-1">{{ title }}</div>
-    <span v-show="npc" class="caption text--disabled">
-      The syntax
-      <code>{X/Y/Z}</code>
-      will be rendered into the values for Tier 1/2/3 based on user tier selection within COMP/CON
-    </span>
-    <tiptap-vuetify
-      id="rte"
-      v-model="val"
-      :extensions="extensions"
-      :card-props="{ flat: true, tile: true, elevation: 0 }"
-      :toolbar-attributes="{ color: 'darkgrey', dark: true }"
-    />
+  <v-card>
+    <v-card-title class="mt-n1 mb-n2">{{ title }}</v-card-title>
+    <v-divider />
+    <v-card-text class="pt-2 bg-background">
+      <p v-if="readonly" v-html="modelValue" />
+      <editor-content v-else :editor="editor" id="rte" />
+    </v-card-text>
   </v-card>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import {
-  TiptapVuetify,
-  Heading,
-  Bold,
-  Italic,
-  Strike,
-  Underline,
-  Code,
-  BulletList,
-  OrderedList,
-  ListItem,
-  Blockquote,
-  HardBreak,
-  HorizontalRule,
-  History,
-} from 'tiptap-vuetify'
+import StarterKit from '@tiptap/starter-kit';
+import { Editor, EditorContent } from '@tiptap/vue-3';
 
-export default Vue.extend({
-  name: 'rich-text-editor',
-  components: { TiptapVuetify },
-  props: ['value', 'title', 'npc'],
-  data: () => ({
-    extensions: [
-      History,
-      Blockquote,
-      Underline,
-      Strike,
-      Italic,
-      ListItem,
-      BulletList,
-      OrderedList,
-      [
-        Heading,
-        {
-          options: {
-            levels: [1, 2, 3],
-          },
-        },
-      ],
-      Bold,
-      Code,
-      HorizontalRule,
-      HardBreak,
-    ],
-  }),
-  computed: {
-    val: {
-      get() {
-        const self = this as any
-        return self.value
-      },
-      set(val) {
-        const self = this as any
-        self.$emit('input', val)
-      },
+export default {
+  components: {
+    EditorContent,
+  },
+
+  props: {
+    modelValue: {
+      type: String,
+      default: '',
+    },
+    title: {
+      type: String,
+      default: '',
+    },
+    readonly: Boolean,
+  },
+
+  emits: ['update:modelValue'],
+
+  data() {
+    return {
+      editor: null as any,
+    };
+  },
+
+  watch: {
+    modelValue(value) {
+      // HTML
+      const isSame = this.editor.getHTML() === value;
+
+      // JSON
+      // const isSame = JSON.stringify(this.editor.getJSON()) === JSON.stringify(value)
+
+      if (isSame) {
+        return;
+      }
+
+      this.editor.commands.setContent(value, false);
     },
   },
-})
+
+  mounted() {
+    this.editor = new Editor({
+      extensions: [StarterKit],
+      content: this.modelValue,
+      onUpdate: () => {
+        // HTML
+        this.$emit('update:modelValue', this.editor.getHTML());
+
+        // JSON
+        // this.$emit('update:modelValue', this.editor.getJSON())
+      },
+    });
+  },
+
+  beforeUnmount() {
+    this.editor.destroy();
+  },
+};
 </script>
 
 <style scoped>
-#rte >>> .tiptap-vuetify-editor__content {
-  max-height: 400px;
+#rte >>> p {
+  padding: 4px 12px 4px 12px;
 }
 </style>

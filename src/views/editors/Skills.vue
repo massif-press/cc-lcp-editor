@@ -5,17 +5,22 @@
     :checkEmpty="['id', 'name', 'description', 'detail', 'family']"
   >
     <template v-slot="{ item }">
-      <v-toolbar dense color="primary" class="white--text text-h6">{{ item.name }}</v-toolbar>
+      <v-toolbar
+        density="compact"
+        color="primary"
+        class="white--text text-h6"
+        >{{ item.name }}</v-toolbar
+      >
       <v-card-text>
-        <v-row>
+        <v-row class="mb-1">
           <v-col><id-input v-model="item.id" /></v-col>
           <v-col><v-text-field label="Name" v-model="item.name" /></v-col>
           <v-col>
             <v-select
-              label="Skill Type"
+              label="Skill Family"
               :items="['str', 'con', 'int', 'dex', 'cha']"
               v-model="item.family"
-              hint="This deremines where on the Skill Trigger list the item appears and has no mechanical effect"
+              hint="Determines where on the Skill Trigger list the item appears and has no mechanical effect"
               persistent-hint
             />
           </v-col>
@@ -28,11 +33,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import EditorBase from './EditorBase.vue'
+import EditorBase from './EditorBase.vue';
 
-export default Vue.extend({
+export default {
   name: 'skills-editor',
   components: { EditorBase },
-})
+};
 </script>
