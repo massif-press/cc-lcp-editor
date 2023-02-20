@@ -6,7 +6,7 @@
         v-for="(range, i) in item.range"
         :key="`range_chip_${item.id}-${i}`"
         small
-        closeable
+        closable
         class="mx-1"
         close-icon="mdi-close"
         @click="edit(range, i)"
