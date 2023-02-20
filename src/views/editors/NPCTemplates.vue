@@ -400,7 +400,7 @@
 </template>
 
 <script lang="ts">
-import { npcRole } from '../assets/enums';
+import { npcRole } from '../../assets/enums';
 import NpcSystemEditor from './components/_NpcSystemEditor.vue';
 import NpcTraitEditor from './components/_NpcTraitEditor.vue';
 import NpcWeaponEditor from './components/_NpcWeaponEditor.vue';
@@ -523,11 +523,9 @@ export default {
       const reader = new FileReader();
 
       reader.onload = (e) =>
-        this.$set(
-          this.lcp,
-          'npc_templates',
-          JSON.parse(e?.target?.result?.toString() || '')
-        );
+        (this.lcp.npc_templates = JSON.parse(
+          e?.target?.result?.toString() || ''
+        ));
       reader.readAsText(file);
     },
     generateStatObject() {

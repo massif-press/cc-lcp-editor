@@ -430,7 +430,7 @@ export default {
     name: '',
     mechtype: [],
     description: '',
-    mounts: [],
+    mounts: [] as any[],
     variant: '',
     stats: {
       size: 1,

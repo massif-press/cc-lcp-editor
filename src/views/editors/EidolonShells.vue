@@ -248,10 +248,10 @@
         hidden
         @change="importFile"
       />
-      <v-btn outlined small class="mx-1" @click="exportJson()"
+      <v-btn outlined small class="mx-1" @click="exportJSON()"
         >Export JSON File</v-btn
       >
-      <v-btn outlined small class="mx-1" @click="importJson()"
+      <v-btn outlined small class="mx-1" @click="importJSON()"
         >Import JSON File</v-btn
       >
     </v-footer>
@@ -378,11 +378,9 @@ export default {
       const reader = new FileReader();
 
       reader.onload = (e) =>
-        this.$set(
-          this.lcp,
-          'eidolon_shells',
-          JSON.parse(e?.target?.result?.toString() || '')
-        );
+        (this.lcp.eidolon_shells = JSON.parse(
+          e?.target?.result?.toString() || ''
+        ));
       reader.readAsText(file);
     },
   },

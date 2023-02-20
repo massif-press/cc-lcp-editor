@@ -34,7 +34,7 @@ export default {
   name: 'old-converter',
   data: () => ({
     loading: false,
-    converterFile: null,
+    converterFile: undefined,
   }),
   methods: {
     async loadConverter(file: HTMLInputElement): Promise<void> {

@@ -91,7 +91,7 @@ import { exportPrep } from '../utilities/cleanup';
 
 function getDuplicateProperties(arr: any[], prop: string) {
   let sorted = arr.map((x) => x[prop]).sort();
-  let results = [];
+  let results: any[] = [];
   for (let i = 0; i < sorted.length - 1; i++) {
     if (sorted[i + 1] == sorted[i]) {
       results.push(sorted[i]);
