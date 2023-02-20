@@ -38,7 +38,7 @@
                   v-model="range.type"
                   item-text="name"
                   item-value="id"
-                  label="range"
+                  label="Range"
                   :items="rangeTypes"
                   hide-details
                 />

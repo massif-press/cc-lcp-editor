@@ -82,7 +82,7 @@ function _exportPrepInternal(e: any) {
       _recIterate(e[prop]);
     }
     // remove paragraph formatting
-    else if (typeof e[prop] === 'string') {
+    else if (typeof e !== 'string' && typeof e[prop] === 'string') {
       e[prop] = e[prop].replaceAll('<p', '<div');
       e[prop] = e[prop].replaceAll('</p', '</div');
     }
