@@ -6,7 +6,7 @@
         color="teal-darken-2"
         :title="`${
           manufacturer ? manufacturer.id : isExotic ? 'Exotic' : ''
-        } Weapon Editor`"
+        } System Editor`"
       >
         <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
       </v-toolbar>

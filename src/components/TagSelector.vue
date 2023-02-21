@@ -29,19 +29,19 @@
           <v-card-text>
             <v-row justify="space-around" align="center">
               <v-col cols="7">
-                <v-combobox
+                <v-autocomplete
                   v-model="tag"
                   item-title="name"
                   item-value="id"
                   label="Tag"
                   :items="tags"
                   hide-details
+                  return-object
                 />
               </v-col>
               <v-col>
-                <tiered-stat-input v-if="npc" v-model="tag.val" title="Value" />
+                <!-- <tiered-stat-input v-if="npc" v-model="tag.val" title="Value" /> -->
                 <v-text-field
-                  v-else
                   v-model="tag.val"
                   type="number"
                   label="Value"
@@ -76,7 +76,7 @@ export default {
   components: { TieredStatInput },
   data: () => ({
     menu: false,
-    tag: {} as any,
+    tag: { name: '', id: '', val: '' } as any,
     isEdit: false,
     editIndex: -1,
   }),
@@ -98,7 +98,7 @@ export default {
         if (!this.item.tags) this.item['tags'] = [];
         this.item.tags.push(this.tag);
       }
-      this['tag'] = {};
+      this.tag = { name: '', id: '', val: '' };
       this.isEdit = false;
       this.editIndex = -1;
       this.menu = false;

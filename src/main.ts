@@ -32,8 +32,8 @@ const router = createRouter({
 const theme = {
   dark: true,
   colors: {
-    background: '#23252F',
-    surface: '#4a4e69',
+    background: '#1d1f2b',
+    surface: '#2c2f40',
     primary: '#558C8C',
     secondary: '#C7EFCF',
     error: '#E63462',

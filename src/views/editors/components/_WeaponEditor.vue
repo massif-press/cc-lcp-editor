@@ -11,7 +11,7 @@
         <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
       </v-toolbar>
       <v-card-text>
-        <v-row justify="space-around" align="end">
+        <v-row justify="space-around" align="center">
           <v-col>
             <id-input v-model="id" />
           </v-col>
@@ -71,6 +71,18 @@
               outlined
               v-model="license_level"
             />
+          </v-col>
+          <v-col v-if="manufacturer && manufacturer.id === 'GMS'" cols="auto">
+            <v-tooltip location="start" width="300px">
+              <template v-slot:activator="{ props }">
+                <v-icon class="pr-6" v-bind="props" icon="mdi-information" />
+              </template>
+              <span>
+                Setting the License Level to <code>0</code> and the License
+                field empty will register this item as a GMS generic available
+                from Pilot LL0
+              </span>
+            </v-tooltip>
           </v-col>
         </v-row>
         <v-row>
@@ -284,6 +296,9 @@ export default {
   },
   methods: {
     open() {
+      if (!this.isEdit && this.manufacturer && this.manufacturer.id === 'GMS') {
+        this.license_level = 0;
+      }
       this.dialog = true;
     },
     close() {
@@ -316,6 +331,7 @@ export default {
       this.dialog = false;
     },
     edit(weapon: any): void {
+      console.log(weapon);
       this.id = weapon.id;
       this.name = weapon.name;
       this.license = weapon.license;
@@ -334,7 +350,7 @@ export default {
       this.dialog = true;
     },
     getProfiles(w: any) {
-      if (w.profiles) return w.profiles;
+      if (w.profiles && w.profiles.length) return w.profiles;
       return [
         {
           name: w.name,
