@@ -65,6 +65,11 @@ export default [
     component: () => import('./views/editors/Talents.vue'),
   },
   {
+    path: '/editor/tables',
+    name: 'Random Table Editor',
+    component: () => import('./views/editors/Tables.vue'),
+  },
+  {
     path: '/editor/manufacturers',
     name: 'Manufacturer Editor',
     component: () => import('./views/editors/Manufacturers.vue'),
