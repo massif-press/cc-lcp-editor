@@ -1,35 +1,28 @@
 <template>
-  <v-container fluid>
+  <div>
     <v-row>
-      <v-col cols="2">
+      <v-col cols="3">
         <v-list nav density="compact">
           <v-list-item
             v-for="(c, i) in classes"
             :key="`${c.id || 'new'}_${i}`"
             :class="selected && selected.id === c.id ? 'primary darken-3' : ''"
             selectable
+            :title="c.name"
             @click="selected = c"
           >
-            <v-list-item-content class="mt-n2">
-              <v-list-item-title>
-                <span class="text-h6 mr-1">{{ c.name }}</span>
-              </v-list-item-title>
-              <v-list-item-action-text class="mt-n2">
-                {{ getFeatures(c).length }} base features /
-                {{ getFeatures(c, true).length }} optional
-              </v-list-item-action-text>
-            </v-list-item-content>
+            <template v-slot:subtitle="{ subtitle }">
+              {{ getFeatures(c).length }} base features /
+              {{ getFeatures(c, true).length }} optional
+            </template>
           </v-list-item>
-          <!-- <v-list-item @click="selected = 'generic'">
-            <v-list-item-content class="mt-n2">
-              <v-list-item-title>
-                <span class="text-h6 mr-1">Generic Features</span>
-              </v-list-item-title>
-              <v-list-item-action-text class="mt-n2">
-                TODO base features / TODO optional
-              </v-list-item-action-text>
-            </v-list-item-content>
-          </v-list-item> -->
+          <v-divider class="my-2" />
+          <v-list-item @click="selected = 'generic'" title="Generic Features">
+            <template v-slot:subtitle="{ subtitle }">
+              {{ getFeatures('generic').length }} base features /
+              {{ getFeatures('generic', true).length }} optional
+            </template>
+          </v-list-item>
         </v-list>
         <v-divider class="my-2" />
         <v-btn block color="secondary" @click="addNew">
@@ -47,10 +40,8 @@
             <v-toolbar
               density="compact"
               color="primary"
-              class="white--text text-h6"
-            >
-              {{ selected.name }}
-            </v-toolbar>
+              :title="selected.name"
+            />
             <v-card-text>
               <v-row density="compact" justify="space-around" align="end">
                 <v-col cols="3">
@@ -61,7 +52,6 @@
                     v-model="selected.name"
                     hide-details
                     label="Name"
-                    density="compact"
                   />
                 </v-col>
                 <v-col cols="3">
@@ -70,7 +60,6 @@
                     outlined
                     :items="roles"
                     v-model="selected.role"
-                    density="compact"
                     hide-details
                   />
                 </v-col>
@@ -100,7 +89,7 @@
                 </v-col>
               </v-row>
               <v-divider class="mt-3 mb-5" />
-              <v-row>
+              <!-- <v-row>
                 <v-col
                   v-show="key !== 'size'"
                   v-for="key in Object.keys(selected.stats)"
@@ -116,14 +105,12 @@
                 <v-col class="pa-1"
                   ><tiered-size-input v-model="selected.stats.size"
                 /></v-col>
-              </v-row>
+              </v-row> -->
               <v-divider class="mb-3 mt-5" />
               <v-row>
                 <v-col>
                   <v-card outlined>
-                    <v-toolbar density="compact" color="grey darken-3"
-                      ><b>BASE FEATURES</b></v-toolbar
-                    >
+                    <v-toolbar density="compact" title="Base Features" />
                     <v-card-text>
                       <v-row>
                         <v-col
@@ -144,9 +131,8 @@
                 </v-col>
                 <v-col>
                   <v-card outlined>
-                    <v-toolbar density="compact" color="grey darken-3"
-                      ><b>OPTIONAL FEATURES</b></v-toolbar
-                    >
+                    <v-toolbar density="compact" title="Optional Features" />
+
                     <v-card-text>
                       <v-row>
                         <v-col
@@ -254,7 +240,7 @@
       @save="saveItem($event)"
       @remove="removeItem($event)"
     />
-  </v-container>
+  </div>
 </template>
 
 <script lang="ts">
@@ -306,13 +292,25 @@ export default {
         );
       }
 
-      const fArr = this.lcp.npc_features.filter(
-        (x: any) => x.origin.type === 'Class' && x.origin.origin_id === c.id
-      );
+      if (c.features) {
+        // v2
+      } else {
+        const fset = isOptional ? 'optional_features' : 'base_features';
+        const out: string[] = [];
+        c[fset].forEach((id: string) => {
+          out.push(this.lcp.npc_features.find((x) => x.id === id));
+        });
 
-      return isOptional
-        ? fArr.filter((x: any) => x.origin.optional)
-        : fArr.filter((x: any) => !x.origin.optional);
+        return out;
+
+        // return isOptional
+        //   ? c.optional_features.map((x) =>
+        //       this.lcp.npc_features.find((y) => y.id === x.id)
+        //     )
+        //   : c.base_features.map((x) =>
+        //       this.lcp.npc_features.find((y) => y.id === x.id)
+        //     );
+      }
     },
     addNew() {
       if (!this.lcp.npc_classes) {

@@ -149,7 +149,7 @@ export default {
       this.lcp[this.itemKey].push({});
     },
     duplicateItem(item: any) {
-      this.lcp[this.itemKey].push(JSON.parse(JSON.stringify(item)));
+      this.lcp[this.itemKey].push({ ...item });
     },
     deleteItem(item: any) {
       this.lcp[this.itemKey].splice(

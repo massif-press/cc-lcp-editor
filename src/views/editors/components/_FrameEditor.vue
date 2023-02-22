@@ -96,11 +96,12 @@
                 <v-chip
                   v-for="(m, i) in mounts"
                   :key="`mount-${i}`"
-                  closable
                   class="mx-1"
-                  close-icon="mdi-close"
-                  @click:close="mounts.splice(i, 1)"
+                  @click="mounts.splice(i, 1)"
                 >
+                  <v-tooltip location="top" activator="parent"
+                    >Click to remove</v-tooltip
+                  >
                   {{ m }}
                 </v-chip>
                 <v-menu>
@@ -444,7 +445,7 @@ export default {
       repcap: 6,
       sensor_range: 10,
       tech_attack: 0,
-      save: 20,
+      save: 12,
       speed: 4,
       sp: 6,
     },
@@ -511,7 +512,7 @@ export default {
         license_level: Number(this.license_level),
         name: this.name,
         mechtype: this.mechtype,
-        vartiant: this.variant,
+        variant: this.variant,
         description: this.description,
         mounts: this.mounts,
         stats: this.stats,
@@ -520,6 +521,11 @@ export default {
         image_url: this.image_url,
         y_pos: this.y_pos,
       };
+      for (const stat in e.stats) {
+        if (!isNaN(Number(e.stats[stat])))
+          e.stats[stat] = Number(e.stats[stat]);
+      }
+
       this.$emit('save', e);
       this.reset();
       this.dialog = false;
@@ -546,7 +552,7 @@ export default {
         synergies: frame.core_system.passive_synergies,
       };
       this.image_url = frame.image_url;
-      this.y_pos = frame.y_pos;
+      this.y_pos = Number(frame.y_pos);
       this.isEdit = true;
       this.dialog = true;
     },
@@ -560,7 +566,8 @@ export default {
       this.name = '';
       this.mechtype = [];
       this.description = '';
-      (this.variant = ''), (this.mounts = []);
+      this.variant = '';
+      this.mounts = [];
       this.stats = {
         size: 1,
         structure: 4,
@@ -573,7 +580,7 @@ export default {
         repcap: 6,
         sensor_range: 10,
         tech_attack: 0,
-        save: 20,
+        save: 12,
         speed: 4,
         sp: 6,
       };

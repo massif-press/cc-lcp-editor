@@ -10,12 +10,9 @@
         <template v-slot:activator="{ props }">
           <v-chip
             small
-            closable
             outlined
             class="mx-1"
-            close-icon="mdi-close"
             @click="edit(bonus, i)"
-            @click:close="remove(i)"
             v-bind="props"
           >
             {{ bonus.id }}, {{ bonus.val }}
@@ -47,9 +44,11 @@
           >
         </template>
         <v-card>
-          <v-toolbar density="compact" color="pink darken-4" class="text-h6"
-            >Add Bonus</v-toolbar
-          >
+          <v-toolbar density="compact" color="pink darken-4" title="Add Bonus">
+            <v-btn icon @click="dialog = false"
+              ><v-icon icon="mdi-close"
+            /></v-btn>
+          </v-toolbar>
           <v-card-text>
             <v-row justify="space-around" align="center" class="mt-2">
               <v-col cols="8">
@@ -193,7 +192,9 @@
           </v-card-text>
           <v-divider />
           <v-card-actions>
-            <v-btn text color="error" @click="dialog = false">cancel</v-btn>
+            <v-btn variant="tonal" color="error" @click="remove()"
+              >delete</v-btn
+            >
             <v-spacer />
             <v-btn
               color="success darken-2"
@@ -286,8 +287,9 @@ export default {
       this.editIndex = index;
       this.dialog = true;
     },
-    remove(index: number) {
-      this.item.bonuses.splice(index, 1);
+    remove() {
+      this.item.bonuses.splice(this.editIndex, 1);
+      this.dialog = false;
     },
     descById(id: string) {
       return (

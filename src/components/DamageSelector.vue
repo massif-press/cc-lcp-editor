@@ -6,12 +6,9 @@
         v-for="(damage, i) in item.damage"
         :key="`damage_chip_${item.id}-${i}`"
         small
-        closable
         class="mx-1"
-        close-icon="mdi-close"
         :color="getColor(damage.type)"
         @click="edit(damage, i)"
-        @click:close="remove(i)"
       >
         {{ damage.val }} {{ damage.type }}
       </v-chip>
@@ -27,11 +24,11 @@
           >
         </template>
         <v-card>
-          <v-toolbar
-            density="compact"
-            color="pink darken-4"
-            title="Add Damage"
-          />
+          <v-toolbar density="compact" color="pink darken-4" title="Add Damage">
+            <v-btn icon @click="menu = false"
+              ><v-icon icon="mdi-close"
+            /></v-btn>
+          </v-toolbar>
           <v-card-text>
             <v-row justify="space-around" align="center">
               <v-col cols="7">
@@ -62,7 +59,9 @@
           </v-card-text>
           <v-divider />
           <v-card-actions>
-            <v-btn text color="error" @click="menu = false">cancel</v-btn>
+            <v-btn variant="tonal" color="error" @click="remove()"
+              >delete</v-btn
+            >
             <v-spacer />
             <v-btn color="success darken-2" @click="submit">
               {{ isEdit ? 'save' : 'confirm' }}
@@ -125,13 +124,14 @@ export default {
       if (!isNaN(this.damage.val)) {
         this.damage.val = Number(this.damage.val);
       }
-      this.damage = JSON.parse(JSON.stringify(damage));
+      this.damage = { ...damage };
       this.isEdit = true;
       this.editIndex = index;
       this.menu = true;
     },
-    remove(index: number) {
-      this.item.damage.splice(index, 1);
+    remove() {
+      this.item.damage.splice(this.editIndex, 1);
+      this.menu = false;
     },
   },
 };

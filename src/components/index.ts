@@ -18,6 +18,7 @@ import * as TagSelector from './TagSelector.vue';
 import * as TieredSizeInput from './TieredSizeInput.vue';
 import * as TieredStatInput from './TieredStatInput.vue';
 import * as IdInput from './IdInput.vue';
+import * as IClockBuilder from './IClockBuilder.vue';
 
 export {
   ActivatorSelector,
@@ -40,4 +41,5 @@ export {
   TieredSizeInput,
   TieredStatInput,
   IdInput,
+  IClockBuilder,
 };

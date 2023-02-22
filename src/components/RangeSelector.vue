@@ -6,11 +6,8 @@
         v-for="(range, i) in item.range"
         :key="`range_chip_${item.id}-${i}`"
         small
-        closable
         class="mx-1"
-        close-icon="mdi-close"
         @click="edit(range, i)"
-        @click:close="remove(i)"
       >
         {{ range.val }} {{ range.type }}
       </v-chip>
@@ -61,7 +58,9 @@
           </v-card-text>
           <v-divider />
           <v-card-actions>
-            <v-btn text color="error" @click="menu = false">cancel</v-btn>
+            <v-btn variant="tonal" color="error" @click="remove()"
+              >delete</v-btn
+            >
             <v-spacer />
             <v-btn
               color="success darken-2"
@@ -113,13 +112,14 @@ export default {
       if (!isNaN(this.range.val)) {
         this.range.val = Number(this.range.val);
       }
-      this.range = JSON.parse(JSON.stringify(range));
+      this.range = { ...range };
       this.isEdit = true;
       this.editIndex = index;
       this.menu = true;
     },
-    remove(index: number) {
-      this.item.range.splice(index, 1);
+    remove() {
+      this.item.range.splice(this.editIndex, 1);
+      this.menu = false;
     },
   },
 };

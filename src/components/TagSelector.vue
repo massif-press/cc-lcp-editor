@@ -4,13 +4,10 @@
     <v-card flat>
       <v-chip
         v-for="(tag, i) in item.tags"
-        :key="`tag_chip_${item.id}-${i}`"
         small
-        closable
         outlined
         class="mx-1"
-        close-icon="mdi-close"
-        @click:close="remove(i)"
+        @click="edit(tag, i)"
       >
         {{ tag.id }}, {{ tag.val }}
       </v-chip>
@@ -25,7 +22,11 @@
           >
         </template>
         <v-card>
-          <v-toolbar density="compact" color="pink darken-4" title="Add Tag" />
+          <v-toolbar density="compact" color="pink darken-4" title="Add Tag">
+            <v-btn icon @click="menu = false"
+              ><v-icon icon="mdi-close"
+            /></v-btn>
+          </v-toolbar>
           <v-card-text>
             <v-row justify="space-around" align="center">
               <v-col cols="7">
@@ -53,7 +54,9 @@
           </v-card-text>
           <v-divider />
           <v-card-actions>
-            <v-btn text color="error" @click="menu = false">cancel</v-btn>
+            <v-btn variant="tonal" color="error" @click="remove()"
+              >delete</v-btn
+            >
             <v-spacer />
             <v-btn color="success darken-2" :disabled="!tag.id" @click="submit">
               {{ isEdit ? 'save' : 'confirm' }}
@@ -83,7 +86,9 @@ export default {
   computed: {
     tags() {
       const localTags = useStore().getters.lcp.tags || [];
-      return tags.concat(localTags);
+      return [...tags, ...localTags].filter(
+        (x) => !this.item.tags.some((y) => x.id === y.id)
+      );
     },
   },
   methods: {
@@ -95,6 +100,7 @@ export default {
       if (this.isEdit) {
         this.item.tags[this.editIndex] = this.tag;
       } else {
+        console.log(this.item.tags);
         if (!this.item.tags) this.item['tags'] = [];
         this.item.tags.push(this.tag);
       }
@@ -104,13 +110,14 @@ export default {
       this.menu = false;
     },
     edit(tag: any, index: number) {
-      this.tag = JSON.parse(JSON.stringify(tag));
+      this.tag = { ...tag };
       this.isEdit = true;
       this.editIndex = index;
       this.menu = true;
     },
-    remove(index: number) {
-      this.item.tags.splice(index, 1);
+    remove() {
+      this.item.tags.splice(this.editIndex, 1);
+      this.menu = false;
     },
   },
 };

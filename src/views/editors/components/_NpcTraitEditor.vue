@@ -1,9 +1,11 @@
 <template>
   <v-dialog v-model="dialog" fullscreen>
     <v-card>
-      <v-toolbar density="compact" color="pink darken-4" class="text-h6">
-        NPC Trait Editor
-        <v-spacer />
+      <v-toolbar
+        density="compact"
+        color="pink darken-4"
+        title="NPC Trait Editor"
+      >
         <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
       </v-toolbar>
       <v-card-text>
@@ -21,7 +23,6 @@
               type="number"
               hide-details
               outlined
-              density="compact"
               clearable
             />
           </v-col>
@@ -39,11 +40,10 @@
               color="secondary"
               inset
               v-model="optional"
-              :value="optional"
               mandatory
               density="compact"
               hide-details
-              :label="`${npcClass ? 'Class' : 'Template'} Feature`"
+              label="Optional Feature"
             />
           </v-col>
         </v-row>
@@ -137,7 +137,7 @@ export default {
         name: this.name,
         origin: this.origin,
         recharge: this.recharge,
-        optional: this.origin.optional,
+        optional: this.optional,
         hide_active: this.hide_active,
         effect: this.effect,
         type: this.type,
@@ -159,7 +159,7 @@ export default {
       this.effect = trait.effect;
       this.type = trait.type;
       this.recharge = trait.recharge;
-      this.optional = trait.origin.optional;
+      this.optional = trait.optional;
       this.hide_active = trait.hide_active;
       this.tags = trait.tags;
       this.actions = trait.actions;

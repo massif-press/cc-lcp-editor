@@ -11,12 +11,9 @@
         <template v-slot:activator="{ props }">
           <v-chip
             small
-            closable
             outlined
             class="mx-1"
-            close-icon="mdi-close"
             @click="edit(action, i)"
-            @click:close="remove(i)"
             v-bind="props"
           >
             {{ action.name || `Activate ${item.name || '---'}` }}
@@ -54,7 +51,11 @@
           >
         </template>
         <v-card>
-          <v-toolbar color="pink darken-4" title="Add Action" />
+          <v-toolbar color="pink darken-4" title="Add Action">
+            <v-btn icon @click="dialog = false"
+              ><v-icon icon="mdi-close"
+            /></v-btn>
+          </v-toolbar>
           <v-card-text>
             <v-row justify="space-around" align="center" class="mt-2">
               <v-col>
@@ -151,7 +152,9 @@
           </v-card-text>
           <v-divider />
           <v-card-actions>
-            <v-btn text color="error" @click="dialog = false">cancel</v-btn>
+            <v-btn variant="tonal" color="error" @click="remove()"
+              >delete</v-btn
+            >
             <v-spacer />
             <v-btn
               color="success darken-2"
@@ -247,8 +250,9 @@ export default {
       this.editIndex = index;
       this.dialog = true;
     },
-    remove(index: number): void {
-      this.item.actions.splice(index, 1);
+    remove() {
+      this.item.actions.splice(this.editIndex, 1);
+      this.dialog = false;
     },
     reset(): void {
       this.name = '';

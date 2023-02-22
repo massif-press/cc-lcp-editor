@@ -377,11 +377,7 @@ export default {
 
   watch: {
     modelValue(value) {
-      // HTML
       const isSame = this.editor.getHTML() === value;
-
-      // JSON
-      // const isSame = JSON.stringify(this.editor.getJSON()) === JSON.stringify(value)
 
       if (isSame) {
         return;

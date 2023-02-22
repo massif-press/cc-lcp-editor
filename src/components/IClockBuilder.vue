@@ -11,15 +11,12 @@
         <template v-slot:activator="{ props }">
           <v-chip
             small
-            closable
             outlined
             class="mx-1"
-            close-icon="mdi-close"
             @click="edit(clock, i)"
-            @click:close="remove(i)"
             v-bind="props"
           >
-            {{ clock.name }}
+            {{ clock.title }}
           </v-chip>
         </template>
         <div v-if="clock.min">Min: {{ clock.min }}</div>
@@ -27,47 +24,62 @@
       </v-tooltip>
       <v-dialog v-model="dialog">
         <template v-slot:activator="{ props }">
-          <v-btn icon v-bind="props"><v-icon>mdi-plus</v-icon></v-btn>
+          <v-btn size="small" icon variant="flat" v-bind="props"
+            ><v-icon>mdi-plus</v-icon></v-btn
+          >
         </template>
         <v-card>
-          <v-toolbar density="compact" color="pink darken-4" class="text-h6"
-            >Add clock</v-toolbar
-          >
+          <v-toolbar density="compact" color="pink darken-4" title="Add Clock">
+            <v-btn icon @click="dialog = false"
+              ><v-icon icon="mdi-close"
+            /></v-btn>
+          </v-toolbar>
           <v-card-text>
             <v-row justify="space-around" align="center" class="mt-2">
               <v-col>
-                <v-text-field v-model="clock.name" label="Name" hide-details />
-              </v-col>
-            </v-row>
-            <v-divider />
-            <v-row justify="space-around" align="center" class="mt-2">
-              <v-col>
                 <v-text-field
-                  v-model="clock.min"
+                  v-model="clock.title"
+                  label="Title"
+                  hide-details
+                />
+              </v-col>
+              <v-col cols="auto">
+                <v-text-field
+                  v-model="clock.segments"
                   type="number"
-                  label="Min"
+                  label="Segments"
                   hide-details
                   outlined
                 />
               </v-col>
-              <v-col>
-                <v-text-field
-                  v-model="clock.max"
-                  type="number"
-                  label="Max"
-                  hide-details
-                  outlined
+              <v-col cols="auto">
+                <v-switch v-model="clock.linear" label="Linear" hide-details />
+              </v-col>
+            </v-row>
+            <v-row justify="space-around" align="center" class="mt-2">
+              <v-col cols="12">
+                <rich-text-editor
+                  title="Description"
+                  v-model="clock.description"
+                />
+              </v-col>
+              <v-col cols="12">
+                <rich-text-editor
+                  title="Resolution"
+                  v-model="clock.resolution"
                 />
               </v-col>
             </v-row>
           </v-card-text>
           <v-divider />
           <v-card-actions>
-            <v-btn text color="error" @click="dialog = false">cancel</v-btn>
+            <v-btn variant="tonal" color="error" @click="remove()"
+              >delete</v-btn
+            >
             <v-spacer />
             <v-btn
               color="success darken-2"
-              :disabled="!clock.name || !clock.id"
+              :disabled="!clock.title || !clock.id"
               @click="submit"
             >
               {{ isEdit ? 'save' : 'confirm' }}
@@ -81,7 +93,7 @@
 
 <script lang="ts">
 export default {
-  name: 'clock-builder',
+  title: 'clock-builder',
   props: { item: { type: Object, required: true } },
   data: () => ({
     dialog: false,
@@ -95,7 +107,7 @@ export default {
       if (this.isEdit) {
         this.item.clocks[this.editIndex] = this.clock;
       } else {
-        if (!this.item.clocks) this.item['clocks'] = [];
+        if (!this.item.clocks) this.item.clocks = [];
         this.item.clocks.push(this.clock);
       }
       this['clock'] = {};
@@ -104,13 +116,14 @@ export default {
       this.dialog = false;
     },
     edit(clock: any, index: number) {
-      this.clock = JSON.parse(JSON.stringify(clock));
+      this.clock = { ...clock };
       this.isEdit = true;
       this.editIndex = index;
       this.dialog = true;
     },
-    remove(index: number) {
-      this.item.clocks.splice(index, 1);
+    remove() {
+      this.item.clocks.splice(this.editIndex, 1);
+      this.dialog = false;
     },
   },
 };
