@@ -5,12 +5,7 @@
     :checkEmpty="['id', 'name', 'description', 'ranks']"
   >
     <template v-slot="{ item }">
-      <v-toolbar
-        density="compact"
-        color="primary"
-        class="white--text text-h6"
-        >{{ item.name }}</v-toolbar
-      >
+      <v-toolbar density="compact" color="primary" :title="item.name" />
       <v-card-text>
         <v-row>
           <v-col><id-input v-model="item.id" /></v-col>

@@ -51,7 +51,7 @@
                 <v-text-field label="Name" hide-details v-model="name" />
               </v-col>
               <v-col cols="auto">
-                <v-tooltip top width="30em">
+                <v-tooltip location="top" width="30em">
                   <template v-slot:activator="{ props }">
                     <v-switch
                       color="secondary"
