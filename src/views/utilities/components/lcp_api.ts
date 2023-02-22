@@ -17,6 +17,7 @@ const api = axios.create({
 });
 
 const getPack = (passcode: string) => {
+  console.log(lcp_meta_key);
   return api.get('/community-pack', {
     params: { passcode },
   });
