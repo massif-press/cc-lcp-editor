@@ -38,7 +38,12 @@
                   item-text="name"
                   item-value="id"
                   label="Damage"
-                  :items="damageTypes"
+                  :items="
+                    damageTypes.filter(
+                      (x) =>
+                        !item.damage.map((y) => y.type).some((z) => z === x)
+                    )
+                  "
                   hide-details
                 />
               </v-col>
@@ -60,7 +65,11 @@
           </v-card-text>
           <v-divider />
           <v-card-actions>
-            <v-btn variant="tonal" color="error" @click="remove()"
+            <v-btn
+              v-show="isEdit"
+              variant="tonal"
+              color="error"
+              @click="remove()"
               >delete</v-btn
             >
             <v-spacer />

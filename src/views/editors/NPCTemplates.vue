@@ -143,10 +143,10 @@
                         v-model="selected.optionalClassPerTier"
                         :items="[
                           {
-                            text: 'when choosing optional systems.',
+                            title: 'when choosing optional systems.',
                             value: false,
                           },
-                          { text: 'per Tier.', value: true },
+                          { title: 'per Tier.', value: true },
                         ]"
                         density="compact"
                         hide-details
@@ -199,10 +199,10 @@
                         v-model="selected.optionalPerTier"
                         :items="[
                           {
-                            text: 'when choosing optional systems.',
+                            title: 'when choosing optional systems.',
                             value: false,
                           },
-                          { text: 'per Tier.', value: true },
+                          { title: 'per Tier.', value: true },
                         ]"
                         density="compact"
                         hide-details

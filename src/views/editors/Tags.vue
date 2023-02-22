@@ -19,9 +19,11 @@
             <v-switch
               color="secondary"
               label="Filter Ignore"
+              density="compact"
               v-model="item.filter_ignore"
-              hint="Prevent this tag from appearing in equipment filters"
-              persistent-hint
+              :messages="[
+                'Prevent this tag from appearing in equipment filters',
+              ]"
             />
           </v-col>
         </v-row>

@@ -168,7 +168,7 @@
         <v-divider class="my-4" />
         <v-alert density="compact" color="error" icon="mdi-alert" class="mb-3">
           The editors below are only compatible with the forthcoming GM tools
-          update. They
+          update. They are <b>unfinished</b> and
           <b>SHOULD NOT</b>
           be used to create data for the current version of COMP/CON
         </v-alert>

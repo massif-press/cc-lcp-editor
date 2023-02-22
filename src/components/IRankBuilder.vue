@@ -91,7 +91,11 @@
           </v-card-text>
           <v-divider />
           <v-card-actions>
-            <v-btn variant="tonal" color="error" @click="remove()"
+            <v-btn
+              v-show="isEdit"
+              variant="tonal"
+              color="error"
+              @click="remove()"
               >delete</v-btn
             >
             <v-spacer />

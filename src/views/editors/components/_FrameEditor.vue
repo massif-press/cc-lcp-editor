@@ -65,7 +65,7 @@
                   v-model="y_pos"
                 />
               </v-col>
-              <v-col v-show="!!image_url" class="ml-auto mt-n2">
+              <v-col cols="12" v-show="!!image_url">
                 Banner Preview
                 <div style="height: 72px" class="bg-blue-grey-darken-4 rounded">
                   <div
