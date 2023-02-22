@@ -4,6 +4,7 @@
     <v-card flat>
       <v-chip
         v-for="(tag, i) in item.tags"
+        :key="`tag_chip_${item.id}-${i}`"
         small
         outlined
         class="mx-1"
@@ -17,7 +18,7 @@
         :close-on-content-click="false"
       >
         <template v-slot:activator="{ props }">
-          <v-btn size="small" icon flat v-bind="props"
+          <v-btn size="small" icon flat @click="addNew()" v-bind="props"
             ><v-icon size="large">mdi-plus</v-icon></v-btn
           >
         </template>
@@ -100,7 +101,6 @@ export default {
       if (this.isEdit) {
         this.item.tags[this.editIndex] = this.tag;
       } else {
-        console.log(this.item.tags);
         if (!this.item.tags) this.item['tags'] = [];
         this.item.tags.push(this.tag);
       }
@@ -108,6 +108,12 @@ export default {
       this.isEdit = false;
       this.editIndex = -1;
       this.menu = false;
+    },
+    addNew() {
+      this.tag = { name: '', id: '', val: '' };
+      this.isEdit = false;
+      this.editIndex = -1;
+      this.menu = true;
     },
     edit(tag: any, index: number) {
       this.tag = { ...tag };
@@ -118,6 +124,8 @@ export default {
     remove() {
       this.item.tags.splice(this.editIndex, 1);
       this.menu = false;
+      this.isEdit = false;
+      this.editIndex = -1;
     },
   },
 };

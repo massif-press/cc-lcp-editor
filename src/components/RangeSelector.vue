@@ -18,16 +18,16 @@
         :close-on-content-click="false"
       >
         <template v-slot:activator="{ props }">
-          <v-btn icon size="small" flat v-bind="props"
+          <v-btn icon size="small" flat @click="addNew()" v-bind="props"
             ><v-icon>mdi-plus</v-icon></v-btn
           >
         </template>
         <v-card>
-          <v-toolbar
-            density="compact"
-            color="pink darken-4"
-            title="Add Range"
-          />
+          <v-toolbar density="compact" color="pink darken-4" title="Add Range">
+            <v-btn icon @click="menu = false"
+              ><v-icon icon="mdi-close"
+            /></v-btn>
+          </v-toolbar>
           <v-card-text>
             <v-row justify="space-around" align="center">
               <v-col cols="7">
@@ -103,10 +103,16 @@ export default {
         if (!this.item.range) this.item['range'] = [];
         this.item.range.push(this.range);
       }
-      this['range'] = {};
+      this.range = {};
       this.isEdit = false;
       this.editIndex = -1;
       this.menu = false;
+    },
+    addNew() {
+      this.range = {};
+      this.isEdit = false;
+      this.editIndex = -1;
+      this.menu = true;
     },
     edit(range: any, index: number) {
       if (!isNaN(this.range.val)) {
@@ -120,6 +126,8 @@ export default {
     remove() {
       this.item.range.splice(this.editIndex, 1);
       this.menu = false;
+      this.isEdit = false;
+      this.editIndex = -1;
     },
   },
 };

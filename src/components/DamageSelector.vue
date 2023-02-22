@@ -12,6 +12,7 @@
       >
         {{ damage.val }} {{ damage.type }}
       </v-chip>
+
       <v-menu
         v-model="menu"
         width="20em"
@@ -19,7 +20,7 @@
         :close-on-content-click="false"
       >
         <template v-slot:activator="{ props }">
-          <v-btn icon size="small" flat v-bind="props"
+          <v-btn icon size="small" flat @click="addNew()" v-bind="props"
             ><v-icon>mdi-plus</v-icon></v-btn
           >
         </template>
@@ -115,10 +116,16 @@ export default {
         if (!this.item.damage) this.item['damage'] = [];
         this.item.damage.push(this.damage);
       }
-      this['damage'] = {};
+      this.damage = {};
       this.isEdit = false;
       this.editIndex = -1;
       this.menu = false;
+    },
+    addNew() {
+      this.damage = {};
+      this.isEdit = false;
+      this.editIndex = -1;
+      this.menu = true;
     },
     edit(damage: any, index: number) {
       if (!isNaN(this.damage.val)) {
@@ -132,6 +139,8 @@ export default {
     remove() {
       this.item.damage.splice(this.editIndex, 1);
       this.menu = false;
+      this.isEdit = false;
+      this.editIndex = -1;
     },
   },
 };

@@ -331,7 +331,9 @@ export default {
       if (!this.lcp[type]) return [];
       if (!id)
         return this.lcp[type].filter(
-          (x: any) => x.source === id || x.source.toLowerCase() === 'exotic'
+          (x: any) =>
+            !!x.source &&
+            (x.source === id || x.source.toLowerCase() === 'exotic')
         );
       return this.lcp[type].filter((x: any) => x.source === id);
     },
