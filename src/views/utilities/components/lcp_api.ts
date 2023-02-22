@@ -2,14 +2,11 @@
 // @ts-nocheck
 import axios from 'axios';
 
-const lcp_meta_key = import.meta.env.VUE_APP_LCP_META_KEY || '';
+const lcp_meta_key = import.meta.env.VITE_LCP_META_KEY || '';
 
 const headers = {
   headers: {
     'Content-Type': 'application/json',
-    // 'Access-Control-Allow-Origin': '*',
-    // 'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-    // 'Access-Control-Allow-Credentials': true,
     'x-api-key': lcp_meta_key,
   },
 };
