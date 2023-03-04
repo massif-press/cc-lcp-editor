@@ -8,13 +8,7 @@
         top
       >
         <template v-slot:activator="{ props }">
-          <v-chip
-            small
-            outlined
-            class="mx-1"
-            @click="edit(counter, i)"
-            v-bind="props"
-          >
+          <v-chip small class="mx-1" @click="edit(counter, i)" v-bind="props">
             {{ counter.name }}
           </v-chip>
         </template>
@@ -63,7 +57,6 @@
                   type="number"
                   label="Min"
                   hide-details
-                  outlined
                 />
               </v-col>
               <v-col>
@@ -72,7 +65,6 @@
                   type="number"
                   label="Max"
                   hide-details
-                  outlined
                 />
               </v-col>
               <v-col>
@@ -81,7 +73,6 @@
                   type="number"
                   label="Starting Value"
                   hide-details
-                  outlined
                 />
               </v-col>
             </v-row>

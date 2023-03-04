@@ -109,7 +109,6 @@
                 <v-col cols="12">
                   <v-textarea
                     v-model="lcp.lcp_manifest.description"
-                    outlined
                     auto-grow
                     rows="3"
                     label="Description"

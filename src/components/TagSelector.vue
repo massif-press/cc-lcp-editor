@@ -6,7 +6,6 @@
         v-for="(tag, i) in item.tags"
         :key="`tag_chip_${item.id}-${i}`"
         small
-        outlined
         class="mx-1"
         @click="edit(tag, i)"
       >
@@ -48,7 +47,6 @@
                   type="number"
                   label="Value"
                   hide-details
-                  outlined
                 />
               </v-col>
             </v-row>

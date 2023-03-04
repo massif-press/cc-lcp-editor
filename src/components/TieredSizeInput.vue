@@ -1,42 +1,45 @@
 <template>
-  <div>
-    <div class="overline mb-n1 mt-n2">Size</div>
-    <v-card color="grey darken-3" class="pa-1 pt-2">
-      <v-row no-gutters>
+  <div class="mt-n2">
+    <div class="text-overline mb-n2">Size</div>
+    <v-card variant="tonal" class="px-3 py-2">
+      <v-row dense>
         <v-col>
           <v-select
-            :value="val[0]"
+            v-model="value[0]"
             label="T1"
             :items="sizes"
             @change="setTier($event, 0)"
-            outlined
             density="compact"
+            variant="outlined"
             hide-details
             multiple
+            style="width: 150px"
           />
         </v-col>
         <v-col>
           <v-select
-            :value="val[1]"
+            v-model="value[1]"
             label="T2"
             :items="sizes"
             @change="setTier($event, 1)"
-            outlined
             density="compact"
+            variant="outlined"
             hide-details
             multiple
+            style="width: 150px"
           />
         </v-col>
         <v-col>
           <v-select
-            :value="val[2]"
+            v-model="value[2]"
             label="T3"
             :items="sizes"
             @change="setTier($event, 2)"
-            outlined
             density="compact"
+            variant="outlined"
             hide-details
             multiple
+            style="width: 150px"
           />
         </v-col>
       </v-row>
@@ -46,17 +49,22 @@
 
 <script lang="ts">
 export default {
-  name: 'tiered-stat-input',
-  props: ['value'],
+  name: 'tiered-size-input',
+  props: {
+    modelValue: {
+      type: Array,
+      default: [[1], [1], [1]],
+    },
+  },
+  emits: ['update:modelValue'],
+
   computed: {
-    val: {
+    value: {
       get() {
-        const self = this as any;
-        return self.value;
+        return this.modelValue;
       },
-      set(val) {
-        const self = this as any;
-        self.$emit('input', val);
+      set(value: string) {
+        this.$emit('update:modelValue', value);
       },
     },
   },
@@ -68,7 +76,7 @@ export default {
       let e = evt ? evt : [1];
       if (!Array.isArray(e)) e = [Number(e)];
       e = e.map((v) => Number(v));
-      this.val[tier] = e;
+      this.value[tier] = e;
     },
   },
 };

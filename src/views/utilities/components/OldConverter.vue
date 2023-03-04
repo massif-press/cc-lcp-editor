@@ -17,7 +17,6 @@
         accept=".lcp,.zip"
         show-size
         hide-details
-        outlined
         clearable
         :loading="loading"
         @change="loadConverter($event)"

@@ -31,7 +31,6 @@
               label="License Level"
               type="number"
               hide-details
-              outlined
               v-model="license_level"
             />
           </v-col>
@@ -40,7 +39,6 @@
               label="SP Cost"
               type="number"
               hide-details
-              outlined
               v-model="sp"
             />
           </v-col>
@@ -82,7 +80,6 @@
               v-model="allowed_types"
               :items="weaponType"
               density="compact"
-              outlined
               multiple
               hide-details
               label="Allowed Weapon Types"
@@ -93,7 +90,6 @@
               v-model="allowed_sizes"
               :items="weaponSize"
               density="compact"
-              outlined
               multiple
               hide-details
               label="Allowed Weapon Sizes"
@@ -110,7 +106,6 @@
               v-model="restricted_types"
               :items="weaponType"
               density="compact"
-              outlined
               multiple
               hide-details
               label="Restricted Weapon Types"
@@ -121,7 +116,6 @@
               v-model="restricted_sizes"
               :items="weaponSize"
               density="compact"
-              outlined
               multiple
               hide-details
               label="Restricted Weapon Sizes"

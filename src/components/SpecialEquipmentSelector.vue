@@ -4,7 +4,6 @@
     :items="equipment"
     item-title="name"
     item-value="id"
-    outlined
     hide-details
     multiple
     v-model="item.special_equipment"

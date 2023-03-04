@@ -9,13 +9,7 @@
         width="20em"
       >
         <template v-slot:activator="{ props }">
-          <v-chip
-            small
-            outlined
-            class="mx-1"
-            @click="edit(action, i)"
-            v-bind="props"
-          >
+          <v-chip small class="mx-1" @click="edit(action, i)" v-bind="props">
             {{ action.name || `Activate ${item.name || '---'}` }}
           </v-chip>
         </template>
@@ -90,7 +84,6 @@
                   type="number"
                   label="Use Cost"
                   density="compact"
-                  outlined
                   hide-details
                 />
               </v-col>
@@ -121,7 +114,6 @@
                   <v-combobox
                     v-model="frequency"
                     :items="frequencies"
-                    outlined
                     label="Frequency"
                   />
                 </v-col>

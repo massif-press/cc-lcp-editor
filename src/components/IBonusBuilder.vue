@@ -8,13 +8,7 @@
         top
       >
         <template v-slot:activator="{ props }">
-          <v-chip
-            small
-            outlined
-            class="mx-1"
-            @click="edit(bonus, i)"
-            v-bind="props"
-          >
+          <v-chip small class="mx-1" @click="edit(bonus, i)" v-bind="props">
             {{ bonus.id }}, {{ bonus.val }}
           </v-chip>
         </template>
@@ -68,12 +62,7 @@
                     v-model="value"
                     title="Integer"
                   />
-                  <v-text-field
-                    v-else
-                    v-model="value"
-                    label="Integer"
-                    outlined
-                  />
+                  <v-text-field v-else v-model="value" label="Integer" />
                 </div>
                 <div v-else-if="bonus.type === 'boolean'">
                   <v-radio-group v-model="value" mandatory>
@@ -87,12 +76,7 @@
                     v-model="value"
                     title="String"
                   />
-                  <v-text-field
-                    v-else
-                    v-model="value"
-                    label="String"
-                    outlined
-                  />
+                  <v-text-field v-else v-model="value" label="String" />
                 </div>
               </v-col>
             </v-row>
@@ -104,7 +88,6 @@
                   v-model="dt"
                   :items="damageType"
                   density="compact"
-                  outlined
                   multiple
                   hide-details
                   label="Damage Types"
@@ -115,7 +98,6 @@
                   v-model="rt"
                   :items="rangeType"
                   density="compact"
-                  outlined
                   multiple
                   hide-details
                   label="Range Types"
@@ -126,7 +108,6 @@
                   v-model="wt"
                   :items="weaponType"
                   density="compact"
-                  outlined
                   multiple
                   hide-details
                   label="Weapon Types"
@@ -137,7 +118,6 @@
                   v-model="ws"
                   :items="weaponSize"
                   density="compact"
-                  outlined
                   multiple
                   hide-details
                   label="Weapon Sizes"

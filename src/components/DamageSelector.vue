@@ -58,7 +58,6 @@
                   v-model="damage.val"
                   label="Value"
                   hide-details
-                  outlined
                 />
               </v-col>
             </v-row>

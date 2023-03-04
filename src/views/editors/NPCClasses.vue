@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="3">
+      <v-col cols="auto">
         <v-list nav density="compact">
           <v-list-item
             v-for="(c, i) in classes"
@@ -16,18 +16,18 @@
               {{ getFeatures(c, true).length }} optional
             </template>
           </v-list-item>
-          <v-divider class="my-2" />
+          <!-- <v-divider class="my-2" />
           <v-list-item @click="selected = 'generic'" title="Generic Features">
             <template v-slot:subtitle="{ subtitle }">
               {{ getFeatures('generic').length }} base features /
               {{ getFeatures('generic', true).length }} optional
             </template>
-          </v-list-item>
+          </v-list-item> -->
         </v-list>
         <v-divider class="my-2" />
         <v-btn block color="secondary" @click="addNew">
           <v-icon left>mdi-plus</v-icon>
-          Add New NPC Class
+          Add New Class
         </v-btn>
       </v-col>
       <v-col>
@@ -57,7 +57,6 @@
                 <v-col cols="3">
                   <v-select
                     label="Role"
-                    outlined
                     :items="roles"
                     v-model="selected.role"
                     hide-details
@@ -69,7 +68,6 @@
                   <v-textarea
                     label="Short Description"
                     density="compact"
-                    outlined
                     hide-details
                     rows="2"
                     v-model="selected.info.terse"
@@ -89,12 +87,12 @@
                 </v-col>
               </v-row>
               <v-divider class="mt-3 mb-5" />
-              <!-- <v-row>
+              <v-row class="px-2" justify="space-around">
                 <v-col
                   v-show="key !== 'size'"
                   v-for="key in Object.keys(selected.stats)"
                   :key="`stat_${key}`"
-                  cols="2"
+                  cols="auto"
                   class="pa-1"
                 >
                   <tiered-stat-input
@@ -102,14 +100,14 @@
                     :title="key"
                   />
                 </v-col>
-                <v-col class="pa-1"
+                <v-col cols="auto" class="pa-1"
                   ><tiered-size-input v-model="selected.stats.size"
                 /></v-col>
-              </v-row> -->
+              </v-row>
               <v-divider class="mb-3 mt-5" />
               <v-row>
                 <v-col>
-                  <v-card outlined>
+                  <v-card>
                     <v-toolbar density="compact" title="Base Features" />
                     <v-card-text>
                       <v-row>
@@ -130,7 +128,7 @@
                   </v-card>
                 </v-col>
                 <v-col>
-                  <v-card outlined>
+                  <v-card>
                     <v-toolbar density="compact" title="Optional Features" />
 
                     <v-card-text>
@@ -302,14 +300,6 @@ export default {
         });
 
         return out;
-
-        // return isOptional
-        //   ? c.optional_features.map((x) =>
-        //       this.lcp.npc_features.find((y) => y.id === x.id)
-        //     )
-        //   : c.base_features.map((x) =>
-        //       this.lcp.npc_features.find((y) => y.id === x.id)
-        //     );
       }
     },
     addNew() {

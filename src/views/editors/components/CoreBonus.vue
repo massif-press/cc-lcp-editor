@@ -4,7 +4,6 @@
       v-for="(cb, i) in core_bonuses"
       :key="`cb_card_${manufacturer.id}-${i}`"
       class="my-2"
-      outlined
     >
       <v-toolbar density="compact" color="primary" :title="cb.name" />
       <v-card-text>
@@ -62,7 +61,6 @@
                 v-model="mounted_effect"
                 label="Mounted Effect (Optional)"
                 density="compact"
-                outlined
                 hide-details
                 rows="2"
                 auto-grow

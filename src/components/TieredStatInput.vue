@@ -1,39 +1,42 @@
 <template>
   <div class="mt-n2">
-    <div class="overline mb-n2 mt-n2">{{ title }}</div>
-    <v-card color="grey darken-3" class="pa-1 pt-2">
-      <v-row no-gutters>
+    <div class="text-overline mb-n2">{{ title }}</div>
+    <v-card variant="tonal" class="px-3 py-2">
+      <v-row dense>
         <v-col>
           <v-text-field
-            :value="val[0]"
+            v-model="value[0]"
             label="T1"
             type="number"
+            variant="outlined"
             @change="setTier($event, 0)"
-            outlined
             density="compact"
             hide-details
+            style="width: 70px"
           />
         </v-col>
         <v-col>
           <v-text-field
-            :value="val[1]"
+            v-model="value[1]"
             label="T2"
             type="number"
+            variant="outlined"
             @change="setTier($event, 1)"
-            outlined
             density="compact"
             hide-details
+            style="width: 70px"
           />
         </v-col>
         <v-col>
           <v-text-field
-            :value="val[2]"
+            v-model="value[2]"
             label="T3"
             type="number"
+            variant="outlined"
             @change="setTier($event, 2)"
-            outlined
             density="compact"
             hide-details
+            style="width: 70px"
           />
         </v-col>
       </v-row>
@@ -44,27 +47,37 @@
 <script lang="ts">
 export default {
   name: 'tiered-stat-input',
-  props: ['value', 'title'],
+  props: {
+    modelValue: {
+      type: Array,
+      default: [0, 0, 0],
+    },
+    title: {
+      type: String,
+      default: '',
+    },
+    readonly: Boolean,
+  },
+  emits: ['update:modelValue'],
+
   computed: {
-    val: {
+    value: {
       get() {
-        const self = this as any;
-        return self.value;
+        return this.modelValue;
       },
-      set(val: any) {
-        const self = this as any;
-        self.$emit('input', val);
+      set(value: string) {
+        this.$emit('update:modelValue', value);
       },
     },
   },
   created() {
-    if (!Array.isArray(this.val)) this.val = [0, 0, 0];
+    if (!Array.isArray(this.value)) this.value = [0, 0, 0];
   },
   methods: {
     setTier(evt: string, tier: number) {
       const n = Number(evt);
-      if (!Array.isArray(this.val)) this.val = [n, n, n];
-      this.val[tier] = n;
+      if (!Array.isArray(this.value)) this.value = [n, n, n];
+      this.value[tier] = n;
     },
   },
 };

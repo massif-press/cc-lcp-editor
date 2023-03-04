@@ -9,13 +9,7 @@
         top
       >
         <template v-slot:activator="{ props }">
-          <v-chip
-            small
-            outlined
-            class="mx-1"
-            @click="edit(clock, i)"
-            v-bind="props"
-          >
+          <v-chip small class="mx-1" @click="edit(clock, i)" v-bind="props">
             {{ clock.title }}
           </v-chip>
         </template>
@@ -49,7 +43,6 @@
                   type="number"
                   label="Segments"
                   hide-details
-                  outlined
                 />
               </v-col>
               <v-col cols="auto">

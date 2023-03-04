@@ -16,7 +16,6 @@
                   v-model="lcp.tables[t.key][i]"
                   density="compact"
                   hide-details
-                  outlined
                 />
               </v-col>
               <v-col cols="auto">

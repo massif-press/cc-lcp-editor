@@ -10,7 +10,6 @@
         <template v-slot:activator="{ props }">
           <v-chip
             small
-            outlined
             class="mx-1"
             @click="edit(deployable, i)"
             v-bind="props"
@@ -36,19 +35,16 @@
         <div>
           <v-divider class="my-1" />
           <v-chip
-            outlined
             small
             class="mx-1"
             v-html="`${deployable.armor ? `  Armor: ${deployable.armor}` : ''}`"
           />
           <v-chip
-            outlined
             small
             class="mx-1"
             v-html="`${deployable.hp ? `  HP: ${deployable.hp}` : ''}`"
           />
           <v-chip
-            outlined
             small
             class="mx-1"
             v-html="
@@ -56,13 +52,11 @@
             "
           />
           <v-chip
-            outlined
             small
             class="mx-1"
             v-html="`${deployable.edef ? `  EDef: ${deployable.edef}` : ''}`"
           />
           <v-chip
-            outlined
             small
             class="mx-1"
             v-html="
@@ -70,7 +64,6 @@
             "
           />
           <v-chip
-            outlined
             small
             class="mx-1"
             v-html="
@@ -78,7 +71,6 @@
             "
           />
           <v-chip
-            outlined
             small
             class="mx-1"
             v-html="
@@ -90,7 +82,6 @@
             "
           />
           <v-chip
-            outlined
             small
             class="mx-1"
             v-html="
@@ -102,19 +93,16 @@
             "
           />
           <v-chip
-            outlined
             small
             class="mx-1"
             v-html="`${deployable.save ? `  Save: ${deployable.save}` : ''}`"
           />
           <v-chip
-            outlined
             small
             class="mx-1"
             v-html="`${deployable.speed ? `  Speed: ${deployable.speed}` : ''}`"
           />
           <v-chip
-            outlined
             small
             class="mx-1"
             v-html="`${deployable.size ? `  Size: ${deployable.size}` : ''}`"
@@ -223,7 +211,6 @@
                   label="Instances"
                   density="compact"
                   clearable
-                  outlined
                   hide-details
                 />
               </v-col>
@@ -234,7 +221,6 @@
                   label="Use Cost"
                   density="compact"
                   clearable
-                  outlined
                   hide-details
                 />
               </v-col>
@@ -276,7 +262,6 @@
                   :label="k.replaceAll('_', ' ')"
                   density="compact"
                   clearable
-                  outlined
                   hide-details
                 />
               </v-col>

@@ -39,7 +39,6 @@
               label="License Level"
               type="number"
               hide-details
-              outlined
               v-model="license_level"
             />
           </v-col>
@@ -48,7 +47,6 @@
               label="SP Cost"
               type="number"
               hide-details
-              outlined
               v-model="sp"
             />
           </v-col>

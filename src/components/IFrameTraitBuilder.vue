@@ -9,13 +9,7 @@
         width="30em"
       >
         <template v-slot:activator="{ props }">
-          <v-chip
-            small
-            outlined
-            class="mx-1"
-            @click="edit(trait, i)"
-            v-bind="props"
-          >
+          <v-chip small class="mx-1" @click="edit(trait, i)" v-bind="props">
             {{ trait.name }}
           </v-chip>
         </template>
@@ -53,7 +47,6 @@
                     'Mission',
                   ]"
                   label="Use"
-                  outlined
                   hide-details
                   clearable
                 />

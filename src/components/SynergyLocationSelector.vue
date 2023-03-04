@@ -4,7 +4,6 @@
     multiple
     clearable
     small-chips
-    outlined
     deletable-chips
     hide-details
     :items="synergyLocations"

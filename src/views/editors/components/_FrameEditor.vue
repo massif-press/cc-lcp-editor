@@ -61,7 +61,6 @@
                   label="Mech Banner Y Position"
                   type="number"
                   hide-details
-                  outlined
                   v-model="y_pos"
                 />
               </v-col>
@@ -145,7 +144,6 @@
               type="number"
               label="Structure"
               density="compact"
-              outlined
               hide-details
             />
           </v-col>
@@ -155,7 +153,6 @@
               type="number"
               label="Stress"
               density="compact"
-              outlined
               hide-details
             />
           </v-col>
@@ -165,7 +162,6 @@
               type="number"
               label="Armor"
               density="compact"
-              outlined
               hide-details
             />
           </v-col>
@@ -175,7 +171,6 @@
               type="number"
               label="HP"
               density="compact"
-              outlined
               hide-details
             />
           </v-col>
@@ -185,7 +180,6 @@
               type="number"
               label="Evasion"
               density="compact"
-              outlined
               hide-details
             />
           </v-col>
@@ -195,7 +189,6 @@
               type="number"
               label="E-Defense"
               density="compact"
-              outlined
               hide-details
             />
           </v-col>
@@ -205,7 +198,6 @@
               type="number"
               label="Heat Capacity"
               density="compact"
-              outlined
               hide-details
             />
           </v-col>
@@ -215,7 +207,6 @@
               type="number"
               label="Repair Capacity"
               density="compact"
-              outlined
               hide-details
             />
           </v-col>
@@ -225,7 +216,6 @@
               type="number"
               label="Sensor Range"
               density="compact"
-              outlined
               hide-details
             />
           </v-col>
@@ -235,7 +225,6 @@
               type="number"
               label="Tech Attack"
               density="compact"
-              outlined
               hide-details
             />
           </v-col>
@@ -245,7 +234,6 @@
               type="number"
               label="Save"
               density="compact"
-              outlined
               hide-details
             />
           </v-col>
@@ -255,7 +243,6 @@
               type="number"
               label="Speed"
               density="compact"
-              outlined
               hide-details
             />
           </v-col>
@@ -265,7 +252,6 @@
               type="number"
               label="SP"
               density="compact"
-              outlined
               hide-details
             />
           </v-col>
@@ -275,7 +261,6 @@
               :items="[0.5, 1, 2, 3, 4]"
               label="Size"
               density="compact"
-              outlined
               hide-details
             />
           </v-col>
@@ -338,7 +323,6 @@
                       ]"
                       label="Use"
                       density="compact"
-                      outlined
                       hide-details
                       clearable
                     />

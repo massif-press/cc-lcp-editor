@@ -16,13 +16,12 @@
           <v-col>
             <v-text-field label="Name" hide-details v-model="name" />
           </v-col>
-          <v-col>
+          <v-col cols="auto">
             <v-text-field
               v-model="recharge"
               label="Recharge"
               type="number"
               hide-details
-              outlined
               clearable
             />
           </v-col>

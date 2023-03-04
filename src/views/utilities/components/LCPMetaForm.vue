@@ -39,7 +39,6 @@
                       v-model="title"
                       density="compact"
                       hide-details
-                      outlined
                       label="Item Title"
                     />
                   </v-col>
@@ -50,7 +49,6 @@
                       v-model="link"
                       density="compact"
                       hide-details
-                      outlined
                       label="itch.io URL"
                     />
                   </v-col>
@@ -59,7 +57,6 @@
                       v-model="img"
                       density="compact"
                       hide-details
-                      outlined
                       label="itch Image URL"
                     />
                   </v-col>
@@ -70,7 +67,6 @@
                       v-model="website"
                       density="compact"
                       hide-details
-                      outlined
                       label="Author Site"
                     />
                   </v-col>
@@ -79,7 +75,6 @@
                       v-model="author"
                       density="compact"
                       hide-details
-                      outlined
                       label="Author"
                     />
                   </v-col>
@@ -90,7 +85,6 @@
                       v-model="cost"
                       density="compact"
                       hide-details
-                      outlined
                       label="Cost"
                     />
                   </v-col>
@@ -99,7 +93,6 @@
                       v-model="description"
                       density="compact"
                       hide-details
-                      outlined
                       label="Short Description"
                     />
                   </v-col>
@@ -110,7 +103,6 @@
                       v-model="name"
                       density="compact"
                       hide-details
-                      outlined
                       label="LCP Name"
                       hint="Must match exactly"
                       persistent-hint
@@ -121,7 +113,6 @@
                       v-model="version"
                       density="compact"
                       hide-details
-                      outlined
                       label="LCP Version"
                       hint="Must match exactly"
                       persistent-hint

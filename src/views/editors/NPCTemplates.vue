@@ -1,24 +1,20 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="2">
+      <v-col cols="auto">
         <v-list nav density="compact">
           <v-list-item
             v-for="(c, i) in templates"
             :key="`${c.id || 'new'}_${i}`"
             :class="selected && selected.id === c.id ? 'primary darken-3' : ''"
             selectable
+            :title="c.name"
             @click="selected = c"
           >
-            <v-list-item-content class="mt-n2">
-              <v-list-item-title>
-                <span class="text-h6 mr-1">{{ c.name }}</span>
-              </v-list-item-title>
-              <v-list-item-action-text class="mt-n2">
-                {{ getFeatures(c).length }} base features /
-                {{ getFeatures(c, true).length }} optional
-              </v-list-item-action-text>
-            </v-list-item-content>
+            <template v-slot:subtitle="{ subtitle }">
+              {{ getFeatures(c).length }} base features /
+              {{ getFeatures(c, true).length }} optional
+            </template>
           </v-list-item>
           <!-- <v-list-item @click="selected = 'generic'">
             <v-list-item-content class="mt-n2">
@@ -34,7 +30,7 @@
         <v-divider class="my-2" />
         <v-btn block color="secondary" @click="addNew">
           <v-icon left>mdi-plus</v-icon>
-          Add New NPC Class
+          Add New Template
         </v-btn>
       </v-col>
       <v-col>
@@ -47,12 +43,10 @@
             <v-toolbar
               density="compact"
               color="primary"
-              class="white--text text-h6"
-            >
-              {{ selected.name }}
-            </v-toolbar>
+              :title="selected.name"
+            />
             <v-card-text>
-              <v-row density="compact" justify="space-around" align="end">
+              <v-row dense justify="space-around" align="end">
                 <v-col cols="3">
                   <id-input v-model="selected.id" />
                 </v-col>
@@ -61,11 +55,10 @@
                     v-model="selected.name"
                     hide-details
                     label="Name"
-                    density="compact"
                   />
                 </v-col>
               </v-row>
-              <v-row density="compact" justify="space-around" align="center">
+              <v-row dense justify="space-around" align="center">
                 <v-col cols="12">
                   <rich-text-editor
                     title="Description"
@@ -99,7 +92,7 @@
                     </v-col>
                   </v-row>
 
-                  <v-row no-gutters align="center">
+                  <v-row dense align="center">
                     <v-col cols="auto">
                       <v-simple-checkbox
                         v-model="selected.forceClassOptional"
@@ -118,7 +111,6 @@
                         :value="selected.optionalClassMin"
                         v-model="selected.optionalClassMin"
                         type="number"
-                        outlined
                         density="compact"
                         hide-details
                       />
@@ -129,7 +121,6 @@
                         :value="selected.optionalClassMax"
                         v-model="selected.optionalClassMax"
                         type="number"
-                        outlined
                         density="compact"
                         hide-details
                       />
@@ -154,7 +145,7 @@
                     </v-col>
                   </v-row>
 
-                  <v-row no-gutters align="center">
+                  <v-row dense align="center">
                     <v-col cols="auto">
                       <v-simple-checkbox
                         v-model="selected.forceOptional"
@@ -173,7 +164,6 @@
                         :value="selected.optionalMin"
                         v-model="selected.optionalMin"
                         type="number"
-                        outlined
                         density="compact"
                         hide-details
                       />
@@ -184,7 +174,6 @@
                         :value="selected.optionalMax"
                         v-model="selected.optionalMax"
                         type="number"
-                        outlined
                         density="compact"
                         hide-details
                       />
@@ -220,7 +209,6 @@
                     density="compact"
                     hide-details
                     rows="1"
-                    outlined
                     auto-grow
                     label="Caveat (optional)"
                   />
@@ -228,10 +216,8 @@
               </v-row>
               <v-row>
                 <v-col>
-                  <v-card outlined>
-                    <v-toolbar density="compact" color="grey darken-3"
-                      ><b>BASE FEATURES</b></v-toolbar
-                    >
+                  <v-card>
+                    <v-toolbar density="compact" title="Base Features" />
                     <v-card-text>
                       <v-row>
                         <v-col
@@ -251,10 +237,9 @@
                   </v-card>
                 </v-col>
                 <v-col>
-                  <v-card outlined>
-                    <v-toolbar density="compact" color="grey darken-3">
-                      <b>{{ selected.name }} FEATURES</b>
-                    </v-toolbar>
+                  <v-card>
+                    <v-toolbar density="compact" title="Optional Features" />
+
                     <v-card-text>
                       <v-row>
                         <v-col
@@ -308,7 +293,7 @@
                     add new system
                   </v-btn>
                 </v-col>
-                <v-col>
+                <!-- <v-col>
                   <v-btn
                     block
                     large
@@ -329,7 +314,7 @@
                     <v-icon left>mdi-plus</v-icon>
                     add new protocol
                   </v-btn>
-                </v-col>
+                </v-col> -->
               </v-row>
             </v-card-text>
           </v-card>
@@ -453,13 +438,17 @@ export default {
         );
       }
 
-      const fArr = this.lcp.npc_features.filter(
-        (x: any) => x.origin.type === 'Template' && x.origin.origin_id === c.id
-      );
+      if (c.features) {
+        // v2
+      } else {
+        const fset = isOptional ? 'optional_features' : 'base_features';
+        const out: string[] = [];
+        c[fset].forEach((id: string) => {
+          out.push(this.lcp.npc_features.find((x) => x.id === id));
+        });
 
-      return isOptional
-        ? fArr.filter((x: any) => x.origin.optional)
-        : fArr.filter((x: any) => !x.origin.optional);
+        return out;
+      }
     },
     addNew() {
       if (!this.lcp.npc_templates) {

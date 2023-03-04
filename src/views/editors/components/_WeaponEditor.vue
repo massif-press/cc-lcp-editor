@@ -40,7 +40,6 @@
               label="SP Cost"
               type="number"
               hide-details
-              outlined
               v-model="sp"
             />
           </v-col>
@@ -49,8 +48,7 @@
               label="Use Cost"
               type="number"
               hide-details
-              outlined
-              v-model="cost"
+                            v-model="cost"
             />
           </v-col> -->
         </v-row>
@@ -68,7 +66,6 @@
               label="License Level"
               type="number"
               hide-details
-              outlined
               v-model="license_level"
             />
           </v-col>

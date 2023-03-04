@@ -55,7 +55,6 @@
                   v-model="range.val"
                   label="Value"
                   hide-details
-                  outlined
                 />
               </v-col>
             </v-row>

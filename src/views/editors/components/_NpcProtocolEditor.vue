@@ -1,9 +1,11 @@
 <template>
   <v-dialog v-model="dialog" fullscreen>
     <v-card>
-      <v-toolbar density="compact" color="amber darken-4" class="text-h6">
-        NPC Protocol Editor
-        <v-spacer />
+      <v-toolbar
+        density="compact"
+        color="amber darken-4"
+        title="NPC Protocol Editor"
+      >
         <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
       </v-toolbar>
       <v-card-text>
@@ -14,14 +16,12 @@
           <v-col>
             <v-text-field label="Name" hide-details v-model="name" />
           </v-col>
-          <v-col>
+          <v-col cols="auto">
             <v-text-field
               v-model="recharge"
               label="Recharge"
               type="number"
               hide-details
-              outlined
-              density="compact"
               clearable
             />
           </v-col>
@@ -39,11 +39,10 @@
               color="secondary"
               inset
               v-model="optional"
-              :value="optional"
               mandatory
               density="compact"
               hide-details
-              :label="`${npcClass ? 'Class' : 'Template'} Feature`"
+              label="Optional Feature"
             />
           </v-col>
         </v-row>

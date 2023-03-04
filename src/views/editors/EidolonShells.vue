@@ -135,7 +135,6 @@
                             type="number"
                             density="compact"
                             hide-details
-                            outlined
                             label="T1"
                           />
                         </v-col>
@@ -145,7 +144,6 @@
                             type="number"
                             density="compact"
                             hide-details
-                            outlined
                             label="T2"
                           />
                         </v-col>
@@ -155,7 +153,6 @@
                             type="number"
                             density="compact"
                             hide-details
-                            outlined
                             label="T3"
                           />
                         </v-col>

@@ -17,7 +17,6 @@
               hide-details
               label="Type"
               :items="['Armor', 'Weapon', 'Gear']"
-              outlined
               v-model="item.type"
             />
           </v-col>

@@ -8,13 +8,7 @@
         top
       >
         <template v-slot:activator="{ props }">
-          <v-chip
-            small
-            outlined
-            class="mx-1"
-            @click="edit(synergy, i)"
-            v-bind="props"
-          >
+          <v-chip small class="mx-1" @click="edit(synergy, i)" v-bind="props">
             {{ synergy.locations.join(', ') }}
           </v-chip>
         </template>
@@ -50,7 +44,6 @@
                   item-value="value"
                   item-text="desc"
                   multiple
-                  outlined
                   hide-details
                   v-model="locations"
                 />
@@ -68,7 +61,6 @@
                     v-model="wt"
                     :items="weaponType"
                     density="compact"
-                    outlined
                     multiple
                     hide-details
                     label="Weapon Types"
@@ -79,7 +71,6 @@
                     v-model="ws"
                     :items="weaponSize"
                     density="compact"
-                    outlined
                     multiple
                     hide-details
                     label="Weapon Sizes"
@@ -90,7 +81,6 @@
                     v-model="st"
                     :items="systemType"
                     density="compact"
-                    outlined
                     multiple
                     hide-details
                     label="System Types"
