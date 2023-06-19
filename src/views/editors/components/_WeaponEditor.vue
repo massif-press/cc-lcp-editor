@@ -236,7 +236,7 @@ export default {
     description: '',
     weaponTypes: weaponType,
     weaponSizes: weaponSize,
-    mount: 'Aux',
+    mount: 'Auxiliary',
     type: 'Melee',
 
     no_attack: false,
