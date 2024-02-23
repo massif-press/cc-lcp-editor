@@ -36,11 +36,7 @@
                   item-text="name"
                   item-value="id"
                   label="Range"
-                  :items="
-                    rangeTypes.filter(
-                      (x) => !item.range.map((y) => y.type).some((z) => z === x)
-                    )
-                  "
+                  :items="ranges"
                   hide-details
                 />
               </v-col>
@@ -98,6 +94,17 @@ export default {
     editIndex: -1,
     rangeTypes: rangeType,
   }),
+  computed: {
+    ranges() {
+      if (this.item.range) {
+        return this.rangeTypes.filter(
+          (x) => !this.item.range.map((y) => y.type).some((z) => z === x)
+        )
+      } else {
+        return this.rangeTypes
+      }
+    }
+  },
   methods: {
     submit() {
       if (!this.range) return;

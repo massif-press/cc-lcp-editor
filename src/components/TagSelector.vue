@@ -89,9 +89,13 @@ export default {
   computed: {
     tags() {
       const localTags = useStore().getters.lcp.tags || [];
-      return [...tags, ...localTags].filter(
-        (x) => !this.item.tags.some((y) => x.id === y.id)
-      );
+      if(this.item.tags){
+        return [...tags, ...localTags].filter(
+          (x) => !this.item.tags.some((y) => x.id === y.id)
+        );
+      } else {
+        return [...tags, ...localTags];
+      }
     },
   },
   methods: {
