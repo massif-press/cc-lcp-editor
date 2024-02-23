@@ -100,7 +100,7 @@
 
 <script lang="ts">
 import { useStore } from 'vuex';
-import { manufacturers, frames } from 'lancer-data';
+import { manufacturers, frames } from '@massif/lancer-data';
 import _ from 'lodash';
 import FrameEditor from './_FrameEditor.vue';
 import SystemEditor from './_SystemEditor.vue';

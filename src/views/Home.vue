@@ -269,7 +269,7 @@ import PromisifyFileReader from 'promisify-file-reader';
 import JSZip from 'jszip';
 import { exportPrep } from './utilities/cleanup';
 import { saveAs } from 'file-saver';
-import { tags } from 'lancer-data';
+import { tags } from '@massif/lancer-data';
 
 export default {
   name: 'Home',
