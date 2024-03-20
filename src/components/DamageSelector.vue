@@ -38,12 +38,7 @@
                   item-text="name"
                   item-value="id"
                   label="Damage"
-                  :items="
-                    damageTypes.filter(
-                      (x) =>
-                        !item.damage.map((y) => y.type).some((z) => z === x)
-                    )
-                  "
+                  :items="damages"
                   hide-details
                 />
               </v-col>
@@ -95,6 +90,18 @@ export default {
     editIndex: -1,
     damageTypes: damageType,
   }),
+  computed: {
+    damages() {
+      if (this.item.damage) {
+        return this.damageTypes.filter(
+          (x) =>
+            !this.item.damage.map((y) => y.type).some((z) => z === x)
+        )
+      } else {
+        return this.damageTypes
+      }
+    }
+  },
   methods: {
     getColor(type: string) {
       switch (type) {

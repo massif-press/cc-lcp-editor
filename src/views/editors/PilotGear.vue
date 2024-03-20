@@ -59,7 +59,7 @@ import EditorBase from './EditorBase.vue';
 import SynergySelector from '../../components/SynergyLocationSelector.vue';
 
 export default {
-  name: 'tags-editor',
+  name: 'pilot-gear-editor',
   components: {
     EditorBase,
 
