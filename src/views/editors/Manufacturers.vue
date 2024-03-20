@@ -257,7 +257,7 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { manufacturers } from 'lancer-data';
+import { manufacturers } from '@massif/lancer-data';
 import { useStore } from 'vuex';
 
 import { exportPrep } from '../utilities/cleanup';

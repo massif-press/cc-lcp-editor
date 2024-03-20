@@ -72,7 +72,7 @@
 </template>
 
 <script lang="ts">
-import { tags } from 'lancer-data';
+import { tags } from '@massif/lancer-data';
 import TieredStatInput from './TieredStatInput.vue';
 import { useStore } from 'vuex';
 

@@ -399,7 +399,7 @@
 
 <script lang="ts">
 import { useStore } from 'vuex';
-import { frames } from 'lancer-data';
+import { frames } from '@massif/lancer-data';
 import { mechType, mountType } from '../../../assets/enums';
 
 export default {

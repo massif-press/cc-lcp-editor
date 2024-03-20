@@ -1,4 +1,4 @@
-import { frames } from 'lancer-data';
+import { frames } from '@massif/lancer-data';
 
 const getLicenseID = (licenseString: string, localFrames: any[]) => {
   let frame = localFrames.find(
