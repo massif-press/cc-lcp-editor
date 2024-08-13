@@ -466,10 +466,12 @@ export default {
     confirmOK(): boolean {
       return !!this.id && !!this.name;
     },
-    availableFrames(): string[] {
+    availableFrames(): object[] {
       const store = useStore();
       if (store.getters.lcp.frames && store.getters.lcp.frames.length)
-      return [...store.getters.lcp.frames.map((x: any) => x), ...frames.map((x: any) => x)];
+        return [...store.getters.lcp.frames.map((x: any) => x), ...frames.map((x: any) => x)];
+      else 
+        return [...frames.map((x: any) => x)];
     },
     availableVariants(): string[] {
       return ['', ...this.availableFrames.map((x: any) => x.name)];
