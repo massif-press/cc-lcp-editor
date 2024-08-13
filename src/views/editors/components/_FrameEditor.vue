@@ -466,13 +466,15 @@ export default {
     confirmOK(): boolean {
       return !!this.id && !!this.name;
     },
-    availableVariants(): string[] {
-      let userFrames = [];
+    availableFrames(): string[] {
       const store = useStore();
       if (store.getters.lcp.frames && store.getters.lcp.frames.length)
-        userFrames = store.getters.lcp.frames.map((x: any) => x.name);
-      return ['', ...userFrames, ...frames.map((x: any) => x.name)];
+      return [...store.getters.lcp.frames.map((x: any) => x), ...frames.map((x: any) => x)];
     },
+    availableVariants(): string[] {
+      return ['', ...this.availableFrames.map((x: any) => x.name)];
+    },
+    
   },
   methods: {
     open() {
@@ -505,6 +507,13 @@ export default {
         image_url: this.image_url,
         y_pos: this.y_pos,
       };
+      if (e.variant && e.variant !== e.name){
+        let parentFrame = e.license_id;
+        if (this.availableFrames && this.availableFrames.length){
+          parentFrame = this.availableFrames.find((x : any) => (x.name === e.variant));
+        }
+        e.license_id = parentFrame.license_id;
+      }
       for (const stat in e.stats) {
         if (!isNaN(Number(e.stats[stat])))
           e.stats[stat] = Number(e.stats[stat]);
