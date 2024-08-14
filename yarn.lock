@@ -401,11 +401,11 @@ asynckit@^0.4.0:
   integrity sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==
 
 axios@^1.3.3:
-  version "1.6.7"
-  resolved "https://registry.npmjs.org/axios/-/axios-1.6.7.tgz"
-  integrity sha512-/hDJGff6/c7u0hDkvkGxR/oy6CbCs8ziCsC7SqmhjfozqiJGc8Z11wrv9z9lYfY4K8l+H9TpjcMDX0xOZmx+RA==
+  version "1.7.4"
+  resolved "https://registry.npmjs.org/axios/-/axios-1.7.4.tgz"
+  integrity sha512-DukmaFRnY6AzAALSH4J2M3k6PkaC+MfaAGdEERRWcC9q3/TWQwLpHR8ZRLKTdQ3aBDL64EdluRDjJqKw+BPZEw==
   dependencies:
-    follow-redirects "^1.15.4"
+    follow-redirects "^1.15.6"
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
 
@@ -526,10 +526,10 @@ file-saver@^2.0.5:
   resolved "https://registry.npmjs.org/file-saver/-/file-saver-2.0.5.tgz"
   integrity sha512-P9bmyZ3h/PRG+Nzga+rbdI4OEpNDzAVyy74uVO9ATgzLK6VtAsYybF/+TOCvrc0MO793d6+42lLyZTw7/ArVzA==
 
-follow-redirects@^1.15.4:
-  version "1.15.5"
-  resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.5.tgz"
-  integrity sha512-vSFWUON1B+yAw1VN4xMfxgn5fTUiaOzAJCKBwIIgT/+7CuGy9+r+5gITvP62j3RmaD5Ph65UaERdOSRGUzZtgw==
+follow-redirects@^1.15.6:
+  version "1.15.6"
+  resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.6.tgz"
+  integrity sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==
 
 form-data@^4.0.0:
   version "4.0.0"
@@ -982,9 +982,9 @@ uuid@^9.0.0:
   integrity sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==
 
 "vite@^4.0.0 || ^5.0.0", vite@^4.1.0:
-  version "4.5.2"
-  resolved "https://registry.npmjs.org/vite/-/vite-4.5.2.tgz"
-  integrity sha512-tBCZBNSBbHQkaGyhGCDUGqeo2ph8Fstyp6FMSvTtsXeZSPpSMGlviAOav2hxVTqFcx8Hj/twtWKsMJXNY0xI8w==
+  version "4.5.3"
+  resolved "https://registry.npmjs.org/vite/-/vite-4.5.3.tgz"
+  integrity sha512-kQL23kMeX92v3ph7IauVkXkikdDRsYMGTVl5KY2E9OY4ONLvkHf04MDTbnfo6NKxZiDLWzVpP5oTa8hQD8U3dg==
   dependencies:
     esbuild "^0.18.10"
     postcss "^8.4.27"
