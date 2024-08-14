@@ -9,8 +9,7 @@
             :class="selected && selected.id === m.id ? 'primary darken-3' : ''"
             selectable
             :title="m.name"
-            @click="selected = m"
-          >
+            @click="selected = m">
             <template v-slot:subtitle="{ subtitle }">
               {{ itemsByMID(m.id, 'core_bonuses').length }} core bonuses,
               {{ itemsByMID(m.id, 'frames').length }} frames with
@@ -24,8 +23,7 @@
             :class="selected && selected === 'none' ? 'primary darken-3' : ''"
             selectable
             title="No Source"
-            @click="selected = 'none'"
-          >
+            @click="selected = 'none'">
             <template v-slot:subtitle="{ subtitle }">
               {{ itemsByMID('', 'weapons').length }} weapons,
               {{ itemsByMID('', 'systems').length }} systems,
@@ -48,9 +46,7 @@
         <v-container v-else-if="selected">
           <v-expansion-panels v-model="panels" focusable accordion multiple>
             <v-expansion-panel>
-              <v-expansion-panel-title
-                >Manufacturer Information</v-expansion-panel-title
-              >
+              <v-expansion-panel-title>Manufacturer Information</v-expansion-panel-title>
               <v-expansion-panel-text>
                 <v-alert outlined color="primary" class="mt-2">
                   <v-row density="compact" justify="space-around">
@@ -59,64 +55,48 @@
                         v-model="selected.id"
                         hide-details
                         label="ID"
-                        :readonly="isCore(selected.id)"
-                      />
+                        :readonly="isCore(selected.id)" />
                     </v-col>
                     <v-col cols="9">
                       <v-text-field
                         v-model="selected.name"
                         hide-details
                         label="Name"
-                        :readonly="isCore(selected.id)"
-                      />
+                        :readonly="isCore(selected.id)" />
                     </v-col>
                   </v-row>
-                  <v-row
-                    density="compact"
-                    justify="space-around"
-                    align="center"
-                  >
+                  <v-row density="compact" justify="space-around" align="center">
                     <v-col>
                       <v-text-field
                         v-model="selected.logo_url"
                         label="SVG Logo URL"
                         hide-details
-                        :readonly="isCore(selected.id)"
-                      />
-                      <v-img
-                        :src="selected.logo_url"
-                        max-height="222"
-                        max-width="450"
-                        contain
-                      />
+                        :readonly="isCore(selected.id)" />
+                      <v-img :src="selected.logo_url" max-height="222" max-width="450" contain />
                     </v-col>
                     <v-col>
                       <color-selector
                         v-model="selected.light"
                         title="Light Color"
-                        :disabled="isCore(selected.id)"
-                      />
+                        :disabled="isCore(selected.id)" />
                     </v-col>
                     <v-col>
                       <color-selector
                         v-model="selected.dark"
                         title="Dark Color"
-                        :disabled="isCore(selected.id)"
-                      />
+                        :disabled="isCore(selected.id)" />
                     </v-col>
                     <v-col cols="12">
                       <rich-text-editor
                         title="Flavor Quote"
                         v-model="selected.quote"
-                        :readonly="isCore(selected.id)"
-                      />
+                        :readonly="isCore(selected.id)" />
                     </v-col>
                     <v-col cols="12">
                       <rich-text-editor
                         title="Description"
                         v-model="selected.description"
-                        :readonly="isCore(selected.id)"
-                      />
+                        :readonly="isCore(selected.id)" />
                     </v-col>
                   </v-row>
                 </v-alert>
@@ -129,9 +109,7 @@
               </v-expansion-panel-text>
             </v-expansion-panel>
             <v-expansion-panel>
-              <v-expansion-panel-title
-                >Licenses and Equipment</v-expansion-panel-title
-              >
+              <v-expansion-panel-title>Licenses and Equipment</v-expansion-panel-title>
               <v-expansion-panel-text>
                 <license-editor :manufacturer="selected" />
               </v-expansion-panel-text>
@@ -145,41 +123,34 @@
                   size="small"
                   color="error"
                   class="my-5"
-                  v-bind="props"
-                  >DELETE MANUFACTURER</v-btn
-                >
+                  v-bind="props">
+                  DELETE MANUFACTURER
+                </v-btn>
               </template>
-              <v-card
-                ><v-card-text>
-                  <v-row
-                    ><v-col cols="auto"
-                      ><v-icon size="100">mdi-alert</v-icon></v-col
-                    >
-                    <v-col
-                      >Deleting this manufacturer will also delete any
-                      associated Core Bonuses, Licenses, Frames, Weapons,
-                      Systems, and Mods. Are you sure you want to
-                      proceed?</v-col
-                    ></v-row
-                  >
+              <v-card>
+                <v-card-text>
+                  <v-row>
+                    <v-col cols="auto"><v-icon size="100">mdi-alert</v-icon></v-col>
+                    <v-col>
+                      Deleting this manufacturer will also delete any associated Core Bonuses,
+                      Licenses, Frames, Weapons, Systems, and Mods. Are you sure you want to
+                      proceed?
+                    </v-col>
+                  </v-row>
                 </v-card-text>
                 <v-divider />
                 <v-card-actions>
                   <v-btn>Cancel</v-btn>
                   <v-spacer />
-                  <v-btn @click="deleteManufacturer()"
-                    >Proceed</v-btn
-                  ></v-card-actions
-                ></v-card
-              >
+                  <v-btn @click="deleteManufacturer()">Proceed</v-btn>
+                </v-card-actions>
+              </v-card>
             </v-menu>
           </div>
         </v-container>
         <div v-else>
           <v-row style="height: 50vh" justify="center" align="center">
-            <v-col cols="auto" class="text-h2 text--disabled"
-              >Select a Manufacturer</v-col
-            >
+            <v-col cols="auto" class="text-h2 text--disabled">Select a Manufacturer</v-col>
           </v-row>
         </div>
       </v-col>
@@ -190,18 +161,10 @@
         Back
       </v-btn>
       <v-spacer />
-      <input
-        ref="fileUpload"
-        type="file"
-        accept=".json"
-        hidden
-        @change="importFile"
-      />
+      <input ref="fileUpload" type="file" accept=".json" hidden @change="importFile" />
       <v-menu bottom open-on-hover offset-y>
         <template v-slot:activator="{ props }">
-          <v-btn outlined small class="mx-1" v-bind="props"
-            >Export JSON File</v-btn
-          >
+          <v-btn outlined small class="mx-1" v-bind="props">Export JSON File</v-btn>
         </template>
         <v-list density="compact">
           <v-list-item @click="exportJSON('manufacturers')">
@@ -226,9 +189,7 @@
       </v-menu>
       <v-menu bottom open-on-hover offset-y>
         <template v-slot:activator="{ props }">
-          <v-btn outlined small class="mx-1" v-bind="props"
-            >Import JSON File</v-btn
-          >
+          <v-btn outlined small class="mx-1" v-bind="props">Import JSON File</v-btn>
         </template>
         <v-list density="compact">
           <v-list-item @click="importJSON('manufacturers')">
@@ -292,9 +253,7 @@ export default {
       const local = this.lcp.manufacturers ? this.lcp.manufacturers : [];
       return [
         ...new Map(
-          local
-            .concat(this.core_manufacturers)
-            .map((item: any) => [item.id, item])
+          local.concat(this.core_manufacturers).map((item: any) => [item.id, item])
         ).values(),
       ];
     },
@@ -331,16 +290,12 @@ export default {
       if (!this.lcp[type]) return [];
       if (!id)
         return this.lcp[type].filter(
-          (x: any) =>
-            !!x.source &&
-            (x.source === id || x.source.toLowerCase() === 'exotic')
+          (x: any) => !!x.source && (x.source === id || x.source.toLowerCase() === 'exotic')
         );
       return this.lcp[type].filter((x: any) => x.source === id);
     },
     isCore(id: string) {
-      return this.core_manufacturers
-        .map((x: any) => x.id)
-        .some((y: string) => y === id);
+      return this.core_manufacturers.map((x: any) => x.id).some((y: string) => y === id);
     },
     deleteManufacturer() {
       for (const key in this.lcp) {
@@ -376,9 +331,7 @@ export default {
       const reader = new FileReader();
 
       reader.onload = (e) =>
-        (this.lcp[this.importKey] = JSON.parse(
-          e?.target?.result?.toString() || ''
-        ));
+        (this.lcp[this.importKey] = JSON.parse(e?.target?.result?.toString() || ''));
 
       reader.readAsText(file);
     },
