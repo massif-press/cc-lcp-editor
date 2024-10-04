@@ -510,11 +510,43 @@ export default {
         y_pos: this.y_pos,
       };
       if (e.variant && e.variant !== e.name){
-        let parentFrame = e.license_id;
+        let parentFrame = undefined;
         if (this.availableFrames && this.availableFrames.length){
           parentFrame = this.availableFrames.find((x : any) => (x.name === e.variant));
         }
-        e.license_id = parentFrame.license_id;
+        if (!parentFrame){
+          switch (e.variant.toLowerCase()){
+            case "atlas":
+              e.license_id = "mf_atlas";
+              break;
+            case "kidd":
+              e.license_id = "mf_kidd";
+              break;
+            case "zheng":
+              e.license_id = "mf_zheng";
+              break;
+            case "kobold":
+              e.license_id = "mf_kobold";
+              break;
+            case "sunzi":
+              e.license_id = "mf_sunzi";
+              break;
+            case "lich":
+              e.license_id = "mf_lich";
+              break;
+            case "emperor":
+              e.license_id = "mf_emperor";
+              break;
+            case "white witch":
+              e.license_id = "mf_white_witch";
+              break;
+            case "gilgamesh":
+              e.license_id = "mf_gilgamesh";
+              break;
+            default:
+              break;
+          }
+        } else { e.license_id = parentFrame.license_id; }
       }
       for (const stat in e.stats) {
         if (!isNaN(Number(e.stats[stat])))
