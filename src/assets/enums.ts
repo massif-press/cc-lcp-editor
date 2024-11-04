@@ -93,6 +93,7 @@ const synergyLocations = [
   { value: 'bolster', title: 'Bolster Action modal' },
   { value: 'ram', title: 'Ram Action modal' },
   { value: 'grapple', title: 'Grapple Action modal' },
+  { value: 'brace', title: 'Brace Action modal' },
   { value: 'tech_attack', title: 'Tech Attack Action modal' },
   { value: 'quick_tech', title: 'Quick Tech Action modal' },
   { value: 'overcharge', title: 'Overcharge Action modal' },
