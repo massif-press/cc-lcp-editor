@@ -188,6 +188,7 @@ export default {
       this.wt = [];
       this.ws = [];
       this.st = [];
+      this.isEdit = false;
     },
   },
 };

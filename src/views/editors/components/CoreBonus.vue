@@ -208,6 +208,7 @@ export default {
       this.counters = [];
       this.integrated = [];
       this.special_equipment = [];
+      this.isEdit = false;
     },
   },
 };
