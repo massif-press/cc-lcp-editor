@@ -328,7 +328,6 @@ export default {
       this.dialog = false;
     },
     edit(weapon: any): void {
-      console.log(weapon);
       this.id = weapon.id;
       this.name = weapon.name;
       this.license = weapon.license;

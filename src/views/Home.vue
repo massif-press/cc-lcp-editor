@@ -453,13 +453,11 @@ export default {
       if (!this.lcp.weapons) return;
       //collapse single-profile weapons for clean export
       this.lcp.weapons.forEach((w: any) => {
-        /* Previous versions of the editor preferred to use data from the weapon's single profile, if any exists
-         * However, the current version of the editor has default profiles as uneditable, so we should always trust the basic stats instead
-         */
         if (w.profiles && w.profiles.length === 1) {
-          /*for (const key in w.profiles[0]) {
+          for (const key in w.profiles[0]) {
+            if (key === "name") continue;
             if (w.profiles[0][key]) w[key] = w.profiles[0][key];
-          }*/
+          }
           delete w.profiles;
         }
       });
@@ -472,7 +470,6 @@ export default {
       let count = 0;
       for (const key in this.lcp) {
         if (!Array.isArray(this.lcp[key])) continue;
-        console.log(key);
         if (key.toLowerCase() === 'manufacturers') continue;
         this.lcp[key].forEach((item: any, index: number) => {
           count++;
