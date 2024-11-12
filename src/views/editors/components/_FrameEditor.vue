@@ -68,19 +68,13 @@
                 Banner Preview
                 <div style="height: 72px" class="bg-blue-grey-darken-4 rounded">
                   <div
-                    style="
-                      display: flex;
-                      min-height: 100%;
-                      position: relative;
-                      min-width: 100%;
-                    "
+                    :style="` display: flex;
+                              min-height: 100%;
+                              position: relative;
+                              min-width: 100%;
+                              background-image: url('${image_url}');
+                              background-position: left 80px top ${y_pos}%;`"
                   >
-                    <v-img
-                      :src="image_url"
-                      height="100%"
-                      :position="`top ${y_pos}% left 0px`"
-                      style="position: absolute; top: 0; right: 0; z-index: 9"
-                    />
                   </div>
                 </div>
               </v-col>
