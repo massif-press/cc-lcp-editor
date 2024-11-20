@@ -380,7 +380,7 @@ export default {
       this.license = '';
       this.license_level = 1;
       this.description = '';
-      this.mount = 'Aux';
+      this.mount = 'Auxiliary';
       this.type = 'Melee';
       this.no_attack = false;
       this.no_mods = false;

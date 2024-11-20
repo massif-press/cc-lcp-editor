@@ -152,7 +152,7 @@
               <v-col>
                 <v-select
                   label="Size"
-                  :items="[0.5, 1, 2, 3, 4]"
+                  :items="[0, 0.5, 1, 2, 3, 4]"
                   hide-details
                   v-model="size"
                 />
@@ -349,7 +349,7 @@ export default {
   }),
   computed: {
     confirmOK(): boolean {
-      return !!this.name && !!this.type && !!this.detail && !!this.size;
+      return !!this.name && !!this.type && !!this.detail && (!!this.size || this.type == "Mine");
     },
   },
   methods: {
@@ -358,7 +358,7 @@ export default {
       this.dialog = true;
     },
     submit(): void {
-      const e = {
+      const tmp = {
         name: this.name,
         type: this.type,
         detail: this.detail,
@@ -386,6 +386,10 @@ export default {
         synergies: this.synergies,
         counters: this.counters,
       };
+
+      const {"size" : _, ...mine} = tmp;
+      const e = (this.type == "Mine" || this.size == 0) ? mine : tmp;
+
       if (this.isEdit) {
         this.item.deployables[this.editIndex] = e;
       } else {

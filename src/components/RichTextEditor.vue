@@ -1,4 +1,93 @@
 <template>
+  <component :is="'style'">
+  code.horus {
+    font-size: 1.1em;
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    box-shadow: none;
+    color: white;
+    font-style: normal;
+    letter-spacing: 0.05em;
+    border-radius: 0;
+  }
+
+  code.horus:hover {
+    background-color: black !important;
+    animation: distort 0.6s infinite;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .horus--subtle {
+    animation: distort-subtle 5s infinite;
+  }
+
+  @keyframes distort {
+    0% {
+      text-shadow: 2px 1px #ff00ff, -2px -3px #00ffff;
+      transform: translate(-1px, 1px) translate3D(-30px, 0px, 0) rotate(-0.1deg);
+      cursor: crosshair;
+    }
+    25% {
+      text-shadow: -2px -3px #ff00ff, 2px 1px #00ffff;
+      transform: translate(2px, 1px) translate3D(-30px, 0px, 0) rotate(-0.1deg);
+      cursor: cell;
+    }
+    50% {
+      text-shadow: 2px -1px #ff00ff, -4px 1px #00ffff;
+      transform: translate(-2px, 1px) translate3D(-30px, 0px, 0) rotate(-0.1deg);
+      cursor: col-resize;
+    }
+    75% {
+      text-shadow: -4px -1px #ff00ff, -2px -1px #00ffff;
+      transform: translate(3px, 1px) translate3D(-30px, 0px, 0) rotate(-0.1deg);
+      cursor: move;
+    }
+    100% {
+      text-shadow: -2px 0 #ff00ff, 2px -1px #00ffff;
+      transform: translate(-2px, 0) translate3D(-30px, 0px, 0) rotate(-0.1deg);
+      cursor: all-scroll;
+    }
+  }
+
+  @keyframes distort-subtle {
+    25% {
+      text-shadow: none;
+    }
+    26% {
+      text-shadow: 2px -1px #ff0000, -2px 3px #00ffff;
+    }
+    27% {
+      text-shadow: -2px -3px #ff0000, 2px 1px #00ffff;
+    }
+    28% {
+      text-shadow: 2px 1px #ff0000, -4px 1px #00ffff;
+    }
+    29% {
+      text-shadow: -4px 1px #ff0000, -2px -1px #00ffff;
+    }
+    30% {
+      text-shadow: none;
+    }
+    75% {
+      text-shadow: none;
+    }
+    76% {
+      text-shadow: -4px 1px #ff0000, -2px -1px #00ffff;
+    }
+    77% {
+      text-shadow: -2px -3px #ff0000, 2px 1px #00ffff;
+    }
+    78% {
+      text-shadow: 2px -1px #ff0000, -2px 3px #00ffff;
+    }
+    79% {
+      text-shadow: 2px 1px #ff0000, -4px 1px #00ffff;
+    }
+    80% {
+      text-shadow: none;
+    }
+  }
+  </component>
   <v-card>
     <v-card-title class="mt-n1 mb-n2">{{ title }}</v-card-title>
     <v-divider />
@@ -45,6 +134,23 @@
               :color="editor && editor.isActive('code') ? 'pink' : ''"
               @click="editor.chain().focus().toggleCode().run()"
               ><v-icon size="large" icon="mdi-code-braces" /></v-btn
+          ></v-col>
+          <v-spacer />
+          <v-col cols="auto" style="width: 45px !important"
+            ><v-btn
+              variant="text"
+              size="small"
+              :color="editor && editor.isActive({class : 'horus'}) ? 'cyan' : ''"
+              @click="editor.chain().focus().setCode().updateAttributes('code', {class : 'horus'}).run()"
+              ><v-icon size="large" icon="mdi-sawtooth-wave" /></v-btn
+          ></v-col>
+          <v-col cols="auto" style="width: 45px !important"
+            ><v-btn
+              variant="text"
+              size="small"
+              :color="editor && editor.isActive({class : 'horus--subtle'}) ? 'purple' : ''"
+              @click="editor.chain().focus().setColor('').updateAttributes('p', {class : 'horus--subtle'}).run()"
+              ><v-icon size="large" icon="mdi-sine-wave" /></v-btn
           ></v-col>
           <v-spacer />
           <v-col cols="auto" style="width: 45px !important"
@@ -348,8 +454,10 @@
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
-import { Editor, EditorContent } from '@tiptap/vue-3';
-
+import { Editor, EditorContent} from '@tiptap/vue-3';
+import { Code } from "@tiptap/extension-code";
+import { TextStyle } from '@tiptap/extension-text-style';
+import { Color } from '@tiptap/extension-color';
 export default {
   components: {
     EditorContent,
@@ -388,17 +496,56 @@ export default {
   },
 
   mounted() {
+    const HorusCode = Code.extend({
+      addAttributes() {
+        return {
+          class: {
+            default: null,
+            // Take the attribute values
+            renderHTML: attributes => {
+              // … and return an object with HTML attributes.
+              return (attributes.class) ? {class: `${attributes.class}`} : ``
+            },
+          },
+          color: {
+            default: null,
+            // Take the attribute values
+            renderHTML: attributes => {
+              // … and return an object with HTML attributes.
+              return (attributes.color) ? {color: `${attributes.color}`} : ``
+            },
+          },
+        }
+      },
+    });
+    const HorusSpan = TextStyle.extend({
+      addAttributes() {
+        return {
+          class: {
+            default: `horus--subtle`,
+            // Take the attribute values
+            renderHTML: attributes => {
+              // … and return an object with HTML attributes.
+                return {class: `${attributes.class}`}
+              },
+            },
+          }
+      },
+  })
     this.editor = new Editor({
       extensions: [
         TextAlign.configure({
           types: ['heading', 'paragraph'],
         }),
+        Color,
         Underline,
         StarterKit.configure({
           heading: {
             levels: [1, 2, 3],
           },
         }),
+        HorusCode,
+        HorusSpan,
       ],
       content: this.modelValue,
       onUpdate: () => {
