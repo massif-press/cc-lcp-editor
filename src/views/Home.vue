@@ -169,7 +169,7 @@
           The editors below are only compatible with the forthcoming GM tools
           update. They are <b>unfinished</b> and
           <b>SHOULD NOT</b>
-          be used to create data for the current version of COMP/CON
+          be used! They will not read existing NPC LCPs or write new ones. 
         </v-alert>
         <v-row justify="space-around">
           <v-col v-for="(t, i) in gmCategories" :key="`gm_btn_${i}`" cols="4">
