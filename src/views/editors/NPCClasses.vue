@@ -4,15 +4,15 @@
       <v-col cols="auto">
         <v-list nav density="compact">
           <v-list-item
-            v-for="(c, i) in classes"
-            :key="`${c.id || 'new'}_${i}`"
-            :class="selected && selected.id === c.id ? 'primary darken-3' : ''"
+            v-for="c in classes"
+            :key="`${c[0].id || 'new'}_$`"
+            :class="selected && selected[0].id === c[0].id ? 'primary darken-3' : ''"
             selectable
-            :title="c.name"
+            :title="c[0].name"
             @click="selected = c"
           >
             <template v-slot:subtitle="{ subtitle }">
-              {{ getFeatures(c).length }} base features /
+              {{ getFeatures(c, false).length }} base features /
               {{ getFeatures(c, true).length }} optional
             </template>
           </v-list-item>
@@ -31,25 +31,21 @@
         </v-btn>
       </v-col>
       <v-col>
-        <v-container v-if="selected && selected === 'generic'"
-          >todo</v-container
-        >
-
-        <v-container v-else-if="selected">
+        <v-container v-if="selected">
           <v-card outlined>
             <v-toolbar
               density="compact"
               color="primary"
-              :title="selected.name"
+              :title="selected[0].name"
             />
             <v-card-text>
               <v-row density="compact" justify="space-around" align="end">
                 <v-col cols="3">
-                  <id-input v-model="selected.id" />
+                  <id-input v-model="selected[0].id" />
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
-                    v-model="selected.name"
+                    v-model="selected[0].name"
                     hide-details
                     label="Name"
                   />
@@ -58,7 +54,7 @@
                   <v-select
                     label="Role"
                     :items="roles"
-                    v-model="selected.role"
+                    v-model="selected[0].role"
                     hide-details
                   />
                 </v-col>
@@ -70,19 +66,19 @@
                     density="compact"
                     hide-details
                     rows="2"
-                    v-model="selected.info.terse"
+                    v-model="selected[0].info.terse"
                   />
                 </v-col>
                 <v-col cols="12">
                   <rich-text-editor
                     title="Flavor"
-                    v-model="selected.info.flavor"
+                    v-model="selected[0].info.flavor"
                   />
                 </v-col>
                 <v-col cols="12">
                   <rich-text-editor
                     title="Tactics"
-                    v-model="selected.info.tactics"
+                    v-model="selected[0].info.tactics"
                   />
                 </v-col>
               </v-row>
@@ -90,21 +86,21 @@
               <v-row class="px-2" justify="space-around">
                 <v-col
                   v-show="key !== 'size'"
-                  v-for="key in Object.keys(selected.stats)"
+                  v-for="key in Object.keys(selected[0].stats)"
                   :key="`stat_${key}`"
                   cols="auto"
                   class="pa-1"
                 >
                   <tiered-stat-input
-                    v-model="selected.stats[key]"
+                    v-model="selected[0].stats[key]"
                     :title="key"
                   />
                 </v-col>
                 <v-col cols="auto" class="pa-1"
-                  ><tiered-size-input v-model="selected.stats.size"
+                  ><tiered-size-input v-model="selected[0].stats.size"
                 /></v-col>
               </v-row>
-              <v-divider class="mb-3 mt-5" />
+              <v-divider class="mb-3 mt-5" /> 
               <v-row>
                 <v-col>
                   <v-card>
@@ -112,8 +108,8 @@
                     <v-card-text>
                       <v-row>
                         <v-col
-                          v-for="(item, i) in getFeatures(selected)"
-                          :key="`base_feature_${i}`"
+                          v-for="item in getFeatures(selected, false)"
+                          :key="`base_feature_${item}`"
                         >
                           <v-btn
                             block
@@ -134,8 +130,8 @@
                     <v-card-text>
                       <v-row>
                         <v-col
-                          v-for="(item, i) in getFeatures(selected, true)"
-                          :key="`optional_feature_${i}`"
+                          v-for="item in getFeatures(selected, true)"
+                          :key="`optional_feature_${item}`"
                         >
                           <v-btn
                             block
@@ -283,24 +279,8 @@ export default {
       }
     },
     getFeatures(c: any, isOptional?: boolean) {
-      if (!this.lcp.npc_features) return [];
-      if (c === 'generic') {
-        return this.lcp.npc_features.filter(
-          (x: any) => x.origin.type === 'Generic'
-        );
-      }
-
-      if (c.features) {
-        // v2
-      } else {
-        const fset = isOptional ? 'optional_features' : 'base_features';
-        const out: string[] = [];
-        c[fset].forEach((id: string) => {
-          out.push(this.lcp.npc_features.find((x) => x.id === id));
-        });
-
-        return out;
-      }
+      //if (!this.lcp) return [];
+      return c.slice(1).filter((x: any) => (((isOptional) ? (!x.base || x.base === false) : (x.base === true))));
     },
     addNew() {
       if (!this.lcp.npc_classes) {
