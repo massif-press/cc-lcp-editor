@@ -302,6 +302,7 @@ export default {
       this.dialog = false;
     },
     submit(): void {
+      this.profiles.forEach((profile) => this.cleanProfileText(profile));
       const e = {
         id: this.id,
         name: this.name,
@@ -326,6 +327,17 @@ export default {
       this.$emit('save', e);
       this.reset();
       this.dialog = false;
+    },
+    cleanProfileText(profile: any): void {
+      if(profile.on_attack == '<p></p>') {
+        profile.on_attack = undefined;
+      }
+      if(profile.on_hit == '<p></p>') {
+        profile.on_hit = undefined;
+      }
+      if(profile.on_crit == '<p></p>') {
+        profile.on_crit = undefined;
+      }
     },
     edit(weapon: any): void {
       this.id = weapon.id;
