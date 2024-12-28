@@ -108,7 +108,7 @@ export default {
         this.item.tags[this.editIndex] = this.tag;
       } else {
         if (!this.item.tags) this.item['tags'] = [];
-        this.item.tags.push(this.tag);
+          this.item.tags.push({ ...this.tag });
       }
       this.tag = { name: '', id: '', val: '' };
       this.isEdit = false;
