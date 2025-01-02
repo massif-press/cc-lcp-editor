@@ -87,6 +87,11 @@
             <rich-text-editor title="Description" v-model="description" />
           </v-col>
         </v-row>
+        <v-row>
+          <v-col>
+            <rich-text-editor title="Effect" v-model="effect" />
+          </v-col>
+        </v-row>
 
         <v-row density="compact" justify="space-around">
           <v-col cols="auto">
@@ -234,6 +239,7 @@ export default {
     license: '',
     license_level: 1,
     description: '',
+    effect: '',
     weaponTypes: weaponType,
     weaponSizes: weaponSize,
     mount: 'Auxiliary',
@@ -314,6 +320,7 @@ export default {
         ),
         license_level: Number(this.license_level),
         description: this.description,
+        effect: this.effect,
         mount: this.mount,
         type: this.type,
         no_attack: this.no_attack,
@@ -345,6 +352,7 @@ export default {
       this.license = weapon.license;
       this.license_level = Number(weapon.license_level);
       this.description = weapon.description;
+      this.effect = weapon.effect;
       this.mount = weapon.mount;
       this.type = weapon.type;
       this.no_attack = weapon.no_attack;
@@ -392,6 +400,7 @@ export default {
       this.license = '';
       this.license_level = 1;
       this.description = '';
+      this.effect = '';
       this.mount = 'Auxiliary';
       this.type = 'Melee';
       this.no_attack = false;

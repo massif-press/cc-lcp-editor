@@ -24,7 +24,7 @@
               readonly
               disabled
               persistent-hint
-              hint="Single-profile weapons inherit the base object's name"
+              hint="Single-profile weapons inherit the base object's name & effect"
             />
             <v-text-field v-else label="Name" v-model="profile.name" />
           </v-col>
@@ -59,7 +59,15 @@
 
         <v-row>
           <v-col>
-            <rich-text-editor title="Effect" v-model="profile.effect" />
+            <v-text-field
+              v-if="isOnlyProfile"
+              label="Effect"
+              readonly
+              disabled
+              persistent-hint
+              hint="Single-profile weapons inherit the base object's effect"
+            />            
+            <rich-text-editor v-else label="Effect" title="Effect" v-model="profile.effect" />
 
             <damage-selector class="my-3" :item="profile" />
 

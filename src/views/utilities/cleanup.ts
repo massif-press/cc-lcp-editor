@@ -1,6 +1,8 @@
 import { frames } from '@massif/lancer-data';
 
 const getLicenseID = (licenseString: string, localFrames: any[]) => {
+  if (!licenseString) return '';
+  
   let frame = localFrames.find(
     (x: any) => x.name.toLowerCase() === licenseString.toLowerCase()
   );
