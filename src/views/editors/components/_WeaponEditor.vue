@@ -336,14 +336,18 @@ export default {
       this.dialog = false;
     },
     cleanProfileText(profile: any): void {
-      if(profile.on_attack == '<p></p>') {
+      let is_empty_text = (s) => (s == "<p></p>" || s == "<div></div>");
+      if (is_empty_text(profile.on_attack)) {
         profile.on_attack = undefined;
       }
-      if(profile.on_hit == '<p></p>') {
+      if (is_empty_text(profile.on_hit)) {
         profile.on_hit = undefined;
       }
-      if(profile.on_crit == '<p></p>') {
+      if (is_empty_text(profile.on_crit)) {
         profile.on_crit = undefined;
+      }
+      if (is_empty_text(profile.effect)) {
+        profile.effect = undefined;
       }
     },
     edit(weapon: any): void {
