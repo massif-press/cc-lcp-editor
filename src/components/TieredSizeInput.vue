@@ -52,7 +52,7 @@ export default {
   name: 'tiered-size-input',
   props: {
     modelValue: {
-      type: Array,
+      type: [Array, Number],
       default: [[1], [1], [1]],
     },
   },
@@ -61,7 +61,7 @@ export default {
   computed: {
     value: {
       get() {
-        return this.modelValue;
+        return (Array.isArray(this.modelValue) ? this.modelValue : [this.modelValue, this.modelValue, this.modelValue]);
       },
       set(value: string) {
         this.$emit('update:modelValue', value);

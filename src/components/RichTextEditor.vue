@@ -467,11 +467,23 @@
 
 <script lang="ts">
 import { Mark, mergeAttributes} from '@tiptap/core';
-import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import { Editor, EditorContent} from '@tiptap/vue-3';
 import { Code } from "@tiptap/extension-code";
+import { TextStyle } from '@tiptap/extension-text-style';
+import { Color } from '@tiptap/extension-color';
+import { Bold } from '@tiptap/extension-bold';
+import { Italic } from '@tiptap/extension-italic';
+import { Strike } from '@tiptap/extension-strike';
+import { Heading } from '@tiptap/extension-heading';
+import { Paragraph } from '@tiptap/extension-paragraph';
+import { HorizontalRule } from '@tiptap/extension-horizontal-rule';
+import { OrderedList } from '@tiptap/extension-ordered-list';
+import { ListItem } from '@tiptap/extension-list-item';
+import { BulletList } from '@tiptap/extension-bullet-list';
+import { Text } from '@tiptap/extension-text';
+import { Document} from '@tiptap/extension-document';
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -483,6 +495,7 @@ declare module '@tiptap/core' {
     }
   }
 }
+
 
 export default {
   components: {
@@ -586,11 +599,12 @@ export default {
           types: ['heading', 'paragraph'],
         }),
         Underline,
-        StarterKit.configure({
-          heading: {
-            levels: [1, 2, 3],
-          },
+        Bold, Italic, Strike,
+        Heading.configure({
+          levels: [1, 2, 3],
         }),
+        Paragraph, HorizontalRule, OrderedList, BulletList, ListItem,
+        Text, Document,
         HorusCode,
         HorusTexts.configure(),
       ],
