@@ -20,6 +20,13 @@
   .horus--subtle {
     animation: distort-subtle 5s infinite;
   }
+  
+  .ra-quiet {
+    color: #eeeeee;
+    font-family: 'Consolas', monospace;
+    font-size: 12pt;
+    font-weight: bolder;
+  }
 
   @keyframes distort {
     0% {
@@ -148,9 +155,17 @@
             ><v-btn
               variant="text"
               size="small"
-              :color="editor && editor.isActive({class : 'horus--subtle'}) ? 'purple' : ''"
-              @click="editor.chain().focus().setColor('').updateAttributes('p', {class : 'horus--subtle'}).run()"
+              :color="editor && editor.isActive('horus_text', {class : 'horus--subtle'}) ? 'purple' : ''"
+              @click="editor.chain().focus().toggleHorusSubtle().run()"
               ><v-icon size="large" icon="mdi-sine-wave" /></v-btn
+          ></v-col>
+          <v-col cols="auto" style="width: 45px !important"
+            ><v-btn
+              variant="text"
+              size="small"
+              :color="editor && editor.isActive('horus_text', {class : 'ra-quiet'}) ? 'yellow' : ''"
+              @click="editor.chain().focus().toggleRaQuiet().run()"
+              ><v-icon size="large" icon="mdi-record-circle-outline" /></v-btn
           ></v-col>
           <v-spacer />
           <v-col cols="auto" style="width: 45px !important"
@@ -451,13 +466,24 @@
 </template>
 
 <script lang="ts">
+import { Mark, mergeAttributes} from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import { Editor, EditorContent} from '@tiptap/vue-3';
 import { Code } from "@tiptap/extension-code";
-import { TextStyle } from '@tiptap/extension-text-style';
-import { Color } from '@tiptap/extension-color';
+
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    HorusTexts: {
+      setHorusSubtle: () => ReturnType,
+      toggleHorusSubtle: () => ReturnType,
+      setRaQuiet: () => ReturnType,
+      toggleRaQuiet: () => ReturnType,
+    }
+  }
+}
+
 export default {
   components: {
     EditorContent,
@@ -506,38 +532,59 @@ export default {
               // … and return an object with HTML attributes.
               return (attributes.class) ? {class: `${attributes.class}`} : ``
             },
-          },
-          color: {
+          }
+        }
+      },
+    });
+
+    const HorusTexts = Mark.create({
+      name : "horus_text",
+      addAttributes() {
+        return {
+          class: {
             default: null,
-            // Take the attribute values
-            renderHTML: attributes => {
-              // … and return an object with HTML attributes.
-              return (attributes.color) ? {color: `${attributes.color}`} : ``
-            },
+          },
+        }
+      },
+      addOptions() {
+        return {
+          HTMLAttributes: {},
+        }
+      },
+      parseHTML() {
+        return [
+          { 
+            tag: 'span',
+            getAttrs: element => ({class: element.getAttribute('class') })
+          },
+        ]
+      },
+      renderHTML({ HTMLAttributes }) {
+        return ['span', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), 0]
+      },
+      addCommands() {
+        return {
+          setHorusSubtle: () => ({ commands }) => {
+            return commands.setMark(this.name, {class : "horus--subtle"})
+          },
+          toggleHorusSubtle: () => ({ commands }) => {
+            return commands.toggleMark(this.name, {class : "horus--subtle"})
+          },
+          setRaQuiet: () => ({ commands }) => {
+            return commands.setMark(this.name, {class : "ra-quiet"})
+          },
+          toggleRaQuiet: () => ({ commands }) => {
+            return commands.toggleMark(this.name, {class : "ra-quiet"})
           },
         }
       },
     });
-    const HorusSpan = TextStyle.extend({
-      addAttributes() {
-        return {
-          class: {
-            default: `horus--subtle`,
-            // Take the attribute values
-            renderHTML: attributes => {
-              // … and return an object with HTML attributes.
-                return {class: `${attributes.class}`}
-              },
-            },
-          }
-      },
-  })
+
     this.editor = new Editor({
       extensions: [
         TextAlign.configure({
           types: ['heading', 'paragraph'],
         }),
-        Color,
         Underline,
         StarterKit.configure({
           heading: {
@@ -545,7 +592,7 @@ export default {
           },
         }),
         HorusCode,
-        HorusSpan,
+        HorusTexts.configure(),
       ],
       content: this.modelValue,
       onUpdate: () => {

@@ -277,7 +277,7 @@ export default {
     },
     descById(id: string) {
       return (
-        (this.bonuses as any[]).find((x: any) => x.value === id)?.desc || 'err'
+        (this.bonuses as any[]).find((x: any) => x.value === id)?.title || 'err'
       );
     },
     restrictions(bonus: any) {

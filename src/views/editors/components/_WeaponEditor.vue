@@ -87,6 +87,11 @@
             <rich-text-editor title="Description" v-model="description" />
           </v-col>
         </v-row>
+        <v-row>
+          <v-col>
+            <rich-text-editor title="Effect" v-model="effect" />
+          </v-col>
+        </v-row>
 
         <v-row density="compact" justify="space-around">
           <v-col cols="auto">
@@ -234,6 +239,7 @@ export default {
     license: '',
     license_level: 1,
     description: '',
+    effect: '',
     weaponTypes: weaponType,
     weaponSizes: weaponSize,
     mount: 'Auxiliary',
@@ -302,6 +308,7 @@ export default {
       this.dialog = false;
     },
     submit(): void {
+      this.profiles.forEach((profile) => this.cleanProfileText(profile));
       const e = {
         id: this.id,
         name: this.name,
@@ -313,6 +320,7 @@ export default {
         ),
         license_level: Number(this.license_level),
         description: this.description,
+        effect: this.effect,
         mount: this.mount,
         type: this.type,
         no_attack: this.no_attack,
@@ -327,12 +335,28 @@ export default {
       this.reset();
       this.dialog = false;
     },
+    cleanProfileText(profile: any): void {
+      let is_empty_text = (s) => (s == "<p></p>" || s == "<div></div>");
+      if (is_empty_text(profile.on_attack)) {
+        profile.on_attack = undefined;
+      }
+      if (is_empty_text(profile.on_hit)) {
+        profile.on_hit = undefined;
+      }
+      if (is_empty_text(profile.on_crit)) {
+        profile.on_crit = undefined;
+      }
+      if (is_empty_text(profile.effect)) {
+        profile.effect = undefined;
+      }
+    },
     edit(weapon: any): void {
       this.id = weapon.id;
       this.name = weapon.name;
       this.license = weapon.license;
       this.license_level = Number(weapon.license_level);
       this.description = weapon.description;
+      this.effect = weapon.effect;
       this.mount = weapon.mount;
       this.type = weapon.type;
       this.no_attack = weapon.no_attack;
@@ -380,6 +404,7 @@ export default {
       this.license = '';
       this.license_level = 1;
       this.description = '';
+      this.effect = '';
       this.mount = 'Auxiliary';
       this.type = 'Melee';
       this.no_attack = false;

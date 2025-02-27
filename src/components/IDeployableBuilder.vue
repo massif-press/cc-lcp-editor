@@ -268,8 +268,8 @@
             </v-row>
             <v-divider class="my-4" />
             <v-row density="compact" align="center">
-              <v-col><i-action-builder :item="this" npc /></v-col>
-              <v-col><i-bonus-builder :item="this" npc /></v-col>
+              <v-col><i-action-builder :item="this" ::npc="npc" /></v-col>
+              <v-col><i-bonus-builder :item="this" :npc="npc" /></v-col>
               <v-col><i-counter-builder :item="this" /></v-col>
             </v-row>
           </v-card-text>
