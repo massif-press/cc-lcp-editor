@@ -155,6 +155,20 @@
         </div>
       </v-col>
     </v-row>
+    <br/>
+    <v-alert
+      v-show="hasImportedError"
+      :icon="'mdi-alert'"
+      prominent
+      :color="'error darken-2'"
+      class="text-center"
+    >
+      <code class="error-msg">
+        <span
+          v-html="'Importing JSON file failed, check console for errors!'"
+        />
+      </code>
+    </v-alert>
     <v-footer app>
       <v-btn to="/">
         <v-icon>mdi-chevron-left</v-icon>
@@ -241,6 +255,7 @@ export default {
     core_manufacturers: manufacturers,
     selected: null as any,
     importKey: '',
+    hasImportedError : false
   }),
   computed: {
     store() {
@@ -330,9 +345,14 @@ export default {
       const file = evt.target.files[0];
       const reader = new FileReader();
 
-      reader.onload = (e) =>
-        (this.lcp[this.importKey] = JSON.parse(e?.target?.result?.toString() || ''));
-
+      reader.onload = (e) => {
+        try {
+          this.lcp[this.importKey] = JSON.parse(e?.target?.result?.toString() || '');
+        } catch (e : any) {
+          this.hasImportedError = true;
+          console.error(e);
+        }
+      }
       reader.readAsText(file);
     },
   },

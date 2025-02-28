@@ -62,7 +62,6 @@ export default {
   name: 'pilot-gear-editor',
   components: {
     EditorBase,
-
     SynergySelector,
   },
 };

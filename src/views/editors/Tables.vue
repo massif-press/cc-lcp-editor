@@ -42,7 +42,20 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-
+    <br/>
+    <v-alert
+      v-show="hasImportedError"
+      :icon="'mdi-alert'"
+      prominent
+      :color="'error darken-2'"
+      class="text-center"
+    >
+      <code class="error-msg">
+        <span
+          v-html="'Importing JSON file failed, check console for errors!'"
+        />
+      </code>
+    </v-alert>
     <div id="end" style="min-height: 100px" />
     <v-footer fixed>
       <v-btn variant="text" to="/">
@@ -102,6 +115,7 @@ export default {
         location: 'Rollable Quirks table for Flash Cloned pilots',
       },
     ],
+    hasImportedError : false
   }),
   computed: {
     loaded(): boolean {
@@ -141,8 +155,14 @@ export default {
       const file = evt.target.files[0];
       const reader = new FileReader();
 
-      reader.onload = (e) =>
-        (this.lcp.tables = JSON.parse(e?.target?.result?.toString() || ''));
+      reader.onload = (e) => {
+        try {
+          this.lcp.tables = JSON.parse(e?.target?.result?.toString() || '');
+        } catch (e : any) {
+          this.hasImportedError = true;
+          console.error(e);
+        }
+      }
       reader.readAsText(file);
     },
   },

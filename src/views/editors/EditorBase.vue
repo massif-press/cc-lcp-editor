@@ -55,6 +55,20 @@
         />
       </code>
     </v-alert>
+    <br/>
+    <v-alert
+      v-show="lcp && lcp[itemKey] && lcp[itemKey].length && hasImportedError"
+      :icon="'mdi-alert'"
+      prominent
+      :color="'error darken-2'"
+      class="text-center"
+    >
+      <code class="error-msg">
+        <span
+          v-html="'Importing JSON file failed, check console for errors!'"
+        />
+      </code>
+    </v-alert>
     <div id="end" style="min-height: 100px" />
     <v-footer app>
       <v-btn to="/">
@@ -110,6 +124,7 @@ export default {
   data: () => ({
     synergyLocations: synergyLocations,
     activationTypes: activationTypes,
+    hasImportedError : false
   }),
   computed: {
     title() {
@@ -141,7 +156,7 @@ export default {
         });
       });
       return arr;
-    },
+    }
   },
   methods: {
     addNew() {
@@ -170,13 +185,17 @@ export default {
       if (this.$refs.fileUpload) (this.$refs.fileUpload as HTMLElement).click();
     },
     importFile(evt: any) {
+      this.hasImportedError = false;
       const file = evt.target.files[0];
       const reader = new FileReader();
-
-      reader.onload = (e) =>
-        (this.lcp[this.itemKey] = JSON.parse(
-          e?.target?.result?.toString() || ''
-        ));
+      reader.onload = (e) => {
+        try {
+          this.lcp[this.itemKey] = JSON.parse(e?.target?.result?.toString() || '');
+        } catch (e : any) {
+          this.hasImportedError = true;
+          console.error(e);
+        }
+      }
       reader.readAsText(file);
     },
     scrollToElement(target: string) {
