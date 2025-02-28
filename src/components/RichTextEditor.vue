@@ -426,7 +426,6 @@
                             </td>
                             <td />
                           </tr>
-                          <td />
                           <tr>
                             <td>Center align</td>
                             <td>
@@ -467,12 +466,10 @@
 
 <script lang="ts">
 import { Mark, mergeAttributes} from '@tiptap/core';
-import Underline from '@tiptap/extension-underline';
-import TextAlign from '@tiptap/extension-text-align';
 import { Editor, EditorContent} from '@tiptap/vue-3';
+import { Underline } from '@tiptap/extension-underline';
+import { TextAlign } from '@tiptap/extension-text-align';
 import { Code } from "@tiptap/extension-code";
-import { TextStyle } from '@tiptap/extension-text-style';
-import { Color } from '@tiptap/extension-color';
 import { Bold } from '@tiptap/extension-bold';
 import { Italic } from '@tiptap/extension-italic';
 import { Strike } from '@tiptap/extension-strike';

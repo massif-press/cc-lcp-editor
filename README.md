@@ -1,18 +1,15 @@
-# Vue 3 + TypeScript + Vite
+# cc-lcp-editor
+[![Netlify Status](https://api.netlify.com/api/v1/badges/487bd3a4-d35b-42a4-bdd0-15e4c24ad898/deploy-status)](https://app.netlify.com/sites/cc-lcp-editor/deploys)
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+  A tool for producing Lancer Content Packages for use with COMP/CON. More information about LCPs, including technical notes and content examples, can be found in the lancer-data repository: https://github.com/massif-press/lancer-data
 
-## Recommended IDE Setup
+## Disclaimer</div>
+  This app is experimental, subject to frequent and/or profound change, and is only lightly tested. It is provided as-is, but the author makes no guarantees to its operation nor to the output it produces. That said, it is an open source project and contributions and forks are very welcome. Discussion regarding this app should be held in the the #compcon-homebrew channel on the official LANCER Discord.
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Build instructions
 
-## Type Support For `.vue` Imports in TS
+Requires Vue 3 + Vite to build. Install dependencies with `npm install`. Tested on Node 16+.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+- `npm run dev` (`vite`): runs development version, starts server on localhost
+- `npm run build` (`vite build`): generates production build
+- `npm run preview` (`vite preview`): preview most recent production build, starts server on localhost
