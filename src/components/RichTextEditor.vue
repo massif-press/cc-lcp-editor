@@ -426,7 +426,6 @@
                             </td>
                             <td />
                           </tr>
-                          <td />
                           <tr>
                             <td>Center align</td>
                             <td>

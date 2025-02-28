@@ -112,7 +112,7 @@ export default {
     },
   },
   created() {
-    if (!this.lcp.tables) this.lcp.tables = [];
+    if (!this.lcp.tables) this.lcp.tables = {};
 
     this.tables.forEach((e) => {
       if (!this.lcp.tables[e.key]) this.lcp.tables[e.key] = [];
