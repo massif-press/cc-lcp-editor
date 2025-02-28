@@ -64,7 +64,7 @@
                   v-model="y_pos"
                 />
               </v-col>
-              <v-col style="height: 80px" v-b-tooltip.hover title="Use this option to hide the mech from the license and instead use the image information for the license header.">
+              <v-col style="height: 80px" b-tooltip.hover title="Use this option to hide the mech from the license and instead use the image information for the license header.">
                 <v-checkbox label="Specialty" v-model="specialty" />
               </v-col>
               <v-col cols="12" v-show="!!image_url">
