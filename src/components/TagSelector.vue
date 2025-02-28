@@ -9,7 +9,7 @@
         class="mx-1"
         @click="edit(tag, i)"
       >
-        {{ tag.id }}, {{ tag.val }}
+        {{ (tag.val) ? ((tag.name.includes("{VAL}")) ? tag.name.replace("{VAL}", tag.val) : (tag.name + ", " + tag.val)) : (tag.name)}}
       </v-chip>
       <v-menu
         v-model="menu"
