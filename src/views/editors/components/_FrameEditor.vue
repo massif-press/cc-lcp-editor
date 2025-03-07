@@ -520,6 +520,9 @@ export default {
             case "atlas":
               e.license_id = "mf_atlas";
               break;
+			case "caliban":
+              e.license_id = "mf_caliban";
+              break;
             case "kidd":
               e.license_id = "mf_kidd";
               break;
