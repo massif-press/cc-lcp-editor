@@ -87,6 +87,7 @@
             <v-row align="center">
               <v-col><i-counter-builder :item="this" /></v-col>
               <v-col><integrated-selector :item="this" /></v-col>
+              <v-col><special-equipment-selector :item="this" /></v-col>
             </v-row>
           </v-card-text>
           <v-divider />
@@ -121,7 +122,7 @@ import IBonusBuilder from './IBonusBuilder.vue';
 import IDeployableBuilder from './IDeployableBuilder.vue';
 import ICounterBuilder from './ICounterBuilder.vue';
 import IntegratedSelector from './IntegratedSelector.vue';
-
+import SpecialEquipmentSelector from './SpecialEquipmentSelector.vue';
 export default {
   name: 'rank-builder',
   props: { item: { type: Object, required: true } },
@@ -136,6 +137,7 @@ export default {
     deployables: [],
     counters: [],
     integrated: [],
+    special_equipment: [],
     exclusive: false,
     isEdit: false,
     editIndex: -1,
@@ -186,6 +188,7 @@ export default {
         deployables: this.deployables,
         counters: this.counters,
         integrated: this.integrated,
+        special_equipment: this.special_equipment,
         exclusive: this.exclusive,
       };
       if (this.isEdit) {
@@ -207,6 +210,7 @@ export default {
       this.deployables = rank.deployables;
       this.counters = rank.counters;
       this.integrated = rank.integrated;
+      this.special_equipment = rank.special_equipment;
       this.exclusive = rank.exclusive;
       this.isEdit = true;
       this.editIndex = index;
@@ -226,6 +230,7 @@ export default {
       this.deployables = [];
       this.counters = [];
       this.integrated = [];
+      this.special_equipment = [];
       this.exclusive = false;
       this.isEdit = false;
     },
