@@ -285,7 +285,6 @@ export default {
       'statuses',
       'tags',
       'talents',
-      'tables',
     ],
     gmCategories: [
       'npc_classes',
