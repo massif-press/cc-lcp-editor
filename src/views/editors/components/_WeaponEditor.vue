@@ -195,6 +195,11 @@
               :index="i"
           /></v-col>
         </v-row>
+        <v-row align="center" v-if="profiles && profiles.length > 1">
+          <v-col>
+            <tag-selector :item="this" />
+        </v-col>
+      </v-row>
 
         <v-btn block color="primary darken-3" @click="addProfile()">
           <v-icon>mdi-plus</v-icon>
@@ -252,6 +257,7 @@ export default {
     no_synergy: false,
 
     sp: 0,
+    tags: [],
 
     profiles: [
       {
@@ -329,6 +335,7 @@ export default {
         no_bonus: this.no_bonus,
         no_synergy: this.no_synergy,
         sp: this.sp,
+        tags: this.tags,
         profiles: this.profiles,
       };
       this.$emit('save', e);
@@ -365,6 +372,7 @@ export default {
       this.no_bonus = weapon.no_bonus;
       this.no_synergy = weapon.no_synergy;
       this.sp = weapon.sp;
+      this.tags = weapon.tags;
       this.profiles = this.getProfiles(weapon);
       this.isEdit = true;
       this.dialog = true;
@@ -390,7 +398,7 @@ export default {
           counters: w.counters,
           integrated: w.integrated,
           special_equipment: w.special_equipment,
-          tags: w.tags,
+          tags: (w.tags) ? [...w.tags] : [],
         },
       ];
     },
@@ -413,6 +421,7 @@ export default {
       this.no_bonus = false;
       this.no_synergy = false;
       this.sp = 0;
+      this.tags = [];
       this.profiles = [
         {
           name: '',

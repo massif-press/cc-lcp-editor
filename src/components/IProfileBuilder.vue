@@ -137,6 +137,10 @@ export default {
   },
   methods: {
     remove(index: number): void {
+      if (this.parent.profiles.length === 2){
+        this.parent.profiles[+(index==0)].tags = [...new Set([...this.parent.tags, ...this.parent.profiles[+(index==0)].tags])];
+        this.parent.tags = [];
+      }
       this.parent.profiles.splice(index, 1);
     },
   },
