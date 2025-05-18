@@ -155,6 +155,18 @@ export default {
           );
         });
       });
+
+      if (this.itemKey == "pilot_gear"){
+        this.lcp[this.itemKey].forEach(p => {
+          if (p.type == "Weapon"){
+            if (!p.damage)
+              arr.push(`Item with missing damage field (${p.id || p.name || '--'})`);
+            if (!p.range)
+              arr.push(`Item with missing range field (${p.id || p.name || '--'})`);
+          }
+        });
+      }
+
       return arr;
     }
   },
