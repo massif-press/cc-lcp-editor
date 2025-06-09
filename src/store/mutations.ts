@@ -9,7 +9,17 @@ export default {
     await Promise.all(
       Object.keys(zip.files).map(async (file) => {
         const propname = zip.files[file].name.split('.')[0];
-        state.lcp[propname] = await getZipData(zip, zip.files[file].name);
+        const npcname = propname.slice(5);
+        console.log(npcname);
+        if (propname.startsWith("npcc")){
+          if (!state.lcp.npc_classes) state.lcp['npc_classes'] = {};
+          state.lcp.npc_classes[npcname] = await getZipData(zip, zip.files[file].name);
+        } else if (propname.startsWith("npct")){
+          if (!state.lcp.npc_templates) state.lcp['npc_templates'] = {};
+          state.lcp.npc_templates[npcname] = await getZipData(zip, zip.files[file].name);
+        } else {
+          state.lcp[propname] = await getZipData(zip, zip.files[file].name);
+        }
       })
     );
     if (!state.lcp.lcp_manifest) state.lcp.lcp_manifest = {};

@@ -49,7 +49,7 @@ export default {
   name: 'tiered-stat-input',
   props: {
     modelValue: {
-      type: Array,
+      type: [Array, Number],
       default: [0, 0, 0],
     },
     title: {
@@ -63,15 +63,15 @@ export default {
   computed: {
     value: {
       get() {
-        return this.modelValue;
+        return (Array.isArray(this.modelValue) ? this.modelValue : [this.modelValue, this.modelValue, this.modelValue]);
       },
       set(value: string) {
-        this.$emit('update:modelValue', value);
+        this.$emit('update:modelValue', (Array.isArray(this.modelValue)) ? value : value.slice());
       },
     },
   },
   created() {
-    if (!Array.isArray(this.value)) this.value = [0, 0, 0];
+    if (!Array.isArray(this.value)) this.value = [this.value, this.value, this.value];
   },
   methods: {
     setTier(evt: string, tier: number) {
