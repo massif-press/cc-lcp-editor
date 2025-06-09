@@ -3,14 +3,14 @@
     label="ID"
     hide-details
     v-model="value"
-    prepend-icon="mdi-dice-6"
-    @click:prepend="uuid"
+    prepend-icon="mdi-id-card"
   />
 </template>
 
 <script lang="ts">
 import { v4 as uuid } from 'uuid';
-
+// used for random ID generation, disabled because it's not very human-readable
+// @click:prepend="uuid"
 export default {
   name: 'id-entry',
   props: ['modelValue'],
