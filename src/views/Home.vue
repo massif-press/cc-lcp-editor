@@ -165,6 +165,10 @@
           </v-col>
         </v-row>
         <v-divider class="my-4" />
+        <v-alert density="compact" color="warning" icon="mdi-alert" class="mb-3">
+          GM-sided LCP support (including NPCs and Eidolons) will be coming alongside the COMP/CON V3 update release. Stay tuned!
+        </v-alert>
+        <!--
         <v-alert density="compact" color="error" icon="mdi-alert" class="mb-3">
           The editors below are only compatible with the forthcoming GM tools
           update. They are <b>unfinished</b> and
@@ -179,6 +183,7 @@
             </v-btn>
           </v-col>
         </v-row>
+        -->
       </v-card-text>
       <v-row align="center" class="pt-2">
         <v-col><v-divider /></v-col>
