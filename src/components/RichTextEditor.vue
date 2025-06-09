@@ -206,6 +206,13 @@
               @click="editor.commands.setHorizontalRule()"
               ><v-icon size="large" icon="mdi-minus" /></v-btn
           ></v-col>
+          <v-col cols="auto" style="width: 45px !important"
+            ><v-btn
+              variant="text"
+              size="small"
+              @click="editor.commands.setHardBreak()"
+              ><v-icon size="large" icon="mdi-arrow-down-left" /></v-btn
+          ></v-col>
           <v-spacer />
           <v-col cols="auto" style="width: 45px !important"
             ><v-btn
@@ -481,6 +488,7 @@ import { ListItem } from '@tiptap/extension-list-item';
 import { BulletList } from '@tiptap/extension-bullet-list';
 import { Text } from '@tiptap/extension-text';
 import { Document} from '@tiptap/extension-document';
+import { HardBreak } from '@tiptap/extension-hard-break';
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
@@ -602,6 +610,7 @@ export default {
         }),
         Paragraph, HorizontalRule, OrderedList, BulletList, ListItem,
         Text, Document,
+        HardBreak,
         HorusCode,
         HorusTexts.configure(),
       ],
