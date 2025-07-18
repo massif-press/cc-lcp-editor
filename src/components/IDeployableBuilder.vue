@@ -105,7 +105,7 @@
           <v-chip
             small
             class="mx-1"
-            v-html="`${deployable.size ? `  Size: ${deployable.size}` : ''}`"
+            v-html="`${deployable.type == 'Mine' ? `  Size: N/A` : (deployable.size ? `  Size: ${deployable.size}` : '')}`"
           />
         </div>
         <div v-if="deployable.tags">
@@ -150,9 +150,15 @@
                 />
               </v-col>
               <v-col>
-                <v-select
+                <v-select v-if="type != 'Mine'"
                   label="Size"
-                  :items="[0, 0.5, 1, 2, 3, 4]"
+                  :items="[0.5, 1, 2, 3, 4]"
+                  hide-details
+                  v-model="size"
+                />
+                <v-select v-if="type == 'Mine'"
+                  label="Size (ignored when Mine)"
+                  :items="[0.5, 1, 2, 3, 4]"
                   hide-details
                   v-model="size"
                 />
@@ -358,11 +364,11 @@ export default {
       this.dialog = true;
     },
     submit(): void {
-      const tmp = {
+      const e = {
         name: this.name,
         type: this.type,
         detail: this.detail,
-        size: this.size,
+        size: (this.type == "Mine") ? null : this.size,
         activation: this.activation,
         deactivation: this.deactivation,
         recall: this.recall,
@@ -386,9 +392,6 @@ export default {
         synergies: this.synergies,
         counters: this.counters,
       };
-
-      const {"size" : _, ...mine} = tmp;
-      const e = (this.type == "Mine" || this.size == 0) ? mine : tmp;
 
       if (this.isEdit) {
         this.item.deployables[this.editIndex] = e;
