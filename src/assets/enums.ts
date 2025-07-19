@@ -456,7 +456,7 @@ const systemType = [
   'AI',
   'Deployable',
   'Drone',
-  'Flight',
+  'Flight System',
   'Shield',
   'System',
   'Tech',
