@@ -471,7 +471,7 @@ export default {
       if (!this.lcp.backgrounds) return;
       // remove skill additional info from each skill
       this.lcp.backgrounds.forEach((b: any) => {
-        b.skills = b.skills.map(s => s.id);
+        b.skills = b.skills.map(s => (s && s.id) ? s.id : s);
       });
     },
     generateIds() {

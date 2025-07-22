@@ -9,7 +9,7 @@
         class="mx-1"
         @click="edit(skill, i)"
       >
-        {{ (skill.name)}}
+        {{ (skill.name) ? skill.name : getSkill(skill).name }}
       </v-chip>
       <v-menu
         v-model="menu"
@@ -108,7 +108,8 @@ export default {
       this.menu = true;
     },
     edit(skill: any, index: number) {
-      this.skill = { ...skill };
+      if (!skill.id) this.skill = this.getSkill(skill);
+      else this.skill = skill.id;
       this.isEdit = true;
       this.editIndex = index;
       this.menu = true;
@@ -119,6 +120,12 @@ export default {
       this.isEdit = false;
       this.editIndex = -1;
     },
+    getSkill(id : String){
+      for (var elem of [...skills]){
+        if (elem.id == id) return elem;
+      }
+      return id;
+    }
   },
 };
 </script>
