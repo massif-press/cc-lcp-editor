@@ -12,6 +12,7 @@ import * as IRankBuilder from './IRankBuilder.vue';
 import * as ISynergyBuilder from './ISynergyBuilder.vue';
 import * as RangeSelector from './RangeSelector.vue';
 import * as RichTextEditor from './RichTextEditor.vue';
+import * as SkillSelector from './SkillSelector.vue';
 import * as SpecialEquipmentSelector from './SpecialEquipmentSelector.vue';
 import * as SynergyLocationSelector from './SynergyLocationSelector.vue';
 import * as TagSelector from './TagSelector.vue';
@@ -35,6 +36,7 @@ export {
   ISynergyBuilder,
   RangeSelector,
   RichTextEditor,
+  SkillSelector,
   SpecialEquipmentSelector,
   SynergyLocationSelector,
   TagSelector,

@@ -2,7 +2,7 @@
   <editor-base
     itemKey="backgrounds"
     :checkDupes="['id', 'name']"
-    :checkEmpty="['id', 'name', 'description']"
+    :checkEmpty="['id', 'name', 'description', 'skills']"
   >
     <template v-slot="{ item }">
       <v-toolbar density="compact" color="primary" :title="item.name" />
@@ -10,6 +10,7 @@
         <v-row>
           <v-col><id-input v-model="item.id" /></v-col>
           <v-col><v-text-field label="Name" v-model="item.name" /></v-col>
+          <v-col><skill-selector :item="item" /></v-col>
         </v-row>
         <rich-text-editor title="Description" v-model="item.description" />
       </v-card-text>
