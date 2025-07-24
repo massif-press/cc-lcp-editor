@@ -94,17 +94,20 @@
                     label="LCP Version"
                   />
                 </v-col>
-                <v-col cols="5">
+                <v-col cols="4">
                   <v-text-field
                     v-model="lcp.lcp_manifest.website"
                     label="Website URL"
                   />
                 </v-col>
-                <v-col cols="5">
+                <v-col cols="4">
                   <v-text-field
                     v-model="lcp.lcp_manifest.image_url"
                     label="Preview Image URL"
                   />
+                </v-col>
+                <v-col cols="4">
+                  <i-dependency-builder :item="lcp.lcp_manifest" />
                 </v-col>
                 <v-col cols="12">
                   <v-textarea

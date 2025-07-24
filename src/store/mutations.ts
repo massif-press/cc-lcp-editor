@@ -10,7 +10,6 @@ export default {
       Object.keys(zip.files).map(async (file) => {
         const propname = zip.files[file].name.split('.')[0];
         const npcname = propname.slice(5);
-        console.log(npcname);
         if (propname.startsWith("npcc")){
           if (!state.lcp.npc_classes) state.lcp['npc_classes'] = {};
           state.lcp.npc_classes[npcname] = await getZipData(zip, zip.files[file].name);
