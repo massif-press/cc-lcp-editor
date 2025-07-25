@@ -2,6 +2,9 @@ export default {
   setLcp({ commit }: any, lcp: any): void {
     commit('SET_LCP', lcp);
   },
+  setDep({ commit }: any, lcp: any): void {
+    commit('SET_DEP', lcp);
+  },
   loadLcp({ commit }: any, file: any): void {
     commit('LOAD_LCP', file);
   },

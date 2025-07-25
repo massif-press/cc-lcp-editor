@@ -399,19 +399,19 @@
 <script lang="ts">
 import { useStore } from 'vuex';
 import { frames } from '@massif/lancer-data';
-import { mechType, mountType } from '../../../assets/enums';
+import { mechType, mountType, massif_lcps } from '../../../assets/enums';
 
 const extraFrames = [
-  {"id" : "mf_atlas", name : "Atlas"}, 
-  {"id" : "mf_caliban", name : "Caliban"},
-  {"id" : "mf_kidd", name : "Kidd"},
-  {"id" : "mf_zheng", name : "Zheng"},
-  {"id" : "mf_kobold", name : "Kobold"},
-  {"id" : "mf_sunzi", name : "Sunzi"},
-  {"id" : "mf_lich", name : "Lich"},
-  {"id" : "mf_emperor", name : "Emperor"},
-  {"id" : "mf_white_witch", name : "White Witch"},
-  {"id" : "mf_gilgamesh", name : "Gilgamesh"}
+  {"id" : "mf_kidd", name : "Kidd", origin : "Lancer Wallflower Data"},
+  {"id" : "mf_atlas", name : "Atlas", origin : "Lancer Long Rim Data"}, 
+  {"id" : "mf_caliban", name : "Caliban", origin : "Lancer Long Rim Data"},
+  {"id" : "mf_zheng", name : "Zheng", origin : "Lancer Long Rim Data"},
+  {"id" : "mf_kobold", name : "Kobold", origin : "Lancer Long Rim Data"},
+  {"id" : "mf_sunzi", name : "Sunzi", origin : "Lancer Long Rim Data"},
+  {"id" : "mf_lich", name : "Lich", origin : "Lancer Long Rim Data"},
+  {"id" : "mf_emperor", name : "Emperor", origin : "Lancer KTB Data"},
+  {"id" : "mf_white_witch", name : "White Witch", origin : "Lancer KTB Data"},
+  {"id" : "mf_gilgamesh", name : "Gilgamesh", origin : "Operation Winter Scar"}
 ];
 
 export default {
@@ -527,9 +527,11 @@ export default {
         var parentFrame;
         if (this.availableFrames && this.availableFrames.length){
           parentFrame = this.availableFrames.find((x : any) => (x.name === e.variant));
-          
         }
-        e.license_id = (parentFrame) ? (parentFrame["id"]) : "mf_blackbeard";
+        if (parentFrame) {
+          e.license_id = parentFrame["id"]
+          this.addDependency(parentFrame);
+        } else e.license_id = "mf_blackbeard";
       }
       for (const stat in e.stats) {
         if (!isNaN(Number(e.stats[stat])))
@@ -625,6 +627,17 @@ export default {
       this.y_pos = 0;
       this.isEdit = false;
     },
+    addDependency(frame) : void {
+      if (frame){
+        var mlcp = massif_lcps.find((l) => (l.name === frame.origin));
+        if (mlcp){
+          if (!this.$store.getters.lcp.dependencies) this.$store.dispatch('setDep', [JSON.parse(JSON.stringify(mlcp))]);
+          else if (!this.$store.getters.lcp.dependencies.find((l) => (l.name === frame.origin))){
+            this.$store.dispatch('setDep', [...this.$store.getters.lcp.dependencies, JSON.parse(JSON.stringify(mlcp))]);
+          }
+        }
+      }
+    }
   },
 };
 </script>

@@ -107,7 +107,9 @@
                   />
                 </v-col>
                 <v-col cols="4">
-                  <i-dependency-builder :item="lcp.lcp_manifest" />
+                  <v-btn large block color="primary darken-3" :to="`/editor/dependencies`" style="margin-top : 0.75rem">
+                    Manage Dependencies <span class="item-count" >({{ catLength("dependencies") }})</span >
+                  </v-btn>
                 </v-col>
                 <v-col cols="12">
                   <v-textarea
@@ -278,6 +280,7 @@ import JSZip from 'jszip';
 import { exportPrep } from './utilities/cleanup';
 import { saveAs } from 'file-saver';
 import { tags } from '@massif/lancer-data';
+import { massif_lcps } from '@/assets/enums';
 
 export default {
   name: 'Home',
@@ -355,6 +358,7 @@ export default {
       let missing: any[] = [];
       for (const key in this.lcp) {
         if (key.toLowerCase() === 'statuses') continue;
+        if (key.toLowerCase() === 'dependencies') continue;
         if (Array.isArray(this.lcp[key]))
           missing = [
             ...missing,
@@ -449,9 +453,10 @@ export default {
         .replaceAll(' ', '-')}_${this.lcp.lcp_manifest.version}.lcp`;
       this.prepWeapons();
       this.prepBackgrounds();
+      this.prepDependencies();
       const zip = new JSZip();
       Object.keys(this.lcp).forEach((key) => {
-        zip.file(`${key}.json`, exportPrep(this.lcp[key]));
+        if (key.toLowerCase() != "dependencies") zip.file(`${key}.json`, exportPrep(this.lcp[key]));
       });
       zip.generateAsync({ type: 'blob' }).then(function (blob) {
         saveAs(blob, filename);
@@ -476,6 +481,18 @@ export default {
       this.lcp.backgrounds.forEach((b: any) => {
         b.skills = b.skills.map(s => (s && s.id) ? s.id : s);
       });
+    },
+    prepDependencies() {
+      if (!this.lcp.dependencies) return;
+      // remove skill additional info from each skill
+      this.lcp.dependencies.forEach((d: any) => {
+        var mlcp = massif_lcps.find((x) => x["name"] == d.name);
+        if (mlcp){
+          d.version = mlcp.version;
+          d.link = mlcp.link;
+        }
+      });
+      this.lcp.lcp_manifest.dependencies = JSON.parse(JSON.stringify(this.lcp.dependencies));
     },
     generateIds() {
       let start = Date.now();

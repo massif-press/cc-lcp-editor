@@ -4,7 +4,6 @@ import * as DamageSelector from './DamageSelector.vue';
 import * as IActionBuilder from './IActionBuilder.vue';
 import * as IBonusBuilder from './IBonusBuilder.vue';
 import * as ICounterBuilder from './ICounterBuilder.vue';
-import * as IDependencyBuilder from './IDependencyBuilder.vue';
 import * as IDeployableBuilder from './IDeployableBuilder.vue';
 import * as IFrameTraitBuilder from './IFrameTraitBuilder.vue';
 import * as IntegratedSelector from './IntegratedSelector.vue';
@@ -30,7 +29,6 @@ export {
   IBonusBuilder,
   ICounterBuilder,
   IDeployableBuilder,
-  IDependencyBuilder,
   IFrameTraitBuilder,
   IntegratedSelector,
   IProfileBuilder,

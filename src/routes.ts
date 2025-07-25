@@ -25,6 +25,11 @@ export default [
     component: () => import('./views/editors/Backgrounds.vue'),
   },
   {
+    path: '/editor/dependencies',
+    name: 'Dependencies Editor',
+    component: () => import('./views/editors/Dependencies.vue'),
+  },
+  {
     path: '/editor/environments',
     name: 'Environment Editor',
     component: () => import('./views/editors/Environments.vue'),

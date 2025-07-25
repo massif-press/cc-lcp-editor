@@ -22,11 +22,15 @@ export default {
       })
     );
     if (!state.lcp.lcp_manifest) state.lcp.lcp_manifest = {};
+    if (!state.lcp.dependencies && state.lcp.lcp_manifest.dependencies) state.lcp.dependencies = JSON.parse(JSON.stringify(state.lcp.lcp_manifest.dependencies));
     state.loaded = true;
   },
   SET_LCP(state: any, payload: any) {
     state.lcp = payload;
     state.loaded = true;
+  },
+  SET_DEP(state: any, payload: any) {
+    state.lcp.dependencies = payload;
   },
   CLEAR_LCP(state: any): void {
     state.lcp = {};

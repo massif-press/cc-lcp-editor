@@ -100,7 +100,7 @@
 
 <script lang="ts">
 import { useStore } from 'vuex';
-import { synergyLocations, activationTypes } from '../../assets/enums';
+import { synergyLocations, activationTypes, massif_lcps} from '../../assets/enums';
 import { exportPrep } from '../utilities/cleanup';
 
 function getDuplicateProperties(arr: any[], prop: string) {
@@ -150,9 +150,10 @@ export default {
       });
       this.checkEmpty.forEach((prop: string) => {
         getEmptyProperties(this.lcp[this.itemKey], prop).forEach((p) => {
-          arr.push(
-            `Item with missing ${prop} field (${p.id || p.name || '--'})`
-          );
+          if (this.itemKey != "dependencies" || !(massif_lcps.find((x) => x["name"] == p.name)))
+            arr.push(
+              `Item with missing ${prop} field (${p.id || p.name || '--'})`
+            );
         });
       });
 
@@ -163,6 +164,16 @@ export default {
               arr.push(`Item with missing damage field (${p.id || p.name || '--'})`);
             if (!p.range)
               arr.push(`Item with missing range field (${p.id || p.name || '--'})`);
+          }
+        });
+      }
+
+      if (this.itemKey == "dependencies"){
+        var regex = /^(\*|0|[1-9]\d*)\.(\*|0|[1-9]\d*)\.(\*|0|[1-9]\d*)(?:-((?:\*|0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:\*|0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/
+        this.lcp[this.itemKey].forEach(d => {
+          if (d && d.version && !(massif_lcps.find((x) => x["name"] == d.name))) {
+            var cleaned = d.version.startsWith("=") ? d.version.slice(1) : d.version;
+            if (regex.test(cleaned) == false) arr.push(`Item with invalid version (must match semver) (${d.name || d.version})`);
           }
         });
       }
