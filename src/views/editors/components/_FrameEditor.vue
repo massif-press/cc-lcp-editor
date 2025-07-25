@@ -401,6 +401,19 @@ import { useStore } from 'vuex';
 import { frames } from '@massif/lancer-data';
 import { mechType, mountType } from '../../../assets/enums';
 
+const extraFrames = [
+  {"id" : "mf_atlas", name : "Atlas"}, 
+  {"id" : "mf_caliban", name : "Caliban"},
+  {"id" : "mf_kidd", name : "Kidd"},
+  {"id" : "mf_zheng", name : "Zheng"},
+  {"id" : "mf_kobold", name : "Kobold"},
+  {"id" : "mf_sunzi", name : "Sunzi"},
+  {"id" : "mf_lich", name : "Lich"},
+  {"id" : "mf_emperor", name : "Emperor"},
+  {"id" : "mf_white_witch", name : "White Witch"},
+  {"id" : "mf_gilgamesh", name : "Gilgamesh"}
+];
+
 export default {
   name: 'frame-editor',
   props: { manufacturer: { type: Object, required: true } },
@@ -469,9 +482,9 @@ export default {
     availableFrames(): object[] {
       const store = useStore();
       if (store.getters.lcp.frames && store.getters.lcp.frames.length)
-        return [...store.getters.lcp.frames.map((x: any) => x), ...frames.map((x: any) => x)];
+        return [...store.getters.lcp.frames.map((x: any) => x), ...frames.map((x: any) => x), ...extraFrames.map((x: any) => x)];
       else 
-        return [...frames.map((x: any) => x)];
+        return [...frames.map((x: any) => x), ...extraFrames.map((x: any) => x),];
     },
     availableVariants(): string[] {
       return ['', ...this.availableFrames.map((x: any) => x.name)];
@@ -511,46 +524,12 @@ export default {
         y_pos: this.y_pos,
       };
       if (e.variant && e.variant !== e.name){
-        let parentFrame = undefined;
+        var parentFrame;
         if (this.availableFrames && this.availableFrames.length){
           parentFrame = this.availableFrames.find((x : any) => (x.name === e.variant));
+          
         }
-        if (!parentFrame){
-          switch (e.variant.toLowerCase()){
-            case "atlas":
-              e.license_id = "mf_atlas";
-              break;
-			case "caliban":
-              e.license_id = "mf_caliban";
-              break;
-            case "kidd":
-              e.license_id = "mf_kidd";
-              break;
-            case "zheng":
-              e.license_id = "mf_zheng";
-              break;
-            case "kobold":
-              e.license_id = "mf_kobold";
-              break;
-            case "sunzi":
-              e.license_id = "mf_sunzi";
-              break;
-            case "lich":
-              e.license_id = "mf_lich";
-              break;
-            case "emperor":
-              e.license_id = "mf_emperor";
-              break;
-            case "white witch":
-              e.license_id = "mf_white_witch";
-              break;
-            case "gilgamesh":
-              e.license_id = "mf_gilgamesh";
-              break;
-            default:
-              break;
-          }
-        } else { e.license_id = parentFrame.license_id; }
+        e.license_id = (parentFrame) ? (parentFrame["id"]) : "mf_blackbeard";
       }
       for (const stat in e.stats) {
         if (!isNaN(Number(e.stats[stat])))
