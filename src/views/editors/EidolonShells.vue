@@ -36,7 +36,7 @@
             <v-card-text>
               <v-row density="compact" justify="space-around" align="end">
                 <v-col cols="3">
-                  <id-input v-model="selected.id" />
+                  <id-input v-model="selected.id" :name="selected.name"/>
                 </v-col>
                 <v-col>
                   <v-text-field

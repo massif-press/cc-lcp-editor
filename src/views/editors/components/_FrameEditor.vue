@@ -18,7 +18,7 @@
           <v-col>
             <v-row justify="space-around" align="end">
               <v-col cols="3">
-                <id-input v-model="id" />
+                <id-input v-model="id" :name="name"/>
               </v-col>
               <v-col cols="7">
                 <v-text-field label="Name" hide-details v-model="name" />

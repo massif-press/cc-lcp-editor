@@ -507,15 +507,11 @@ export default {
           count++;
           let tId = '';
           if (item.name)
-            tId = `${this.lcp.lcp_manifest.item_prefix}_${key
-              .toLowerCase()
-              .replaceAll(' ', '_')}_${item.name
-              .toLowerCase()
-              .replaceAll(' ', '_')}`;
+            tId = `${this.lcp.lcp_manifest.item_prefix}_${item.name.toLowerCase().replace(/[^a-zA-Z]+/g, "_").replace(/_+/g, "_")}`;
           else
-            tId = `${this.lcp.lcp_manifest.item_prefix}_${key
-              .toLowerCase()
-              .replaceAll(' ', '_')}`;
+            tId = `${this.lcp.lcp_manifest.item_prefix}_${key.toLowerCase().replace(/[^a-zA-Z]+/g, "_").replace(/_+/g, "_")}`;
+          console.log(tId)
+          console.log(item.name.replace(/[^a-zA-Z]+/g, "_").replace(/_+/g, "_"))
           let dupes = seenIds.filter((x) => x.includes(tId));
           if (dupes.length) tId = `${tId}_${dupes.length}`;
           seenIds.push(item.id);

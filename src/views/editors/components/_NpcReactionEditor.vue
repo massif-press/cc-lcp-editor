@@ -11,7 +11,7 @@
       <v-card-text>
         <v-row justify="space-around" align="end">
           <v-col>
-            <id-input v-model="id" />
+            <id-input v-model="id" :name="name"/>
           </v-col>
           <v-col>
             <v-text-field label="Name" hide-details v-model="name" />

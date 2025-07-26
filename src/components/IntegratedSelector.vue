@@ -1,4 +1,4 @@
-<template>
+f<template>
   <v-select
     label="Integrated Equipment"
     :items="equipment"

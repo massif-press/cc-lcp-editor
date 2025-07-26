@@ -39,7 +39,7 @@
         <v-card-text>
           <v-row justify="space-around" align="center">
             <v-col cols="4">
-              <id-input v-model="id" />
+              <id-input v-model="id" :name="name"/>
             </v-col>
             <v-col>
               <v-text-field label="Name" hide-details v-model="name" />

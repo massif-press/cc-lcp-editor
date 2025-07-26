@@ -13,7 +13,7 @@
       >
       <v-card-text>
         <v-row class="mb-1">
-          <v-col><id-input v-model="item.id" /></v-col>
+          <v-col><id-input v-model="item.id" :name="item.name"/></v-col>
           <v-col><v-text-field label="Name" v-model="item.name" /></v-col>
           <v-col>
             <v-select
