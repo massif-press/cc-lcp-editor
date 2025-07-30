@@ -499,20 +499,24 @@ export default {
       this.idOutput = `Starting ID generation process...\n`;
       const seenIds: string[] = [];
       const replacements: { oldId: string; newId: string }[] = [];
+      const digits = [["1", "one"], ["2", "two"], ["3", "three"], ["4", "four"], ["5", "five"], ["6", "six"], ["7", "seven"], ["8", "eight"], ["9", "nine"], ["0", "zero"]];
       let count = 0;
       for (const key in this.lcp) {
         if (!Array.isArray(this.lcp[key])) continue;
-        if (key.toLowerCase() === 'manufacturers') continue;
+        if (key.toLowerCase() === 'manufacturers' || key.toLowerCase() === 'statuses') continue;
         this.lcp[key].forEach((item: any, index: number) => {
           count++;
           let tId = '';
-          if (item.name)
-            tId = `${this.lcp.lcp_manifest.item_prefix}_${item.name.toLowerCase().replace(/[^a-zA-Z]+/g, "_").replace(/_+/g, "_")}`;
+          if (item.name) {
+            var nid = item.name;
+            for (const d of digits) {
+              nid = nid.replaceAll(d[0], d[1]);
+            }
+            tId = `${this.lcp.lcp_manifest.item_prefix}_${nid.toLowerCase().replace(/[^a-zA-Z]+/g, "_").replace(/_+/g, "_")}`;
+          }
           else
             tId = `${this.lcp.lcp_manifest.item_prefix}_${key.toLowerCase().replace(/[^a-zA-Z]+/g, "_").replace(/_+/g, "_")}`;
-          console.log(tId)
-          console.log(item.name.replace(/[^a-zA-Z]+/g, "_").replace(/_+/g, "_"))
-          let dupes = seenIds.filter((x) => x.includes(tId));
+          let dupes = seenIds.filter((x) => x !== undefined).filter((x) => x.includes(tId));
           if (dupes.length) tId = `${tId}_${dupes.length}`;
           seenIds.push(item.id);
           replacements.push({ oldId: item.id, newId: tId });
