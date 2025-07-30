@@ -501,6 +501,7 @@ export default {
       const replacements: { oldId: string; newId: string }[] = [];
       const digits = [["1", "one"], ["2", "two"], ["3", "three"], ["4", "four"], ["5", "five"], ["6", "six"], ["7", "seven"], ["8", "eight"], ["9", "nine"], ["0", "zero"]];
       let count = 0;
+      let unchanged = 0;
       for (const key in this.lcp) {
         if (!Array.isArray(this.lcp[key])) continue;
         if (key.toLowerCase() === 'manufacturers' || key.toLowerCase() === 'statuses') continue;
@@ -520,6 +521,9 @@ export default {
           if (dupes.length) tId = `${tId}_${dupes.length}`;
           seenIds.push(item.id);
           replacements.push({ oldId: item.id, newId: tId });
+          if (item.id === tId) {
+            unchanged++;
+          }
           this.lcp[key][index].id = tId;
         });
       }
@@ -533,7 +537,7 @@ export default {
       this.store.dispatch('setLcp', JSON.parse(json));
 
       this.idOutput += `...Complete!\n`;
-      this.idOutput += `Processed ${count} item IDs in ${Date.now() - start}ms`;
+      this.idOutput += `Processed ${count} item IDs in ${Date.now() - start}ms (${unchanged} unchanged)`;
     },
   },
 };
