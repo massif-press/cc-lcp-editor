@@ -454,6 +454,7 @@ export default {
       this.prepWeapons();
       this.prepBackgrounds();
       this.prepDependencies();
+      this.removeWhitespace();
       const zip = new JSZip();
       Object.keys(this.lcp).forEach((key) => {
         if (key.toLowerCase() != "dependencies") zip.file(`${key}.json`, exportPrep(this.lcp[key]));
@@ -493,6 +494,12 @@ export default {
         }
       });
       this.lcp.lcp_manifest.dependencies = JSON.parse(JSON.stringify(this.lcp.dependencies));
+    },
+    removeWhitespace(){
+      let json = JSON.stringify(this.lcp);
+      json = json.replaceAll("<p></p>", "");
+      json = json.replaceAll("<div></div>", "");
+      this.store.dispatch('setLcp', JSON.parse(json));
     },
     generateIds() {
       let start = Date.now();
