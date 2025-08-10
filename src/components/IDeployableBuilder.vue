@@ -465,6 +465,7 @@ export default {
       this.bonuses = [];
       this.synergies = [];
       this.counters = [];
+      this.isEdit = false;
     },
   },
 };
