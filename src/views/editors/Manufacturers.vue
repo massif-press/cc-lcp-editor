@@ -43,21 +43,58 @@
           <sourceless-equipment exotic />
         </v-container>
 
-        <v-container v-else-if="selected">
+        <v-container v-else-if="selected" :key="idSwapOutput">
           <v-expansion-panels v-model="panels" focusable accordion multiple>
             <v-expansion-panel>
               <v-expansion-panel-title>Manufacturer Information</v-expansion-panel-title>
               <v-expansion-panel-text>
                 <v-alert outlined color="primary" class="mt-2">
-                  <v-row density="compact" justify="space-around">
+                  <v-row density="compact" justify="space-around" align="center">
                     <v-col cols="3">
                       <v-text-field
                         v-model="selected.id"
                         hide-details
                         label="ID"
-                        :readonly="isCore(selected.id)" />
+                        readonly />
                     </v-col>
-                    <v-col cols="9">
+                    <v-col cols="2">
+                    <v-btn v-if="!isCore(selected.id)" color="surface">Change ID
+                      <v-dialog v-model="idSwapDialog" activator="parent" width="50vw">
+                        <v-card>
+                          <v-card-title>ID Replacement Tool</v-card-title>
+                          <v-divider />
+                          <v-card-text>
+                            This tool will attempt to replace all instances of the previous manufacturer ID with the new one, 
+                            allowing you to change the shortened version of how the manufacturer appears in COMP/CON. 
+                            <br/><br/>Unlike the generic "Replace ID" tool, this directly modifies items that are under the given manufacturer in the LCP, as well as the manufacturer itself, and is therefore entirely safe to use.
+                          </v-card-text>
+                          <v-card-text class="text-center">
+                            <v-text-field color="primary" label="Old ID" v-model="selected.id" readonly></v-text-field>
+                            <v-text-field color="primary" label="New ID" v-model="newID"></v-text-field>
+                            <v-btn color="primary" @click="replaceID()"
+                              >Replace IDs</v-btn
+                            >
+                            <div v-show="idSwapOutput">
+                              <div class="text-caption text-left" v-text="`output`" />
+                              <v-textarea
+                                v-model="idSwapOutput"
+                                auto-grow
+                                rows="2"
+                                readonly
+                              />
+                            </div>
+                          </v-card-text>
+                          <v-divider />
+                          <v-card-actions>
+                            <v-btn color="secondary" @click="idSwapDialog = false"
+                              >Close</v-btn
+                            >
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+                    </v-btn>
+                  </v-col>
+                    <v-col cols="7">
                       <v-text-field
                         v-model="selected.name"
                         hide-details
@@ -231,7 +268,7 @@
 </template>
 
 <script lang="ts">
-import _ from 'lodash';
+import _, { property } from 'lodash';
 import { manufacturers } from '@massif/lancer-data';
 import { useStore } from 'vuex';
 
@@ -255,7 +292,10 @@ export default {
     core_manufacturers: manufacturers,
     selected: null as any,
     importKey: '',
-    hasImportedError : false
+    hasImportedError : false,
+    idSwapDialog: false,
+    idSwapOutput: '',
+    newID: '',
   }),
   computed: {
     store() {
@@ -354,6 +394,43 @@ export default {
         }
       }
       reader.readAsText(file);
+    },
+    replaceID() {
+      /* makes a bold assumption that the only time this manufacturer is ever referenced 
+         is in its own ID, and the source fields of all other top level items
+         should be safe - since manufacturers should only ever be referenced via `source` fields
+      */
+      let start = Date.now();
+      let count = 1;
+      this.idSwapOutput = `Starting ID replacement process\n`;
+      if (!this.newID || this.newID === ""){
+        this.idSwapOutput += `Missing ID to replace with, replacement cancelled`;
+        return;
+      } else if (this.newID === this.selected.id) {
+        this.idSwapOutput += `New ID is the same as old ID, replacement cancelled`;
+        return;
+      }
+
+      this.idSwapOutput += `Replacing all instances of "${this.selected.id} with "${this.newID}"`;
+  
+      //iterate through all items and replace seen IDs with their generated counterparts
+      for (const key in this.lcp) {
+        if (!Array.isArray(this.lcp[key])) continue;
+        this.lcp[key].forEach((item: any, index: number) => {
+          if (!item.source) return;
+          if (item.source.toLowerCase() === this.selected.id.toLowerCase()) {
+            item.source = this.newID;
+            count++;
+          }
+        });
+      }
+      for (var item of this.lcp.manufacturers) {
+        if (item.id === this.selected.id) item.id = this.newID;
+      }
+      this.selected.id = this.newID;
+      this.idSwapOutput += `...Complete!\n`;
+      this.idSwapOutput += `Replacement took ${Date.now() - start}ms (${count} replacements made)`;
+      
     },
   },
 };

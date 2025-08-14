@@ -18,7 +18,7 @@
           <v-col>
             <v-row justify="space-around" align="end">
               <v-col cols="3">
-                <id-input v-model="id" :name="name"/>
+                <id-input v-model="id" :name="name" :isFrame="name"/>
               </v-col>
               <v-col cols="7">
                 <v-text-field label="Name" hide-details v-model="name" />
@@ -523,7 +523,9 @@ export default {
         image_url: this.image_url,
         y_pos: this.y_pos,
       };
-      if (e.variant && e.variant !== e.name){
+      if (e.variant === e.name){
+        e.variant = "";
+      } else if (e.variant){
         var parentFrame;
         if (this.availableFrames && this.availableFrames.length){
           parentFrame = this.availableFrames.find((x : any) => (x.name === e.variant));
@@ -531,7 +533,9 @@ export default {
         if (parentFrame) {
           e.license_id = parentFrame["id"]
           this.addDependency(parentFrame);
-        } else e.license_id = "mf_blackbeard";
+        } else e.license_id = e.variant;
+      } else {
+        e.license_id = e.id;
       }
       for (const stat in e.stats) {
         if (!isNaN(Number(e.stats[stat])))

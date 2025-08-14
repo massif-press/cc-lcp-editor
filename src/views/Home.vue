@@ -593,9 +593,12 @@ export default {
       this.idOutput += `Processed ${count} item IDs in ${Date.now() - start}ms (${unchanged} unchanged)`;
     },
     replaceID() {
+      /* this has to be an ugly find/replace, since there's no clean alternative that handles nested IDs well
+         - you'd simply need to check too many different fields (tags, special equipment, etc.)
+         if somebody wants to write that one, by all means, please, i'll merge it -- riker
+      */
       let start = Date.now();
       this.idSwapOutput = `Starting ID replacement process\n`;
-      var prefix = this.lcp.lcp_manifest.item_prefix ? this.lcp.lcp_manifest.item_prefix + "_" : "";
       if (!this.oldID || this.oldID === "") {
         this.idSwapOutput += `Missing ID to replace, replacement cancelled`;
         return;
