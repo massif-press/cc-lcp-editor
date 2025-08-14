@@ -240,6 +240,48 @@
           </div>
         </v-col>
       </v-row>
+      <v-row align="center" justify="space-around">
+        <v-col cols="auto"
+          ><v-btn color="primary"
+            >Replace ID
+            <v-dialog v-model="idSwapDialog" activator="parent" width="50vw">
+              <v-card>
+                <v-card-title>ID Replacement Tool</v-card-title>
+                <v-divider />
+                <v-card-text>
+                  This tool will attempt to replace all instances of a given ID with a new one.
+                  This makes no guarantee about the stability of your LCP, so use with caution.
+                  It simply performs a string replacement on the LCP JSON, which may cause issues
+                  if the exact string of the ID is used in other places. 
+                  <br/><br/><b>Please make a backup of your LCP before using this tool.</b>
+                </v-card-text>
+                <v-card-text class="text-center">
+                  <v-text-field color="primary" label="Old ID" v-model="oldID"></v-text-field>
+                  <v-text-field color="primary" label="New ID" v-model="newID"></v-text-field>
+                  <v-btn color="primary" @click="replaceID()"
+                    >Replace IDs</v-btn
+                  >
+                  <div v-show="idSwapOutput">
+                    <div class="text-caption text-left" v-text="`output`" />
+                    <v-textarea
+                      v-model="idSwapOutput"
+                      auto-grow
+                      rows="2"
+                      readonly
+                    />
+                  </div>
+                </v-card-text>
+                <v-divider />
+                <v-card-actions>
+                  <v-btn color="secondary" @click="idSwapDialog = false"
+                    >Close</v-btn
+                  >
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-btn>
+        </v-col>
+      </v-row>
       <div class="pa-4 mt-6">
         <v-alert
           v-if="errors.length > 0"
@@ -306,6 +348,10 @@ export default {
     ],
     idDialog: false,
     idOutput: '',
+    idSwapDialog: false,
+    idSwapOutput: '',
+    oldID: '',
+    newID: '',
   }),
   computed: {
     store() {
@@ -545,6 +591,37 @@ export default {
 
       this.idOutput += `...Complete!\n`;
       this.idOutput += `Processed ${count} item IDs in ${Date.now() - start}ms (${unchanged} unchanged)`;
+    },
+    replaceID() {
+      let start = Date.now();
+      this.idSwapOutput = `Starting ID replacement process\n`;
+      var prefix = this.lcp.lcp_manifest.item_prefix ? this.lcp.lcp_manifest.item_prefix + "_" : "";
+      if (!this.oldID || this.oldID === "") {
+        this.idSwapOutput += `Missing ID to replace, replacement cancelled`;
+        return;
+      } else if (!this.newID || this.newID === ""){
+        this.idSwapOutput += `Missing ID to replace with, replacement cancelled`;
+        return;
+      }
+      var oid = "\"" + this.oldID + "\"";
+      var nid = "\"" + this.newID + "\"";
+      
+      this.idSwapOutput += `Replacing all instances of ${oid} with ${nid}\n`;
+  
+      //iterate through all items and replace seen IDs with their generated counterparts
+      let json = JSON.stringify(this.lcp);
+      var count = 0;
+      json = json.replaceAll(oid, (function(x){count+=1;return nid}));
+      
+      this.store.dispatch('setLcp', JSON.parse(json));
+
+      if (count == 0) {
+        this.idSwapOutput += `...No replacements made, ID not found\n`; 
+        this.idSwapOutput += `Attempt took ${Date.now() - start}ms`;
+      } else {
+        this.idSwapOutput += `...Complete!\n`;
+        this.idSwapOutput += `Replacement took ${Date.now() - start}ms (${count} replacements made)`;
+      }
     },
   },
 };
