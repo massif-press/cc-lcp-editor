@@ -1,5 +1,15 @@
 <template>
-  <v-text-field class="id_input"
+  <div v-if="wasEmpty">
+    <v-text-field 
+      label="ID"
+      hide-details
+      v-model="value"
+      prepend-icon="mdi-ab-testing"
+    />
+  </div>
+  <div v-else>
+  <v-text-field
+    class="id_input"
     label="ID"
     hide-details
     v-model="value"
@@ -47,6 +57,7 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+</div>
 </template>
 <style scoped>
 .id_input * {
@@ -68,6 +79,7 @@ export default {
     oldID: '',
     newID: '',
     idSwapOutput: '',
+    wasEmpty: false,
   }),
   props: {
     modelValue: {
@@ -108,11 +120,14 @@ export default {
         return true;
       }
       return false;
-    },
+    }
   },
   mounted() {
     if (this.name) {
       this.newID = this.convertName();
+    }
+    if (this.value === '' || !this.value) {
+      this.wasEmpty = true;
     }
   },
   methods: {
