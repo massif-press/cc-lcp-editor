@@ -333,6 +333,7 @@ export default {
       'actions',
       'backgrounds',
       'pilot_gear',
+      'bonds',
       'reserves',
       'skills',
       'statuses',

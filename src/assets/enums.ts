@@ -503,6 +503,8 @@ const mechType = [
   'Defender',
 ];
 
+const frequencyOptions = ['Unlimited', '1/round', '1/encounter', '1/mission'];
+
 const npcRole = [
   'Striker',
   'Artillery',
@@ -569,6 +571,7 @@ export {
   rangeType,
   damageType,
   mechType,
+  frequencyOptions,
   npcRole,
   massif_lcps
 };

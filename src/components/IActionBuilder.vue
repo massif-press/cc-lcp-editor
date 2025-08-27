@@ -169,6 +169,7 @@
 <script lang="ts">
 import SynergySelector from './SynergyLocationSelector.vue';
 import RangeSelector from './RangeSelector.vue';
+import { frequencyOptions } from '../assets/enums';
 
 export default {
   name: 'action-builder',
@@ -186,9 +187,9 @@ export default {
     range: [],
     tech_attack: false,
     frequency: 'Unlimited',
+    frequencies: frequencyOptions,
     init: '',
     trigger: '',
-    frequencies: ['Unlimited', '1/round', '1/encounter', '1/mission'],
     isEdit: false,
     editIndex: -1,
   }),

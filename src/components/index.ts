@@ -6,8 +6,11 @@ import * as IBonusBuilder from './IBonusBuilder.vue';
 import * as ICounterBuilder from './ICounterBuilder.vue';
 import * as IDeployableBuilder from './IDeployableBuilder.vue';
 import * as IFrameTraitBuilder from './IFrameTraitBuilder.vue';
+import * as IIdealBuilder from './IIdealBuilder.vue';
 import * as IntegratedSelector from './IntegratedSelector.vue';
+import * as IPowerBuilder from './IPowerBuilder.vue';
 import * as IProfileBuilder from './IProfileBuilder.vue';
+import * as IQuestionBuilder from './IQuestionBuilder.vue';
 import * as IRankBuilder from './IRankBuilder.vue';
 import * as ISynergyBuilder from './ISynergyBuilder.vue';
 import * as RangeSelector from './RangeSelector.vue';
@@ -30,8 +33,11 @@ export {
   ICounterBuilder,
   IDeployableBuilder,
   IFrameTraitBuilder,
+  IIdealBuilder,
   IntegratedSelector,
+  IPowerBuilder,
   IProfileBuilder,
+  IQuestionBuilder,
   IRankBuilder,
   ISynergyBuilder,
   RangeSelector,

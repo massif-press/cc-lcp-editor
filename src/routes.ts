@@ -65,6 +65,11 @@ export default [
     component: () => import('./views/editors/PilotGear.vue'),
   },
   {
+    path: '/editor/bonds',
+    name: 'Bonds Editor',
+    component: () => import('./views/editors/Bonds.vue'),
+  },
+  {
     path: '/editor/talents',
     name: 'Talent Editor',
     component: () => import('./views/editors/Talents.vue'),
