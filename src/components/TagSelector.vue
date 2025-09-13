@@ -44,7 +44,6 @@
                 <!-- <tiered-stat-input v-if="npc" v-model="tag.val" title="Value" /> -->
                 <v-text-field
                   v-model="tag.val"
-                  type="number"
                   label="Value"
                   hide-details
                 />
