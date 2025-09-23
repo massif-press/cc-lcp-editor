@@ -169,7 +169,7 @@
             </v-row>
             <v-row>
               <v-col>
-                <rich-text-editor title="Detail" v-model="detail" npc />
+                <rich-text-editor title="Detail" v-model="detail" />
               </v-col>
             </v-row>
             <v-row align="center">
@@ -264,7 +264,6 @@
                 <v-text-field
                   v-else
                   v-model="$data[k]"
-                  type="number"
                   :label="k.replaceAll('_', ' ')"
                   density="compact"
                   clearable
@@ -274,8 +273,8 @@
             </v-row>
             <v-divider class="my-4" />
             <v-row density="compact" align="center">
-              <v-col><i-action-builder :item="this" ::npc="npc" /></v-col>
-              <v-col><i-bonus-builder :item="this" :npc="npc" /></v-col>
+              <v-col><i-action-builder :item="this"/></v-col>
+              <v-col><i-bonus-builder :item="this"/></v-col>
               <v-col><i-counter-builder :item="this" /></v-col>
             </v-row>
           </v-card-text>
