@@ -9,7 +9,8 @@
         class="mx-1"
         @click="edit(tag, i)"
       >
-        {{ (tag.val) ? ((tag.name.includes("{VAL}")) ? tag.name.replace("{VAL}", tag.val) : (tag.name + ", " + tag.val)) : (tag.name)}}
+        {{ (!tag.name) ? ((tag.val) ? (tag.id + ", " + tag.val) : (tag.id)) : 
+          ((tag.val) ? ((tag.name.includes("{VAL}")) ? tag.name.replace("{VAL}", tag.val) : (tag.name + ", " + tag.val)) : (tag.name))}}
       </v-chip>
       <v-menu
         v-model="menu"
@@ -30,9 +31,18 @@
           <v-card-text>
             <v-row justify="space-around" align="center">
               <v-col cols="7">
-                <v-autocomplete
+                <v-autocomplete v-if="tag.name"
                   v-model="tag"
                   item-title="name"
+                  item-value="id"
+                  label="Tag"
+                  :items="tags"
+                  hide-details
+                  return-object
+                />
+                <v-autocomplete v-else
+                  v-model="tag"
+                  item-title="id"
                   item-value="id"
                   label="Tag"
                   :items="tags"
