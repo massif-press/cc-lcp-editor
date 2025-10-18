@@ -546,6 +546,9 @@ export default {
       let json = JSON.stringify(this.lcp);
       json = json.replaceAll("<p></p>", "");
       json = json.replaceAll("<div></div>", "");
+      json = json.replaceAll("<p>", "");
+      json = json.replaceAll("</p>", "<br/>");
+      json = json.replaceAll(/<br\/>\"/g, "\"");
       this.store.dispatch('setLcp', JSON.parse(json));
     },
     generateIds() {
