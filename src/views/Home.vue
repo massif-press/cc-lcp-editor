@@ -70,64 +70,146 @@
             <v-col cols="auto"><div class="text-h6">Manifest</div></v-col>
             <v-col><v-divider /></v-col>
           </v-row>
-          <v-row>
+          <v-row density="compact" justify="space-around">
+            <v-col cols="3">
+              <v-text-field v-model="lcp.lcp_manifest.name" label="Name" />
+            </v-col>
+            <v-col cols="3">
+              <v-text-field
+                v-model="lcp.lcp_manifest.author"
+                label="Author"
+              />
+            </v-col>
+            <v-col cols="2">
+              <v-text-field
+                v-model="lcp.lcp_manifest.item_prefix"
+                label="Item ID Prefix"
+              />
+            </v-col>
+            <v-col cols="2">
+              <v-text-field
+                v-model="lcp.lcp_manifest.version"
+                label="LCP Version"
+              />
+            </v-col>
+            <v-col cols="6">
+              <v-text-field
+                v-model="lcp.lcp_manifest.website"
+                label="Website URL"
+              />
+            </v-col>
+            <v-col cols="6">
+              <v-text-field
+                v-model="lcp.lcp_manifest.image_url"
+                label="Preview Image URL"
+              />
+            </v-col>
+          </v-row>
+          <v-row density="compact" justify="space-around">
             <v-col>
-              <v-row density="compact" justify="space-around">
-                <v-col cols="3">
-                  <v-text-field v-model="lcp.lcp_manifest.name" label="Name" />
-                </v-col>
-                <v-col cols="3">
-                  <v-text-field
-                    v-model="lcp.lcp_manifest.author"
-                    label="Author"
-                  />
-                </v-col>
-                <v-col cols="2">
-                  <v-text-field
-                    v-model="lcp.lcp_manifest.item_prefix"
-                    label="Item ID Prefix"
-                  />
-                </v-col>
-                <v-col cols="2">
-                  <v-text-field
-                    v-model="lcp.lcp_manifest.version"
-                    label="LCP Version"
-                  />
-                </v-col>
-                <v-col cols="4">
-                  <v-text-field
-                    v-model="lcp.lcp_manifest.website"
-                    label="Website URL"
-                  />
-                </v-col>
-                <v-col cols="4">
-                  <v-text-field
-                    v-model="lcp.lcp_manifest.image_url"
-                    label="Preview Image URL"
-                  />
-                </v-col>
-                <v-col cols="4">
-                  <v-btn large block color="primary darken-3" :to="`/editor/dependencies`" style="margin-top : 0.75rem">
-                    Manage Dependencies <span class="item-count" >({{ catLength("dependencies") }})</span >
-                  </v-btn>
-                </v-col>
-                <v-col cols="12">
-                  <v-textarea
-                    v-model="lcp.lcp_manifest.description"
-                    auto-grow
-                    rows="3"
-                    label="Description"
-                  />
-                </v-col>
-              </v-row>
+              <v-textarea
+                v-model="lcp.lcp_manifest.description"
+                auto-grow
+                rows="3"
+                label="Description"
+              />
             </v-col>
             <v-col v-show="!!lcp.lcp_manifest.image_url" cols="auto">
-              Image Preview
               <v-img
                 :src="lcp.lcp_manifest.image_url"
-                max-width="300"
-                contain
+                width="5vw"
+                max-height="5vw"
               />
+            </v-col>
+          </v-row>
+          <v-row density="compact" justify="space-around">
+            <v-col cols="auto"
+              ><v-btn color="primary" :disabled="!lcp.lcp_manifest.item_prefix"
+                >Standardize IDs
+                <v-dialog v-model="idDialog" activator="parent" width="50vw">
+                  <v-card>
+                    <v-card-title>ID Standardization Tool</v-card-title>
+                    <v-divider />
+                    <v-card-text>
+                      This tool will attempt to bring all item IDs into the Massif
+                      style (<code>prefix_item_name</code>). This is not necessary,
+                      but useful for human readability and future compatibility (eg.
+                      from a preview LCP to an official release)
+                    </v-card-text>
+                    <v-card-text class="text-center">
+                      <v-btn color="primary" @click="generateIds()"
+                        >Generate IDs</v-btn
+                      >
+                      <div v-show="idOutput">
+                        <div class="text-caption text-left" v-text="`output`" />
+                        <v-textarea
+                          v-model="idOutput"
+                          auto-grow
+                          rows="2"
+                          readonly
+                        />
+                      </div>
+                    </v-card-text>
+                    <v-divider />
+                    <v-card-actions>
+                      <v-btn color="secondary" @click="idDialog = false"
+                        >Close</v-btn
+                      >
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-btn>
+              <div
+                v-show="!lcp.lcp_manifest.item_prefix"
+                class="text-center text-caption text-warning"
+              >
+                REQUIRES ID PREFIX
+              </div>
+            </v-col>
+            <v-col cols="auto"
+              ><v-btn color="primary"
+                >Replace ID
+                <v-dialog v-model="idSwapDialog" activator="parent" width="50vw">
+                  <v-card>
+                    <v-card-title>ID Replacement Tool</v-card-title>
+                    <v-divider />
+                    <v-card-text>
+                      This tool will attempt to replace all instances of a given ID with a new one.
+                      This makes no guarantee about the stability of your LCP, so use with caution.
+                      It simply performs a string replacement on the LCP JSON, which may cause issues
+                      if the exact string of the ID is used in other places. 
+                      <br/><br/><b>Please make a backup of your LCP before using this tool.</b>
+                    </v-card-text>
+                    <v-card-text class="text-center">
+                      <v-text-field color="primary" label="Old ID" v-model="oldID"></v-text-field>
+                      <v-text-field color="primary" label="New ID" v-model="newID"></v-text-field>
+                      <v-btn color="primary" @click="replaceID()"
+                        >Replace IDs</v-btn
+                      >
+                      <div v-show="idSwapOutput">
+                        <div class="text-caption text-left" v-text="`output`" />
+                        <v-textarea
+                          v-model="idSwapOutput"
+                          auto-grow
+                          rows="2"
+                          readonly
+                        />
+                      </div>
+                    </v-card-text>
+                    <v-divider />
+                    <v-card-actions>
+                      <v-btn color="secondary" @click="idSwapDialog = false"
+                        >Close</v-btn
+                      >
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-btn>
+            </v-col>
+            <v-col cols="auto">
+              <v-btn large block color="primary darken-3" :to="`/editor/dependencies`">
+                Manage Dependencies <span class="item-count" >({{ catLength("dependencies") }})</span >
+              </v-btn>
             </v-col>
           </v-row>
         </v-alert>
@@ -158,7 +240,6 @@
             </div>
           </v-col>
         </v-row>
-
         <v-row justify="space-around">
           <v-col v-for="(t, i) in categories" :key="`player_btn_${i}`" cols="3">
             <v-btn large block color="primary darken-3" :to="`/editor/${t}`">
@@ -174,12 +255,6 @@
           GM-sided LCP support (including NPCs and Eidolons) will be coming alongside the COMP/CON V3 update release. Stay tuned!
         </v-alert>
         <!--
-        <v-alert density="compact" color="error" icon="mdi-alert" class="mb-3">
-          The editors below are only compatible with the forthcoming GM tools
-          update. They are <b>unfinished</b> and
-          <b>SHOULD NOT</b>
-          be used! They will not read existing NPC LCPs or write new ones. 
-        </v-alert>
         <v-row justify="space-around">
           <v-col v-for="(t, i) in gmCategories" :key="`gm_btn_${i}`" cols="4">
             <v-btn large block color="primary darken-3" :to="`/editor/${t}`">
@@ -189,99 +264,6 @@
           </v-col>
         </v-row>
         -->
-      </v-card-text>
-      <v-row align="center" class="pt-2">
-        <v-col><v-divider /></v-col>
-        <v-col cols="auto"><div class="text-h6">Utilities</div></v-col>
-        <v-col><v-divider /></v-col>
-      </v-row>
-      <v-row align="center" justify="space-around">
-        <v-col cols="auto"
-          ><v-btn color="primary" :disabled="!lcp.lcp_manifest.item_prefix"
-            >Standardize IDs
-            <v-dialog v-model="idDialog" activator="parent" width="50vw">
-              <v-card>
-                <v-card-title>ID Standardization Tool</v-card-title>
-                <v-divider />
-                <v-card-text>
-                  This tool will attempt to bring all item IDs into the Massif
-                  style (<code>prefix_item_name</code>). This is not necessary,
-                  but useful for human readability and future compatibility (eg.
-                  from a preview LCP to an official release)
-                </v-card-text>
-                <v-card-text class="text-center">
-                  <v-btn color="primary" @click="generateIds()"
-                    >Generate IDs</v-btn
-                  >
-                  <div v-show="idOutput">
-                    <div class="text-caption text-left" v-text="`output`" />
-                    <v-textarea
-                      v-model="idOutput"
-                      auto-grow
-                      rows="2"
-                      readonly
-                    />
-                  </div>
-                </v-card-text>
-                <v-divider />
-                <v-card-actions>
-                  <v-btn color="secondary" @click="idDialog = false"
-                    >Close</v-btn
-                  >
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-btn>
-          <div
-            v-show="!lcp.lcp_manifest.item_prefix"
-            class="text-center text-caption text-warning"
-          >
-            REQUIRES ID PREFIX
-          </div>
-        </v-col>
-      </v-row>
-      <v-row align="center" justify="space-around">
-        <v-col cols="auto"
-          ><v-btn color="primary"
-            >Replace ID
-            <v-dialog v-model="idSwapDialog" activator="parent" width="50vw">
-              <v-card>
-                <v-card-title>ID Replacement Tool</v-card-title>
-                <v-divider />
-                <v-card-text>
-                  This tool will attempt to replace all instances of a given ID with a new one.
-                  This makes no guarantee about the stability of your LCP, so use with caution.
-                  It simply performs a string replacement on the LCP JSON, which may cause issues
-                  if the exact string of the ID is used in other places. 
-                  <br/><br/><b>Please make a backup of your LCP before using this tool.</b>
-                </v-card-text>
-                <v-card-text class="text-center">
-                  <v-text-field color="primary" label="Old ID" v-model="oldID"></v-text-field>
-                  <v-text-field color="primary" label="New ID" v-model="newID"></v-text-field>
-                  <v-btn color="primary" @click="replaceID()"
-                    >Replace IDs</v-btn
-                  >
-                  <div v-show="idSwapOutput">
-                    <div class="text-caption text-left" v-text="`output`" />
-                    <v-textarea
-                      v-model="idSwapOutput"
-                      auto-grow
-                      rows="2"
-                      readonly
-                    />
-                  </div>
-                </v-card-text>
-                <v-divider />
-                <v-card-actions>
-                  <v-btn color="secondary" @click="idSwapDialog = false"
-                    >Close</v-btn
-                  >
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-btn>
-        </v-col>
-      </v-row>
       <div class="pa-4 mt-6">
         <v-alert
           v-if="errors.length > 0"
@@ -310,6 +292,7 @@
           >Export LCP</v-btn
         >
       </div>
+      </v-card-text>
     </v-card>
   </div>
 </template>
