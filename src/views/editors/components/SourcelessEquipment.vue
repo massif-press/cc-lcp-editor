@@ -114,7 +114,7 @@ export default {
     getType(item: any) {
       if (item.mount) return 'weapons';
       if (item.mounts) return 'frames';
-      if (item.allowed_types) return 'mods';
+      if (item.allowed_types || item.allowed_sizes) return 'mods';
       return 'systems';
     },
     colorByType(item: any) {

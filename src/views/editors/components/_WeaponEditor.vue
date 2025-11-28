@@ -291,9 +291,7 @@ export default {
       if (this.manufacturer) return this.manufacturer.id;
       if (
         (this.profiles &&
-          this.profiles
-            .map((p) => p.tags)
-            .some((x: any) => x && x.id === 'tg_exotic')) ||
+          this.profiles.map((p) => (p.tags || [])).some((x: any) => x && x.id === 'tg_exotic')) ||
         this.isExotic
       )
         return 'EXOTIC';
