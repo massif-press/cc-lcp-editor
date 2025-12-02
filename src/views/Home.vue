@@ -212,6 +212,34 @@
               </v-btn>
             </v-col>
           </v-row>
+          <div class="pa-4 mt-6">
+            <v-alert
+              v-if="errors.length > 0"
+              color="warning"
+              class="ma-2"
+              icon="mdi-alert"
+            >
+              <p v-html="errors" />
+            </v-alert>
+            <v-alert
+              v-if="warnings.length > 0"
+              color="orange"
+              variant="outlined"
+              class="ma-2"
+              icon="mdi-alert"
+            >
+              <p v-html="warnings" />
+            </v-alert>
+            <v-btn
+              size="x-large"
+              variant="elevated"
+              block
+              :color="errors.length ? '' : 'success'"
+              :disabled="errors.length > 0"
+              @click="exportLCP"
+              >Export LCP</v-btn
+            >
+         </div>
         </v-alert>
         <v-row align="center" class="pt-2">
           <v-col><v-divider /></v-col>
@@ -264,34 +292,6 @@
           </v-col>
         </v-row>
         -->
-      <div class="pa-4 mt-6">
-        <v-alert
-          v-if="errors.length > 0"
-          color="warning"
-          class="ma-2"
-          icon="mdi-alert"
-        >
-          <p v-html="errors" />
-        </v-alert>
-        <v-alert
-          v-if="warnings.length > 0"
-          color="orange"
-          variant="outlined"
-          class="ma-2"
-          icon="mdi-alert"
-        >
-          <p v-html="warnings" />
-        </v-alert>
-        <v-btn
-          size="x-large"
-          variant="elevated"
-          block
-          :color="errors.length ? '' : 'success'"
-          :disabled="errors.length > 0"
-          @click="exportLCP"
-          >Export LCP</v-btn
-        >
-      </div>
       </v-card-text>
     </v-card>
   </div>
