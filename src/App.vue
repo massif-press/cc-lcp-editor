@@ -40,7 +40,7 @@
               {{ c.replace('_', ' ') }}
             </v-list-item-title>
           </v-list-item>
-          <v-divider v-show="loaded" />
+          <!--<v-divider v-show="loaded" />
           <v-list-item
             v-for="c in gmCategories"
             :key="c"
@@ -54,6 +54,7 @@
               {{ c.replace('_', ' ') }}
             </v-list-item-title>
           </v-list-item>
+          -->
         </v-list>
       </v-menu>
       <v-divider vertical class="ml-2 mr-4" />
