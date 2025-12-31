@@ -471,7 +471,7 @@ const mountType = [
   'Integrated',
 ];
 
-const weaponType = ['Rifle', 'Cannon', 'Launcher', 'CQB', 'Nexus', 'Melee'];
+const weaponType = ['Rifle', 'Cannon', 'Launcher', 'CQB', 'Nexus', 'Melee', 'Special', '???'];
 
 const weaponSize = ['Auxiliary', 'Main', 'Heavy', 'Superheavy'];
 
