@@ -544,7 +544,7 @@ export default {
       let unchanged = 0;
       for (const key in this.lcp) {
         if (!Array.isArray(this.lcp[key])) continue;
-        if (key.toLowerCase() === 'manufacturers' || key.toLowerCase() === 'statuses') continue;
+        if (key.toLowerCase() === 'manufacturers' || key.toLowerCase() === 'statuses' || key.toLowerCase() === 'dependencies') continue;
         this.lcp[key].forEach((item: any, index: number) => {
           count++;
           let tId = '';
