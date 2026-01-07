@@ -227,7 +227,7 @@ export default {
           this.license,
           this.$store.getters.lcp.frames || []
         ),
-        license_level: Number(this.license_level),
+        license_level: (this.license) ? Number(this.license_level) : 0,
         effect: this.effect,
         sp: this.sp,
         description: this.description,
