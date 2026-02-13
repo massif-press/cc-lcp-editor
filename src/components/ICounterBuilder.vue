@@ -114,6 +114,10 @@ export default {
   methods: {
     submit() {
       if (!this.counter) return;
+      if (this.counter.max) this.counter.max = parseInt(this.counter.max);
+      if (this.counter.min) this.counter.min = parseInt(this.counter.min);
+      if (this.counter.default_value)
+        this.counter.default_value = parseInt(this.counter.default_value);
       if (this.isEdit) {
         this.item.counters[this.editIndex] = this.counter;
       } else {
