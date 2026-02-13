@@ -441,7 +441,7 @@ export default {
       repcap: 6,
       sensor_range: 10,
       tech_attack: 0,
-      save: 12,
+      save: 10,
       speed: 4,
       sp: 6,
     },
