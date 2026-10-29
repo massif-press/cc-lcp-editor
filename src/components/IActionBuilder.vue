@@ -25,7 +25,7 @@
           Is Tech Attack:
           <b class="warning--text">true</b>
         </div>
-        <div v-if="action.activation === 'Reaction'">
+        <div>
           <v-divider />
           <div v-html="action.frequency" />
           <div v-html="action.init" />
@@ -106,9 +106,9 @@
                 />
               </v-col>
             </v-row>
-            <div v-show="activation === 'Reaction'" class="mt-3">
+            <div class="mt-3">
               <v-divider />
-              <div class="text-caption my-2">Reaction Detail:</div>
+              <div class="text-caption my-2">Reaction/etc. Detail:</div>
               <v-row align="center" density="compact">
                 <v-col>
                   <v-combobox
