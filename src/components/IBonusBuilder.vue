@@ -9,10 +9,10 @@
       >
         <template v-slot:activator="{ props }">
           <v-chip small class="mx-1" @click="edit(bonus, i)" v-bind="props">
-            {{ bonus.id }}, {{ bonus.val }}
+            {{ bonus.id }}, {{ (bonus.accuracy) ? (bonus.accuracy) : (bonus.val) }}
           </v-chip>
         </template>
-        {{ descById(bonus.id) }}: {{ bonus.val }}
+        {{ descById(bonus.id) }}: {{ (bonus.accuracy) ? (bonus.accuracy) : (bonus.val) }}
         <v-divider />
         <div v-if="restrictions(bonus).length">
           Restricted to: {{ restrictions(bonus) }}
@@ -63,6 +63,14 @@
                     title="Integer"
                   />
                   <v-text-field v-else v-model="value" label="Integer" />
+                </div>
+                <div v-else-if="bonus.type === 'accuracy'">
+                  <tiered-stat-input
+                    v-if="npc"
+                    v-model="acc"
+                    title="Accuracy modifier"
+                  />
+                  <v-text-field v-else v-model="acc" label="Accuracy modifier" />
                 </div>
                 <div v-else-if="bonus.type === 'boolean'">
                   <v-radio-group v-model="value" mandatory>
@@ -182,7 +190,7 @@
             <v-spacer />
             <v-btn
               color="success darken-2"
-              :disabled="!bonus || !value"
+              :disabled="!bonus || !(value || acc)"
               @click="submit"
             >
               {{ isEdit ? 'save' : 'confirm' }}
@@ -219,6 +227,7 @@ export default {
     dialog: false,
     bonus: null as any,
     value: '' as any,
+    acc: '' as any,
     dt: [],
     wt: [],
     rt: [],
@@ -238,6 +247,7 @@ export default {
       const e = {
         id: (this.bonus as any).value,
         val: this.value,
+        accuracy: this.acc,
         damage_types: this.dt,
         range_types: this.rt,
         weapon_types: this.wt,
@@ -247,6 +257,9 @@ export default {
       };
       if (!isNaN(e.val)) {
         e.val = Number(e.val);
+      }
+      if (!isNaN(e.accuracy)) {
+        e.accuracy = Number(e.accuracy);
       }
       if (this.isEdit) {
         this.item.bonuses[this.editIndex] = e;
@@ -261,6 +274,7 @@ export default {
       this.reset();
       this.bonus = this.bonuses.find((x) => x.value === bonus.id) as any;
       this.value = bonus.val;
+      this.acc = bonus.accuracy;
       this.dt = bonus.damage_types;
       this.rt = bonus.range_types;
       this.wt = bonus.weapon_types;
@@ -290,6 +304,7 @@ export default {
     reset() {
       this.bonus = null;
       this.value = '';
+      this.acc = '';
       this.dt = this.wt = this.rt = this.ws = [];
       this.overwrite = this.replace = this.isEdit = false;
       this.editIndex = -1;
